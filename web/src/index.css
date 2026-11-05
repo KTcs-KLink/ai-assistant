@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-canvas: #F7F8FA;       /* 전체 배경 */
+  --color-panel: #FFFFFF;        /* 카드·패널 */
+  --color-side: #F0F3F4;         /* 사이드바 */
+  --color-field: #E8ECEE;        /* 입력 배경(검색) */
+  --color-bubble: #EEF1F2;       /* 사용자 말풍선 */
+  --color-ink: #20282B;          /* 주요 글자 */
+  --color-ink-2: #3A4649;        /* 본문 보조 */
+  --color-muted: #667478;        /* 보조 글자 */
+  --color-faint: #8C989C;        /* 약한 글자/라벨 */
+  --color-brand: #0D9488;        /* 주요 버튼 */
+  --color-brand-strong: #0F766E; /* 호버 / 포인트 글자 */
+  --color-sel: #EAF5F2;          /* 선택 배경 */
+  --color-sel-line: #A7D7CE;     /* 선택 테두리 */
+  --color-hl: #CDEBE4;           /* 인용 강조 */
+  --color-sel-card: #F4FAF8;     /* 선택 카드 배경 */
+  --color-line: #E2E7E9;         /* 구분선 */
+  --color-line-strong: #CDD4D7;  /* 진한 테두리(입력창) */
+  --color-row: #EFF2F3;          /* 표 행 구분선 */
+  --color-ok: oklch(0.45 0.12 150);
+  --color-ok-bg: oklch(0.95 0.04 150);
+  --color-err: oklch(0.48 0.14 30);
+  --color-err-bg: oklch(0.95 0.03 30);
+  --color-rec: oklch(0.6 0.2 25);
+}
+
+@keyframes klwave {
+  from { transform: scaleY(.15); }
+  to { transform: scaleY(1); }
+}
+@keyframes klblink {
+  50% { opacity: 0; }
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+mark { background: var(--color-hl); color: inherit; }
