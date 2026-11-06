@@ -31,10 +31,21 @@ npm run dev
 
 `GET http://localhost:8000/health`는 데이터/LLM 설정 여부를 반환합니다. `OPENAI_API_KEY`가 없으면 문서 색인 또는 생성 기능이 실패하는 것이 정상입니다. 이 상태를 모의 답변으로 숨기지 않습니다.
 
+## 기존 knowledge-mcp 파싱 문서 가져오기
+
+`knowledge-mcp/data/manifests/sources.csv`에 있는 문서 18건은 현재 재배포 허용 여부가 `unknown`으로 표시되어 있습니다. 승인된 문서에 대해서만 아래처럼 명시적으로 가져오세요. 미승인 문서는 임베딩/외부 LLM 전송을 하지 마세요.
+
+```bash
+cd server
+python import_parsed.py --repo ../../knowledge-mcp --source SRC-0004 --collection hr --confirm-authorized
+```
+
+원래 파싱된 `parsing.md`에서 장/조 제목을 유지해 청킹하며 PDF 페이지 정보가 없다면 조항 경로만 출처로 표시합니다. `--source`를 반복하거나 허가된 전체 문서만 `--all`로 선택할 수 있습니다.
+
 ## 실제 사용 동작
 
 - `POST /api/conversations/{id}/messages` → `text/event-stream`: `meta`(근거) → `delta`(실시간 토큰) → `done`.
-- 관리 화면은 등록된 **실제** 문서·질문 수만 집계합니다. 조직/사용자/피드백 검토 기능은 미연동이며 가짜 데이터를 제공하지 않습니다.
+- 관리 화면은 등록된 **실제** 문서·질문 수만 집계하며 부정적 답변 피드백은 검토·분류·처리할 수 있습니다. 조직/사용자 디렉터리·권한 제어는 미연동이며 가짜 데이터를 제공하지 않습니다.
 - 문서별 400쪽, 20MB, 1,200청크 제한이 있습니다. 스캔 이미지 PDF의 OCR은 미지원입니다.
 - 벡터는 SQLite에 저장하고 단일 서버에서 전수 코사인 비교합니다. 대규모 자료는 `knowledge-mcp`와 pgvector 검색 API로 교체해야 합니다.
 - `KLINK_EMBED_PROVIDER=local`은 `requirements-local-embeddings.txt` 설치 후 `BAAI/bge-m3`를 사용합니다. OpenAI와 로컬 모델 간 전환 시 기존 문서를 **재색인**해야 합니다.
