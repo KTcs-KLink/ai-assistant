@@ -123,10 +123,13 @@ def extract_regular_payday(section: str, content: str) -> tuple[int, bool] | Non
     if not supports_regular_payday(section, content):
         return None
     normalized = _compact(content)
-    match = _MONTHLY_DATE.search(normalized)
-    if not match:
+    matches = list(_MONTHLY_DATE.finditer(normalized))
+    if not matches:
         return None
-    day = int(match.group("day"))
+    days = {int(match.group("day")) for match in matches}
+    if len(days) != 1:
+        return None  # Multiple date rules in one chunk require scope review.
+    day = next(iter(days))
     if not 1 <= day <= 31:
         return None
     preceding = (
