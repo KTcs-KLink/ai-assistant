@@ -21,6 +21,12 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+try:
+    from .query_strategy import plan_query, evidence_priority, supports_regular_payday
+except ImportError:  # uvicorn app:app from server/ working directory
+    from query_strategy import plan_query, evidence_priority, supports_regular_payday
+
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -476,6 +482,12 @@ async def retry_document(doc_id: str, _: dict = Depends(require_session)):
 
 
 async def search(question: str, attachment_ids: list[str]) -> list[dict]:
+    """Original Dense + conservative Korean paraphrase + direct source evidence.
+
+    The expansion query is a retrieval hint, never an answer. A monthly
+    payment-day assertion needs a date in a real indexed source passage.
+    """
+    plan = plan_query(question)
     with database() as db:
         rows = db.execute(
             """SELECT c.*, d.name, d.kind FROM chunks c
@@ -486,29 +498,64 @@ async def search(question: str, attachment_ids: list[str]) -> list[dict]:
         ).fetchall()
     if not rows:
         return []
-    vector = normalized((await embed([question]))[0])
-    results = []
+
+    vectors = [normalized(v) for v in await embed(list(plan.variants))]
+    encoded = []
     for row in rows:
         stored = array("f")
         stored.frombytes(row["embedding"])
-        if len(stored) != len(vector):
-            continue  # Embedding model changed: re-index required.
-        score = sum(x * y for x, y in zip(vector, stored))
-        if score >= float(os.getenv("KLINK_MIN_SCORE", "0.25")):
-            results.append({"score": score, "row": row})
-    results.sort(key=lambda r: r["score"], reverse=True)
-    # Avoid returning the same passage several times.
-    chosen, docs_used = [], set()
-    for item in results:
+        if len(stored) != len(vectors[0]):
+            continue  # Embedding model changed: existing vectors require reindexing.
+        encoded.append((row, stored))
+    if not encoded:
+        return []
+
+    ranked: dict[str, dict] = {}
+    for n, vector in enumerate(vectors):
+        order = sorted(
+            ((sum(a * b for a, b in zip(vector, stored)), row) for row, stored in encoded),
+            key=lambda item: item[0],
+            reverse=True,
+        )
+        for rank, (cosine, row) in enumerate(order[:20], start=1):
+            item = ranked.setdefault(row["id"], {"row": row, "score": cosine, "rrf": 0.0})
+            item["score"] = max(item["score"], cosine)
+            item["rrf"] += (1.0 if n == 0 else 0.8) / (60 + rank)
+
+    # Rescue short payday questions only when actual approved, indexed
+    # source text contains a specific monthly payday. No hard-coded answer.
+    if plan.intent == "regular_payday":
+        for row, _ in encoded:
+            if supports_regular_payday(row["section"], row["content"]):
+                ranked.setdefault(row["id"], {"row": row, "score": 0.0, "rrf": 0.0})
+
+    threshold = float(os.getenv("KLINK_MIN_SCORE", "0.25"))
+    options = []
+    for item in ranked.values():
         row = item["row"]
-        key = (row["document_id"], row["page"], row["section"])
-        if key in docs_used:
+        anchor = evidence_priority(plan, row["section"], row["content"])
+        if plan.intent == "regular_payday" and not anchor:
+            continue  # "Paid on payday" alone cannot establish which day.
+        if plan.intent != "regular_payday" and item["score"] < threshold:
             continue
-        docs_used.add(key)
-        chosen.append(item)
+        item["priority"] = anchor * 10 + item["rrf"] * 30 + item["score"]
+        options.append(item)
+    options.sort(key=lambda item: item["priority"], reverse=True)
+
+    chosen, seen = [], set()
+    for item in options:
+        row = item["row"]
+        # Keep different passages in the same section. Section-wide dedupe
+        # used to drop essential conditions in long paragraphs.
+        key = (row["document_id"], row["content"].strip())
+        if key in seen:
+            continue
+        seen.add(key)
+        chosen.append({"score": round(item["score"], 5), "row": row})
         if len(chosen) >= 5:
             break
     return chosen
+
 
 
 def emit(event: dict) -> str:
