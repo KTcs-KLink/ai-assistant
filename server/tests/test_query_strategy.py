@@ -138,6 +138,10 @@ def test_grounded_payday_rescue_and_debug(demo):
         )
         assert response.status_code == 200
         assert "연봉 및 복리후생관리규정" in response.text
+        assert "매월 25일" in response.text
+        assert "전일에 지급" in response.text
+        assert "[[c1]]" in response.text
+        assert "KTcs 실제 급여일을 확정한 것은 아닙니다" in response.text
 
     # Unrelated query cannot be turned into a payroll-day answer.
     audit = client.get("/api/admin/retrieval-debug", params={"question": "성과연봉 언제 지급해?"})
@@ -158,3 +162,25 @@ def test_no_payday_in_eligible_index_means_no_fabricated_answer(demo):
     assert audit.status_code == 200
     assert audit.json()["matches"] == []
     assert audit.json()["indexedChunks"] == 1
+
+
+
+def test_conflicting_approved_paydays_refuse_single_day(demo):
+    client, server = demo
+    login(client)
+    _inject_indexed_text(
+        server, "a", "회사 규정 A", "제17조(보수 지급일)",
+        "보수는 매월 25일에 지급한다.", [1.0, 0.0],
+    )
+    _inject_indexed_text(
+        server, "b", "회사 규정 B", "제3조(보수 지급일)",
+        "보수는 매월 26일에 지급한다.", [1.0, 0.0],
+    )
+    conv = client.post("/api/conversations", json={"title": "급여일"}).json()
+    response = client.post(
+        f"/api/conversations/{conv['id']}/messages",
+        json={"content": "월급날은 언제야?", "attachment_ids": []},
+    )
+    assert "서로 다른 급여 지급일" in response.text
+    assert "매월 25일 지급합니다" not in response.text
+    assert "매월 26일 지급합니다" not in response.text
