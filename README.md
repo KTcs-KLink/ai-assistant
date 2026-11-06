@@ -19,9 +19,17 @@ KTcs 업무지식에 질문하고 답변과 근거 출처를 확인하는 AI 어
 | [`knowledge-mcp`](https://github.com/KTcs-KLink/knowledge-mcp) | 허가된 지식 자료, 출처 manifest, 청크 형식, 검색 API 및 MCP Server |
 | [`.github`](https://github.com/KTcs-KLink/.github) | 조직 공통 협업 규칙, 이슈·PR 템플릿, 조직 소개 |
 
+## 실시간 RAG 시연 브랜치 (2026-11-06)
+
+이 브랜치에는 `server/app.py` FastAPI가 추가되었습니다. 기존 `web/` 화면과 동일한 로그인/대화/SSE 계약으로 연결되며, 허용된 텍스트 PDF를 업로드하면 조항 중심 청킹 → Dense 임베딩 → 문서 검색 → 출처 기반 OpenAI 답변을 실시간으로 표시합니다. 관리자 화면은 등록 문서 수와 API 설정 상태를 보여줍니다.
+
+**실행 방법:** [server/README.md](server/README.md)를 참고하세요. `web/.env.example`은 실제 API 사용이 기본이며 `VITE_USE_MOCK=true`일 때에만 기존 고정 예시 답변을 씁니다. 기존 `knowledge-mcp`의 파싱 문서는 `server/import_parsed.py`로 **이용 허용 여부를 검토한 뒤** 선택적으로 적재할 수 있습니다.
+
+**구현되지 않은 부분:** Supabase pgvector(연결 계정의 프로젝트가 비활성), KTcs 내부 실사용 데이터, 정식 SSO/RBAC, OCR, 운영용 자동 변경감지·MCP 서비스. 본 기능은 단일 관리자·로컬 시연용이며 실서비스라고 주장할 수 없습니다.
+
 ## 현재 상태
 
-저장소 구조와 협업 기반을 준비하는 단계입니다. 현재 `src/` 구조는 사용자 화면의 초기 골격입니다. ADR은 이 저장소에 서버 측 오케스트레이터를 함께 두는 방향을 제안하지만, 서버 프레임워크·배치 경로·실행 명령, API와 MCP 요청·응답 계약은 아직 확정되지 않았습니다. 구현과 팀 합의에 맞춰 이 README를 갱신하고 확인되지 않은 설정이나 동작은 확정 사실로 적지 않습니다.
+현재 `web/`은 React 사용자 화면을, `server/`는 시연용 FastAPI RAG 서버를 담당합니다. SSE API는 작동 테스트를 통과했으며 모델 외부 호출과 데이터베이스 운영 연동은 실제 키와 허용된 자료가 구성된 환경에서 별도 검증해야 합니다. `knowledge-mcp`와 정식 검색 MCP 연결은 후속 작업입니다.
 
 ## 폴더 구조
 
