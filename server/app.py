@@ -23,9 +23,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 try:
-    from .query_strategy import plan_query, evidence_priority, supports_regular_payday
+    from .query_strategy import plan_query, evidence_priority, supports_regular_payday, grounded_regular_payday_answer
 except ImportError:  # uvicorn app:app from server/ working directory
-    from query_strategy import plan_query, evidence_priority, supports_regular_payday
+    from query_strategy import plan_query, evidence_priority, supports_regular_payday, grounded_regular_payday_answer
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -651,6 +651,13 @@ async def answer_events(cid: str, question: str, attachment_ids: list[str]):
             answer_text = (
                 "등록된 문서에서 질문에 답할 만한 근거를 찾지 못했습니다. "
                 "관리자 화면에서 관련 텍스트 PDF를 등록하거나 질문을 더 구체적으로 입력해 주세요."
+            )
+            yield emit({"type": "delta", "text": answer_text})
+        elif plan_query(question).intent == "regular_payday":
+            # For this exact policy fact, derive the day from an indexed clause.
+            # The source validation already removed passages without a day.
+            answer_text = grounded_regular_payday_answer(results) or (
+                "지급일을 확정할 수 있는 승인된 근거가 없습니다."
             )
             yield emit({"type": "delta", "text": answer_text})
         elif not OPENAI_KEY:
