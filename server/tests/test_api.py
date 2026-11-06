@@ -103,6 +103,33 @@ def test_pdf_upload_real_dense_search_and_citations(demo):
     assert client.get("/health").json()["indexedDocuments"] == 1
 
 
+def test_feedback_is_visible_to_admin(demo):
+    client, _ = demo
+    login(client)
+    conv = client.post("/api/conversations", json={"title": "feedback"}).json()
+    cid = conv["id"]
+    result = sse_events(client.post(f"/api/conversations/{cid}/messages", json={
+        "content": "unknown", "attachment_ids": [],
+    }))
+    mid = result[-1]["messageId"]
+    feedback = client.put(
+        f"/api/conversations/{cid}/messages/{mid}/feedback",
+        json={"value": "down", "comment": "관련 자료가 없습니다."},
+    )
+    assert feedback.status_code == 204
+    reviews = client.get("/api/admin/feedback").json()
+    assert len(reviews) == 1
+    assert reviews[0]["question"] == "unknown"
+    assert reviews[0]["comment"] == "관련 자료가 없습니다."
+    patch = client.patch(f"/api/admin/feedback/{mid}", json={
+        "status": "done", "causes": ["문서 누락"], "memo": "자료 수집 후 재검증",
+    })
+    assert patch.status_code == 204
+    updated = client.get("/api/admin/feedback").json()[0]
+    assert updated["status"] == "done"
+    assert updated["causes"] == ["문서 누락"]
+
+
 def test_attachments_are_not_global_knowledge(demo):
     client, _ = demo
     login(client)
