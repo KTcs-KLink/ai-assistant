@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { X } from 'lucide-react'
-import { api } from '../api/client'
+import { api, USE_MOCK } from '../api/client'
 import type { Attachment } from '../api/types'
 import { cx, MicIcon } from '../components/ui'
 import { formatTimer } from '../lib/format'
 import { useVoiceInput } from './useVoiceInput'
 
-const ACCEPT = '.pdf,.docx,.xlsx,.pptx'
+const ACCEPT = '.pdf'
 
 interface PendingFile {
   key: string
@@ -167,16 +167,16 @@ export function Composer({ variant, placeholder, onSend, isStreaming, onStop }: 
               }}
             />
             <div className="flex items-center gap-2">
-              <button
+              {USE_MOCK && <button
                 type="button"
-                title="음성 입력"
+                title="음성 입력 (모의 모드 전용)"
                 aria-label="음성 입력"
                 onClick={voice.start}
                 disabled={isStreaming}
                 className={cx(iconBtn, 'border border-line bg-panel text-ink-2 hover:bg-side')}
               >
                 <MicIcon />
-              </button>
+              </button>}
               {isStreaming ? (
                 <button
                   type="button"
