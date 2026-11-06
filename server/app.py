@@ -558,6 +558,48 @@ async def search(question: str, attachment_ids: list[str]) -> list[dict]:
 
 
 
+
+@app.get("/api/admin/retrieval-debug")
+async def retrieval_debug(question: str, _: dict = Depends(require_session)):
+    """Live evidence audit for the administrator; never returns API keys."""
+    if not question.strip() or len(question) > 300:
+        raise HTTPException(422, "질문은 1~300자로 입력하세요.")
+    with database() as db:
+        ready = db.execute(
+            "SELECT COUNT(*) FROM documents WHERE status='ready' AND kind='kb'"
+        ).fetchone()[0]
+        count = db.execute(
+            """SELECT COUNT(*) FROM chunks c JOIN documents d
+               ON c.document_id=d.id
+               WHERE d.status='ready' AND d.kind='kb'"""
+        ).fetchone()[0]
+        pending = db.execute(
+            "SELECT COUNT(*) FROM documents WHERE status IN ('processing','error')"
+        ).fetchone()[0]
+    plan = plan_query(question)
+    results = await search(question, []) if count else []
+    return {
+        "question": question, "intent": plan.intent, "queries": list(plan.variants),
+        "readyDocuments": ready, "indexedChunks": count,
+        "pendingOrFailedDocuments": pending,
+        "matches": [
+            {
+                "chunkId": item["row"]["id"],
+                "document": item["row"]["name"],
+                "section": item["row"]["section"],
+                "page": item["row"]["page"],
+                "score": item["score"],
+                "excerpt": item["row"]["content"][:220],
+            } for item in results
+        ],
+        "diagnosis": (
+            "인덱스가 비어 있습니다." if not count else
+            "근거 검색됨" if results else
+            "근거 미확인: 원문 적재, 접근 허용, 임베딩 모델 일치 여부를 확인하세요."
+        ),
+    }
+
+
 def emit(event: dict) -> str:
     return f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
 
