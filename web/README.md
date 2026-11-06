@@ -12,8 +12,8 @@ npm run dev        # http://localhost:5173
 npm run build      # 타입 검사 + 프로덕션 빌드
 ```
 
-`VITE_API_BASE_URL`이 비어 있으면 **목(mock) API**로 동작합니다. 데이터는 메모리에만 있고, 새로고침하면 초기화됩니다.
-목 모드 로그인 계정: 관리자 `klink123`(김지현, 경영지원팀), 일반 사용자 `klink`(박서준, 영업1팀). 비밀번호는 둘 다 `VITE_MOCK_PASSWORD`(기본값 `klink1234`)입니다. `.env.example`을 참고하세요.
+실제 RAG API(`http://localhost:8000`)가 **기본 동작**입니다. `server/README.md`에 따라 FastAPI를 먼저 실행하고 `web/.env.example`을 복사하세요. **예시 데이터 모드**는 `VITE_USE_MOCK=true`를 명시했을 때에만 활성화됩니다.
+**목 모드에서만 사용할 수 있는 가상 계정:** 관리자 `klink123`(김지현, 경영지원팀), 일반 사용자 `klink`(박서준, 영업1팀). 비밀번호는 둘 다 `VITE_MOCK_PASSWORD`(기본값 `klink1234`)입니다. `.env.example`을 참고하세요.
 
 ## 라우트
 
@@ -36,7 +36,7 @@ npm run build      # 타입 검사 + 프로덕션 빌드
 src/
   api/
     types.ts       도메인 타입 (Message, Citation, StreamEvent …)
-    client.ts      FastAPI 호출 + SSE 파서. VITE_API_BASE_URL 이 없으면 mock 사용
+    client.ts      실제 FastAPI 호출 + SSE 파서. VITE_USE_MOCK=true면 목 사용
     mock.ts        인메모리 목 API
     answers.ts     목 모드에서 쓰는 질문별 답변
   auth/            AuthContext (/api/auth/me, /api/auth/login)
@@ -53,11 +53,11 @@ src/
 
 ## 백엔드 연동 메모 (FastAPI)
 
-`src/api/client.ts`의 엔드포인트 경로와 아래 이벤트 형식은 프론트 쪽 **제안**입니다. 백엔드 구현 시 그대로 맞추거나, 바꾸면 `client.ts`와 이 문서를 함께 고쳐 주세요.
+`src/api/client.ts`의 엔드포인트와 아래 SSE 규격은 `server/app.py`에 실제로 구현되어 있습니다. 백엔드를 다른 서비스로 교체하면 규격과 자동 테스트를 함께 갱신하세요.
 
 - 인증: 쿠키 세션 기준(`credentials: 'include'`). `GET /api/auth/me`가 401을 주면 로그인 화면으로 보내고,
-  로그인 폼은 `POST /api/auth/login` (`{"username","password"}`)을 보내 세션 쿠키와 `User`를 받는다고 가정합니다. 틀리면 401.
-- 답변 스트리밍: `POST /api/conversations/{id}/messages`가 `text/event-stream`으로 아래 이벤트를 보낸다고 가정합니다.
+  로그인 폼은 `POST /api/auth/login` (`{"username","password"}`)을 보내 시연용 HTTPOnly 세션 쿠키와 `User`를 받습니다. 틀리면 401.
+- 답변 스트리밍: `POST /api/conversations/{id}/messages`가 `text/event-stream`으로 아래 이벤트를 보낸다고 구현되어 있습니다.
   ```
   data: {"type":"meta","searchNote":"문서 3건에서 검색함","citations":[...]}
   data: {"type":"delta","text":"네, 미사용"}
@@ -66,7 +66,7 @@ src/
   POST 본문을 보내야 하므로 `EventSource`는 쓰지 않고 `fetch` 스트림으로 직접 파싱합니다. [■ 중지]를 누르면 요청이 취소(abort)됩니다.
 - 본문 형식: `**굵게**`, 인용 위치는 `[[citationId]]`, 문단은 빈 줄로 구분합니다.
   사내 문서 인용문 `quote`에서 강조할 부분은 `[ ]`로 감쌉니다. 첨부 파일 인용은 `context`(해당 쪽 문단) 안에서 `quote`와 같은 부분을 강조합니다.
-- 첨부 파일은 `POST /api/attachments`로 올리고 id만 메시지에 실어 보냅니다. 사내 문서(컬렉션)로 저장하지 않습니다.
+- 첨부 파일은 `POST /api/attachments`로 PDF만 업로드하고 id만 메시지에 실어 보냅니다. 일반 사내지식 컬렉션으로 저장하지 않으며, 단일 시연계정 전용 파일로 로컬 서버에 임시 보관됩니다.
 
 ## 남은 일
 
