@@ -34,13 +34,15 @@ KTcs 업무지식에 질문하고 답변과 근거 출처를 확인하는 AI 어
 ## 폴더 구조
 
 ```text
-src/
-  api/        브라우저에서 Assistant API를 호출하는 client 코드
-  features/   질문, 답변, 출처 등 사용자 기능
-  shared/     기능 간 공통 UI와 유틸리티
-public/       정적 파일
-tests/        화면 및 기능 테스트
-docs/         화면 흐름, 연동 규격, 개발 문서
+web/
+  src/api/    서버 API 및 SSE 클라이언트
+  src/chat/   질문/답변 스트리밍, 인용 출처
+  src/admin/  문서 관리, 피드백, 실행 상태
+server/
+  app.py      FastAPI 인증/대화/임베딩/검색/생성/색인
+  import_parsed.py  승인된 knowledge-mcp 마크다운 적재
+  tests/      API 실동작 회귀 테스트
+docs/         화면 흐름, 연동 규격, ADR
 ```
 
 서버 측 오케스트레이터의 디렉터리와 기술 스택은 아직 정해지지 않았습니다. 구현 위치가 합의되면 실제 구조를 이 표에 추가합니다.
