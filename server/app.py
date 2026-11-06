@@ -645,6 +645,7 @@ async def regenerate(cid: str, mid: str, _: dict = Depends(require_session)):
             yield event
         if finished:
             with database() as db:
+                db.execute("DELETE FROM feedback_reviews WHERE message_id=?", (mid,))
                 db.execute("DELETE FROM messages WHERE id=?", (mid,))
 
     return StreamingResponse(
