@@ -35,6 +35,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       abortRef.current = ctrl
       const draft: Message = { id: 'draft', role: 'assistant', content: '', citations: [], createdAt: new Date().toISOString() }
       setStream({ conversationId, draft, started: false })
+      let networkError = false
       try {
         for await (const ev of events(ctrl.signal)) {
           if (ev.type === 'meta') {
@@ -46,7 +47,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           }
         }
       } catch (e) {
-        console.error(e)
+        if (!ctrl.signal.aborted) {
+          console.error('K:LINK API stream failed', e)
+          networkError = true
+        }
       } finally {
         if (abortRef.current === ctrl) abortRef.current = null
         // 저장된 결과로 다시 불러온 뒤 임시 답변을 지운다 (깜박임 방지)
@@ -54,6 +58,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           qc.invalidateQueries({ queryKey: messagesKey(conversationId) }),
           qc.invalidateQueries({ queryKey: ['conversations'] }),
         ])
+        if (networkError) {
+          qc.setQueryData<Message[]>(messagesKey(conversationId), (prev) => [
+            ...(prev ?? []),
+            { id: `network-error-${Date.now()}`, role: 'assistant',
+              content: '실시간 API에 연결하지 못했습니다. 서버 실행 상태와 네트워크 설정을 확인해 주세요.',
+              citations: [], createdAt: new Date().toISOString() },
+          ])
+        }
         // 그사이 다른 답변 생성이 시작됐으면 그 상태는 건드리지 않는다
         if (!abortRef.current) setStream(null)
       }
