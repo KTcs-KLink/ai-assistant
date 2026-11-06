@@ -24,7 +24,7 @@ jobs:
       - name: Test real SSE and PDF ingestion (no paid API calls)
         env:
           KLINK_DEMO_PASSWORD: ci-only-password
-        run: python -m pytest server/tests -q
+        run: python -m pytest server/tests scripts/tests -q
 
   frontend:
     runs-on: ubuntu-latest
