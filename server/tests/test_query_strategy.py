@@ -82,6 +82,11 @@ def test_direct_evidence_requires_payday_date_and_scope():
         "제5조(업무계획)",
         "매월 25일에 회의를 개최한다.",
     )
+    from server.query_strategy import extract_regular_payday
+    assert extract_regular_payday(
+        "제17조(보수 지급)",
+        "보수는 매월 25일에 지급한다. 특별수당은 매월 20일에 지급한다.",
+    ) is None
 
 
 def _inject_indexed_text(server, doc_id, name, section, content, vector):
