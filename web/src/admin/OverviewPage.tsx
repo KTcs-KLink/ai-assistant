@@ -18,6 +18,7 @@ interface SearchDiagnostic {
   queries: string[]
   readyDocuments: number
   indexedChunks: number
+  storedVectorDimensions?: { dimension: number; chunks: number }[]
   pendingOrFailedDocuments: number
   diagnosis: string
   matches: {
@@ -126,7 +127,12 @@ export function OverviewPage() {
                   <strong>{probeSearch.data.diagnosis}</strong> · 색인 {probeSearch.data.indexedChunks}청크 /
                   문서 {probeSearch.data.readyDocuments}건 · 처리 중·실패 {probeSearch.data.pendingOrFailedDocuments}건
                 </p>
-                <p className="text-xs text-muted">해석된 의도: {probeSearch.data.intent} · 검색 표현: {probeSearch.data.queries.join(' / ')}</p>
+                <p className="text-xs text-muted">
+                  저장 벡터 차원: {(probeSearch.data.storedVectorDimensions ?? [])
+                    .map((v) => `${v.dimension}D × ${v.chunks}개`).join(', ') || '없음'} ·
+                  해석된 의도: {probeSearch.data.intent}
+                </p>
+                <p className="text-xs text-muted">검색 표현: {probeSearch.data.queries.join(' / ')}</p>
                 {probeSearch.data.matches.map((m) => (
                   <div key={m.chunkId} className="rounded-lg border border-line p-3">
                     <div className="flex flex-wrap items-center gap-2 text-xs">
