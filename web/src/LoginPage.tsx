@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
-import { ApiError } from './api/client'
+import { ApiError, USE_MOCK } from './api/client'
 import { useAuth } from './auth/AuthContext'
 import { Logo, cx } from './components/ui'
 
@@ -50,7 +50,7 @@ export function LoginPage() {
           <Logo size={36} />
           <div className="flex flex-col items-center gap-1.5">
             <h1 className="text-[22px] font-semibold">K-LINK</h1>
-            <p className="text-sm leading-[1.6] text-pretty text-muted">회사 계정으로 로그인하면 내 권한에 맞는 사내 문서를 검색할 수 있어요.</p>
+            <p className="text-sm leading-[1.6] text-pretty text-muted">시연 계정으로 로그인해 등록된 업무 문서를 검색합니다. 실제 KTcs 사내 계정 연동은 아직 아닙니다.</p>
           </div>
         </div>
 
@@ -103,14 +103,10 @@ export function LoginPage() {
         </button>
 
         <div className="flex flex-col gap-0.5 border-t border-line pt-[18px] text-[13px] leading-[1.6] text-muted">
-          <span>비밀번호를 잊었거나 로그인이 안 되나요?</span>
-          <span>
-            IT 지원팀 내선 1234 ·{' '}
-            <a href="mailto:it-help@company.com" className="whitespace-nowrap text-brand underline underline-offset-2">it-help@company.com</a>
-          </span>
+          <span>{USE_MOCK ? '현재 예시 답변만 표시되는 디자인 시연 모드입니다.' : '서버의 KLINK_DEMO_USER / KLINK_DEMO_PASSWORD로 로그인하세요.'}</span>
         </div>
       </form>
-      <div className="text-xs text-faint">대화 내용은 사내 서버에만 저장되며 외부로 전송되지 않습니다.</div>
+      <div className="max-w-[520px] text-center text-xs text-faint">LLM API를 사용하면 질문과 관련 문서 내용이 설정된 외부 모델 제공업체로 전송될 수 있습니다. 승인된 시연 자료만 사용하세요.</div>
     </div>
   )
 }
