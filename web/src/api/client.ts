@@ -1,5 +1,4 @@
-// VITE_API_BASE_URL 이 있으면 FastAPI 백엔드를, 없으면 목 API를 쓴다.
-// 엔드포인트 경로는 백엔드와 합의 전 가안이다.
+// 실시간 RAG API를 기본으로 사용. 목 응답은 명시적으로 설정한 경우에만 허용합니다.
 import { ApiError } from './errors'
 import { mockApi } from './mock'
 import type {
@@ -7,8 +6,8 @@ import type {
   Message, PermissionException, Settings, Stats, StreamEvent, User,
 } from './types'
 
-const BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, '') ?? ''
-export const USE_MOCK = !BASE
+const BASE = ((import.meta.env.VITE_API_BASE_URL as string | undefined) || 'http://localhost:8000').replace(/\/$/, '')
+export const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 
 export { ApiError }
 
