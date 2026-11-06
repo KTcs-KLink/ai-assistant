@@ -51,13 +51,13 @@ export function DocumentsPage() {
           <Button variant="primary" disabled={upload.isPending} onClick={() => fileInput.current?.click()}>
             {upload.isPending ? '올리는 중…' : '파일 선택'}
           </Button>
-          <span className="text-xs text-muted">PDF · DOCX · XLSX · PPTX — 등록 후 자동으로 인덱싱돼요</span>
+          <span className="text-xs text-muted">텍스트 PDF만 지원 · 업로드 후 Dense 색인 · 스캔본 OCR 미지원</span>
           <input
             ref={fileInput}
             type="file"
             multiple
             hidden
-            accept=".pdf,.docx,.xlsx,.pptx"
+            accept=".pdf"
             onChange={(e) => {
               const files = Array.from(e.target.files ?? [])
               if (files.length) upload.mutate(files)
@@ -68,6 +68,8 @@ export function DocumentsPage() {
         </div>
       )}
 
+      {upload.isError && <div role="alert" className="mx-7 mt-3 text-sm text-err">업로드 또는 색인 요청에 실패했습니다. PDF 파일 및 서버 연결을 확인해 주세요.</div>}
+      {retry.isError && <div role="alert" className="mx-7 mt-3 text-sm text-err">색인 재시도 요청에 실패했습니다.</div>}
       <div className="flex items-center justify-between gap-4 px-7 pt-5">
         <div className="flex flex-wrap gap-1.5">
           <Chip active={!collection} onClick={() => setCollection(null)}>전체 {total}</Chip>
