@@ -114,6 +114,12 @@ def init_db() -> None:
             FOREIGN KEY(document_id) REFERENCES documents(id)
         );
         CREATE INDEX IF NOT EXISTS idx_chunks_doc ON chunks(document_id);
+        CREATE TABLE IF NOT EXISTS feedback_reviews(
+            message_id TEXT PRIMARY KEY, comment TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL DEFAULT 'open',
+            causes TEXT NOT NULL DEFAULT '[]', memo TEXT NOT NULL DEFAULT '',
+            FOREIGN KEY(message_id) REFERENCES messages(id)
+        );
         """)
         # Restart during an indexing job must never leave a permanent "processing" state.
         db.execute("UPDATE documents SET status='error', error='재시도 필요' WHERE status='processing'")
@@ -144,7 +150,13 @@ class MessageCreate(BaseModel):
 
 class FeedbackUpdate(BaseModel):
     value: str | None = None
-    comment: str | None = None
+    comment: str | None = Field(default=None, max_length=1000)
+
+
+class FeedbackReviewUpdate(BaseModel):
+    causes: list[str] | None = None
+    memo: str | None = Field(default=None, max_length=3000)
+    status: str | None = None
 
 
 def require_session(request: Request) -> dict:
@@ -647,10 +659,20 @@ def feedback(cid: str, mid: str, payload: FeedbackUpdate, _: dict = Depends(requ
         raise HTTPException(422, "올바르지 않은 평가입니다.")
     with database() as db:
         ensure_conv(db, cid)
-        db.execute(
+        updated = db.execute(
             "UPDATE messages SET feedback=? WHERE id=? AND conversation_id=? AND role='assistant'",
             (payload.value, mid, cid),
         )
+        if not updated.rowcount:
+            raise HTTPException(404, "답변을 찾을 수 없습니다.")
+        if payload.value == "down":
+            db.execute(
+                """INSERT INTO feedback_reviews(message_id,comment)
+                   VALUES(?,?) ON CONFLICT(message_id) DO UPDATE SET comment=excluded.comment""",
+                (mid, payload.comment or ""),
+            )
+        else:
+            db.execute("DELETE FROM feedback_reviews WHERE message_id=?", (mid,))
 
 
 @app.get("/api/admin/collections")
@@ -700,7 +722,55 @@ def stats(days: int = 7, _: dict = Depends(require_session)):
 
 @app.get("/api/admin/feedback")
 def list_feedback(_: dict = Depends(require_session)):
-    return []  # 피드백 검토 워크플로는 아직 구현되지 않았습니다.
+    items = []
+    with database() as db:
+        rows = db.execute(
+            """SELECT m.*, f.comment, f.status, f.causes, f.memo
+               FROM messages m JOIN feedback_reviews f ON f.message_id=m.id
+               WHERE m.feedback='down' ORDER BY m.created_at DESC""",
+        ).fetchall()
+        for row in rows:
+            user_msg = db.execute(
+                """SELECT content FROM messages WHERE conversation_id=? AND role='user'
+                   AND (created_at < ? OR (created_at=? AND rowid <
+                   (SELECT rowid FROM messages WHERE id=?)))
+                   ORDER BY created_at DESC, rowid DESC LIMIT 1""",
+                (row["conversation_id"], row["created_at"], row["created_at"], row["id"]),
+            ).fetchone()
+            refs = json.loads(row["citations"])
+            items.append({
+                "id": row["id"], "question": user_msg["content"] if user_msg else "",
+                "answer": row["content"], "comment": row["comment"],
+                "collectionName": refs[0]["docName"] if refs else None,
+                "userName": DEMO_NAME, "dept": "K:LINK 시연",
+                "createdAt": row["created_at"], "status": row["status"],
+                "causes": json.loads(row["causes"]), "memo": row["memo"],
+                "conversationId": row["conversation_id"],
+            })
+    return items
+
+
+@app.patch("/api/admin/feedback/{mid}", status_code=204)
+def update_feedback_review(
+    mid: str, payload: FeedbackReviewUpdate, _: dict = Depends(require_session)
+):
+    allowed = {"문서 누락", "검색 실패", "답변 오류", "권한 없음"}
+    if payload.causes is not None and not set(payload.causes).issubset(allowed):
+        raise HTTPException(422, "올바르지 않은 개선 분류입니다.")
+    if payload.status is not None and payload.status not in {"open", "done"}:
+        raise HTTPException(422, "올바르지 않은 처리 상태입니다.")
+    with database() as db:
+        review = db.execute(
+            "SELECT * FROM feedback_reviews WHERE message_id=?", (mid,),
+        ).fetchone()
+        if not review:
+            raise HTTPException(404, "피드백을 찾을 수 없습니다.")
+        db.execute(
+            "UPDATE feedback_reviews SET causes=?,memo=?,status=? WHERE message_id=?",
+            (json.dumps(payload.causes if payload.causes is not None else json.loads(review["causes"]), ensure_ascii=False),
+             payload.memo if payload.memo is not None else review["memo"],
+             payload.status if payload.status is not None else review["status"], mid),
+        )
 
 
 @app.get("/api/admin/departments")
