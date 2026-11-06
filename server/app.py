@@ -16,6 +16,7 @@ import secrets
 import sqlite3
 import uuid
 from array import array
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -49,6 +50,13 @@ COLLECTIONS = {
 }
 LOCAL_MODEL = None
 MODEL_LOCK = asyncio.Lock()
+INDEX_TASKS: set[asyncio.Task] = set()
+
+
+def schedule_index(doc_id: str) -> None:
+    task = asyncio.create_task(index_document(doc_id))
+    INDEX_TASKS.add(task)
+    task.add_done_callback(INDEX_TASKS.discard)
 
 
 def now() -> str:
@@ -59,11 +67,19 @@ def new_id() -> str:
     return uuid.uuid4().hex
 
 
-def database() -> sqlite3.Connection:
+@contextmanager
+def database():
     db = sqlite3.connect(DB, timeout=30)
     db.row_factory = sqlite3.Row
     db.execute("PRAGMA foreign_keys=ON")
-    return db
+    try:
+        yield db
+        db.commit()
+    except BaseException:
+        db.rollback()
+        raise
+    finally:
+        db.close()
 
 
 def init_db() -> None:
@@ -398,7 +414,7 @@ async def upload_document(
     if collection_id not in COLLECTIONS:
         raise HTTPException(400, "지원하지 않는 업무 도메인입니다.")
     doc = await receive_pdf(file, collection_id, "kb")
-    asyncio.create_task(index_document(doc["id"]))
+    schedule_index(doc["id"])
     return doc
 
 
@@ -409,7 +425,7 @@ async def retry_document(doc_id: str, _: dict = Depends(require_session)):
         if not record:
             raise HTTPException(404, "문서를 찾을 수 없습니다.")
         db.execute("UPDATE documents SET status='processing', error=NULL WHERE id=?", (doc_id,))
-    asyncio.create_task(index_document(doc_id))
+    schedule_index(doc_id)
 
 
 async def search(question: str, attachment_ids: list[str]) -> list[dict]:
@@ -526,7 +542,14 @@ async def answer_events(cid: str, question: str, attachment_ids: list[str]):
         raise
     except Exception:
         # Do not reveal provider exceptions, API key fragments or internal paths.
-        yield emit({"type": "error", "message": "문서 검색 또는 답변 생성에 실패했습니다. 서버 로그와 API 설정을 확인해 주세요."})
+        error_text = "문서 검색 또는 답변 생성에 실패했습니다. 서버 로그와 API 설정을 확인해 주세요."
+        if not answer_text:
+            answer_text = error_text
+        else:
+            answer_text += "\n\n" + error_text
+        mid = add_message(cid, "assistant", answer_text, citations=citations, search_note=note)
+        yield emit({"type": "delta", "text": error_text if answer_text == error_text else "\n\n" + error_text})
+        yield emit({"type": "done", "messageId": mid})
 
 
 @app.post("/api/conversations/{cid}/messages")
@@ -562,12 +585,21 @@ async def regenerate(cid: str, mid: str, _: dict = Depends(require_session)):
             "SELECT * FROM messages WHERE conversation_id=? AND role='user' ORDER BY created_at DESC,rowid DESC LIMIT 1",
             (cid,),
         ).fetchone()
-        db.execute("DELETE FROM messages WHERE id=?", (mid,))
     if not last:
         raise HTTPException(400, "원본 질문이 없습니다.")
     ids = [a["id"] for a in json.loads(last["attachments"])]
+    async def replace_answer():
+        finished = False
+        async for event in answer_events(cid, last["content"], ids):
+            if '"type": "done"' in event:
+                finished = True
+            yield event
+        if finished:
+            with database() as db:
+                db.execute("DELETE FROM messages WHERE id=?", (mid,))
+
     return StreamingResponse(
-        answer_events(cid, last["content"], ids), media_type="text/event-stream",
+        replace_answer(), media_type="text/event-stream",
         headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"},
     )
 
