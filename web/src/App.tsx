@@ -28,9 +28,10 @@ export function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        {/* 기존 로컬 실데이터 앱은 별도 인증 서버를 요구하지 않습니다. */}
+        <Route path="/original-data-demo" element={<div className="flex h-screen bg-canvas"><OriginalDataDemoPage /></div>} />
         <Route element={<RequireAuth><ChatLayout /></RequireAuth>}>
           <Route index element={<NewChatPage />} />
-          <Route path="original-data-demo" element={<OriginalDataDemoPage />} />
           <Route path="c/:id" element={<ConversationPage />} />
         </Route>
         <Route path="admin" element={<RequireAuth admin><AdminLayout /></RequireAuth>}>
