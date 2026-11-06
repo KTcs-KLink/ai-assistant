@@ -576,11 +576,18 @@ async def retrieval_debug(question: str, _: dict = Depends(require_session)):
         pending = db.execute(
             "SELECT COUNT(*) FROM documents WHERE status IN ('processing','error')"
         ).fetchone()[0]
+        dimensions = db.execute(
+            """SELECT LENGTH(c.embedding) / 4 AS dimension, COUNT(*) AS total
+               FROM chunks c JOIN documents d ON c.document_id=d.id
+               WHERE d.status='ready' AND d.kind='kb'
+               GROUP BY LENGTH(c.embedding) / 4 ORDER BY dimension"""
+        ).fetchall()
     plan = plan_query(question)
     results = await search(question, []) if count else []
     return {
         "question": question, "intent": plan.intent, "queries": list(plan.variants),
         "readyDocuments": ready, "indexedChunks": count,
+        "storedVectorDimensions": [{"dimension": int(row["dimension"]), "chunks": row["total"]} for row in dimensions],
         "pendingOrFailedDocuments": pending,
         "matches": [
             {
