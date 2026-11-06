@@ -20,3 +20,6 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+
+# Local launcher output (may contain application logs)
+.demo-logs/
