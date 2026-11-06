@@ -10,6 +10,7 @@ import { useAuth } from './auth/AuthContext'
 import { ChatLayout } from './chat/ChatLayout'
 import { ConversationPage } from './chat/ConversationPage'
 import { NewChatPage } from './chat/NewChatPage'
+import { OriginalDataDemoPage } from './chat/OriginalDataDemoPage'
 import { LoginPage } from './LoginPage'
 
 function RequireAuth({ admin, children }: { admin?: boolean; children: ReactNode }) {
@@ -29,6 +30,7 @@ export function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route element={<RequireAuth><ChatLayout /></RequireAuth>}>
           <Route index element={<NewChatPage />} />
+          <Route path="original-data-demo" element={<OriginalDataDemoPage />} />
           <Route path="c/:id" element={<ConversationPage />} />
         </Route>
         <Route path="admin" element={<RequireAuth admin><AdminLayout /></RequireAuth>}>
