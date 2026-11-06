@@ -140,7 +140,10 @@ def main() -> int:
         cmd, cwd = original_launch(demo, root, args.original_port)
         print("기존 RAG 시연 앱을 실행합니다:", cmd[0], Path(cmd[-1]).name)
         env = os.environ.copy()
-        env["PYTHONPATH"] = os.pathsep.join(filter(None, [str(root), str(demo), env.get("PYTHONPATH", "")]))
+        env["PYTHONPATH"] = os.pathsep.join(filter(None, [
+            str(root), str(demo), str(root / "work" / "kepco_hr_contextual_20261102"),
+            env.get("PYTHONPATH", ""),
+        ]))
         start_logged(cmd, cwd, logs, "original-rag", env)
         if not wait_for_port(args.original_port):
             print(f"원본 RAG가 포트 {args.original_port} 에서 실행되지 않았습니다. 로그 마지막 부분:")
