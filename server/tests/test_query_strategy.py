@@ -9,6 +9,7 @@ from array import array
 import pytest
 
 from server.query_strategy import plan_query, supports_regular_payday
+from test_api import demo, login
 
 
 @pytest.mark.parametrize("question", [
@@ -98,7 +99,6 @@ def _inject_indexed_text(server, doc_id, name, section, content, vector):
 
 def test_grounded_payday_rescue_and_debug(demo):
     client, server = demo
-    from test_api import login
     login(client)
     # Both vectors intentionally point away from the query. The anchored
     # recovery must be based on actual document text, not a hardcoded date.
