@@ -19,6 +19,28 @@ KTcs 업무지식에 질문하고 답변과 근거 출처를 확인하는 AI 어
 | [`knowledge-mcp`](https://github.com/KTcs-KLink/knowledge-mcp) | 허가된 지식 자료, 출처 manifest, 청크 형식, 검색 API 및 MCP Server |
 | [`.github`](https://github.com/KTcs-KLink/.github) | 조직 공통 협업 규칙, 이슈·PR 템플릿, 조직 소개 |
 
+## 내 PC에서 기존 960문항 인사 RAG 화면 바로 열기 (Windows)
+
+다음 명령을 **PowerShell에서 한 번에 실행**하세요. 이전 로컬 KTCS 폴더의 원본 인덱스를 수정하지 않고, 8811번 기존 RAG 앱과 5173번 K:LINK 웹을 실행한 다음 기본 브라우저를 엽니다.
+
+```powershell
+$ROOT = "C:\Users\hjy10\OneDrive\문서\ChatGPT\KTCS"
+$REPO = Join-Path $ROOT "klink-demo-ui"
+if (-not (Test-Path (Join-Path $REPO ".git"))) {
+    git clone https://github.com/KTcs-KLink/ai-assistant.git $REPO
+}
+git -C $REPO fetch origin
+git -C $REPO switch feat/live-rag-chat-20261106
+git -C $REPO pull --ff-only origin feat/live-rag-chat-20261106
+& (Join-Path $REPO "start_klink.cmd")
+```
+
+또는 해당 저장소 폴더에서 `start_klink.cmd`를 더블클릭해도 됩니다. 서버가 정상 실행되면 `http://127.0.0.1:5173/original-data-demo`를 열게 됩니다.
+
+**중요한 제한:** 이 런처가 연결하는 기존 8811번 앱의 Python 실행 진입점과 실제 인덱스 로딩은 사용자 PC에서만 확인할 수 있습니다. 자동 실행이 실패하면 `klink-demo-ui/.demo-logs/original-rag.stderr.log`에서 실제 오류를 확인하세요. 검색 가능한 Python 앱이 여러 개이면 임의로 선택하지 않고 실패합니다. 비밀키 또는 내부 자료는 로그를 그대로 공유하기 전에 가려 주세요.
+
+`py scripts/launch_local_demo.py --inspect-only`를 실행하면 원본 파일을 변경하지 않고 파일 구조만 확인할 수 있습니다. 화면이 열려도 **기존 인덱스로 정확하게 답변하는지**는 질문을 실제 입력하고 검색 로그를 확인해야 합니다. Supabase 적재나 원본 `app_core.py` 수정까지 완료된 것은 아닙니다.
+
 ## 실시간 RAG 시연 브랜치 (2026-11-06)
 
 이 브랜치에는 `server/app.py` FastAPI가 추가되었습니다. 기존 `web/` 화면과 동일한 로그인/대화/SSE 계약으로 연결되며, 허용된 텍스트 PDF를 업로드하면 조항 중심 청킹 → Dense 임베딩 → 문서 검색 → 출처 기반 OpenAI 답변을 실시간으로 표시합니다. 관리자 화면은 등록 문서 수와 API 설정 상태를 보여줍니다.
