@@ -196,7 +196,7 @@ def health():
         "status": "ok", "mode": "single-user-demo", "indexedDocuments": indexed,
         "llmConfigured": bool(OPENAI_KEY),
         "embeddingProvider": EMBED_PROVIDER,
-        "denseReady": EMBED_PROVIDER == "local" or bool(OPENAI_KEY),
+        "denseReady": bool(OPENAI_KEY) if EMBED_PROVIDER == "openai" else (LOCAL_MODEL is not None),
         "supabaseConnected": False,
     }
 
@@ -298,6 +298,39 @@ def extract_pdf(path: Path) -> list[tuple[int, str, str]]:
     return result
 
 
+def extract_markdown(path: Path) -> list[tuple[int | None, str, str]]:
+    """Use chapter/article headings from already parsed documents, not a flat page chunk."""
+    text = path.read_text(encoding="utf-8-sig")
+    if len(text) > 2_000_000:
+        raise ValueError("시연 환경은 문서당 최대 2MB 텍스트를 지원합니다.")
+    sections: list[tuple[int | None, str, str]] = []
+    chapter = ""
+    heading = path.parent.name
+    body: list[str] = []
+
+    def flush():
+        if not body:
+            return
+        content = "\n".join(body).strip()
+        if content:
+            for chunk in split_text(content):
+                sections.append((None, " > ".join(x for x in [chapter, heading] if x), chunk))
+        body.clear()
+
+    for line in text.splitlines():
+        match = re.match(r"^(#{1,6})\s+(.+)", line)
+        if match:
+            flush()
+            name = match.group(2).strip()
+            if re.match(r"^제\s*\d+\s*장", name):
+                chapter = name
+            heading = name
+        elif line.strip() and not line.lstrip().startswith("> 원본:"):
+            body.append(line)
+    flush()
+    return sections
+
+
 def normalized(values: list[float]) -> list[float]:
     norm = math.sqrt(sum(v * v for v in values)) or 1.0
     return [v / norm for v in values]
@@ -338,7 +371,9 @@ async def index_document(doc_id: str) -> None:
     if not r:
         return
     try:
-        chunks = await asyncio.to_thread(extract_pdf, Path(r["path"]))
+        path = Path(r["path"])
+        parser = extract_markdown if path.suffix.lower() in {".md", ".txt"} else extract_pdf
+        chunks = await asyncio.to_thread(parser, path)
         if not chunks:
             raise ValueError("텍스트를 추출하지 못했습니다. 이미지 PDF는 OCR 처리가 필요합니다.")
         if len(chunks) > 1200:
@@ -474,7 +509,7 @@ def citations_for(results: list[dict]) -> list[dict]:
         row = item["row"]
         citations.append({
             "id": f"c{i}", "label": str(i), "docName": row["name"],
-            "section": f"{row['section']} · p.{row['page']}",
+            "section": f"{row['section']} · p.{row['page']}" if row["page"] else row["section"],
             "page": row["page"], "quote": row["content"][:350],
             "source": "attachment" if row["kind"] == "attachment" else "kb",
         })
@@ -483,7 +518,9 @@ def citations_for(results: list[dict]) -> list[dict]:
 
 def prompt_with_context(question: str, results: list[dict]) -> list[dict]:
     refs = "\n\n".join(
-        f"[[c{i}]] {x['row']['name']} / {x['row']['section']} / {x['row']['page']}쪽\n{x['row']['content']}"
+        f"[[c{i}]] {x['row']['name']} / {x['row']['section']}" +
+        (f" / {x['row']['page']}쪽" if x["row"]["page"] else "") +
+        f"\n{x['row']['content']}"
         for i, x in enumerate(results, 1)
     )
     return [
