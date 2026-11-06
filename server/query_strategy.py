@@ -78,7 +78,7 @@ def plan_query(question: str) -> QueryPlan:
 
 # An eligible chunk must directly state the regular monthly payment day.
 # A clause saying only "paid on payday" does not prove the actual day.
-_MONTHLY_DATE = re.compile(r"(?:매월|매달|매\s*월)\s*(?:\d{1,2}\s*일)")
+_MONTHLY_DATE = re.compile(r"(?:매월|매달|매\s*월)\s*(?P<day>\d{1,2})\s*일")
 _PAY_VOCAB = re.compile(r"급여|보수|임금|월급|봉급")
 _PAY_VERB = re.compile(r"지급|입금")
 
@@ -113,3 +113,58 @@ def has_sufficient_direct_evidence(plan: QueryPlan, results: list[dict]) -> bool
         supports_regular_payday(item["row"]["section"], item["row"]["content"])
         for item in results
     )
+
+
+def extract_regular_payday(section: str, content: str) -> tuple[int, bool] | None:
+    """Extract the day only from *retrieved source text*, never a fixed fact.
+
+    bool indicates an explicit preceding-day exception for weekends/holidays.
+    """
+    if not supports_regular_payday(section, content):
+        return None
+    normalized = _compact(content)
+    match = _MONTHLY_DATE.search(normalized)
+    if not match:
+        return None
+    day = int(match.group("day"))
+    if not 1 <= day <= 31:
+        return None
+    preceding = (
+        ("휴일" in normalized or "토요일" in normalized)
+        and ("그전일" in normalized or "전일로" in normalized or "전날" in normalized)
+    )
+    return day, preceding
+
+
+def grounded_regular_payday_answer(results: list[dict]) -> str | None:
+    """Fast, citation-backed deterministic answer for an unambiguous payroll day.
+
+    A conflicting or absent day is not resolved by guessing. The caller falls
+    back to a clear refusal if the indexed documents do not establish a day.
+    """
+    facts: list[tuple[str, int, bool]] = []
+    for n, item in enumerate(results, start=1):
+        row = item["row"]
+        extracted = extract_regular_payday(row["section"], row["content"])
+        if extracted:
+            facts.append((f"c{n}", extracted[0], extracted[1]))
+    if not facts:
+        return None
+    days = {day for _, day, _ in facts}
+    if len(days) != 1:
+        ids = ", ".join(f"[[{cid}]]" for cid, _, _ in facts)
+        return (
+            "등록된 근거 자료에 서로 다른 급여 지급일이 표시되어 있습니다. "
+            f"대상 직원과 적용 규정의 확인이 필요합니다. {ids}"
+        )
+    day = next(iter(days))
+    best_id = next(cid for cid, fact_day, _ in facts if fact_day == day)
+    answer = f"등록된 시연 규정에 따르면, 정기 보수(급여)는 **매월 {day}일** 지급합니다[[{best_id}]]."
+    preceding_ids = [cid for cid, _, preceding in facts if preceding]
+    if preceding_ids:
+        answer += (
+            " 해당 규정에는 **지급일이 토요일 또는 휴일이면 그 전일에 지급**하도록 되어 있습니다"
+            f"[[{preceding_ids[0]}]]."
+        )
+    answer += " 이 내용은 등록된 대체자료 기준이며 KTcs 실제 급여일을 확정한 것은 아닙니다."
+    return answer
