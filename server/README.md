@@ -62,7 +62,7 @@ python import_parsed.py --repo ../../knowledge-mcp --source SRC-0004 --collectio
 
 ## Semantic Dense 검색 개선 및 실시간 진단 (2026-11-06)
 
-일반 RAG 서버는 \`server/query_strategy.py\`의 보수적인 한국어 질의 정규화를 적용합니다. **원본 질문도 항상 함께 검색**하고, 지원하는 업무 표현은 한 번 더 Dense 임베딩해 각 후보 Top20을 RRF로 합칩니다. 현재 도메인 별칭은 정기 급여 지급일, 연차휴가, 출장비·여비, 사직, 근무시간, 채용의 일부 고신뢰 표현에 적용합니다. 나머지 질문도 원래 Dense 검색을 유지합니다.
+일반 RAG 서버는 `server/query_strategy.py`의 보수적인 한국어 질의 정규화를 적용합니다. **원본 질문도 항상 함께 검색**하고, 지원하는 업무 표현은 한 번 더 Dense 임베딩해 각 후보 Top20을 RRF로 합칩니다. 현재 도메인 별칭은 정기 급여 지급일, 연차휴가, 출장비·여비, 사직, 근무시간, 채용의 일부 고신뢰 표현에 적용합니다. 나머지 질문도 원래 Dense 검색을 유지합니다.
 
 - 정기 월급 지급일을 묻는 경우, 허용된 실제 색인 텍스트에 **'매월 NN일'과 급여/보수 지급 근거가 함께 명시**된 후보만 답변 모델에 넘깁니다. “성과연봉은 급여지급일에 준한다”는 문장만 있다면 날짜를 추론하지 않습니다. 지급일이 25일이라는 숫자를 코드에 고정하지 않았습니다.
 - 일상적인 다른 질문은 별도 업무 조건을 보존한 짧은 의미 질의로 보완합니다. 임금 계산기간·성과연봉·퇴직금 날짜는 정기 급여일 의도로 자동 치환하지 않습니다.
@@ -71,7 +71,7 @@ python import_parsed.py --repo ../../knowledge-mcp --source SRC-0004 --collectio
 
 ### 진단 API
 
-시연용 로그인에 성공한 상태에서 브라우저 관리자 개요 탭의 **검색 디버그**에서 질문을 입력하세요. \`GET /api/admin/retrieval-debug?question=...\`이 실제 등록 문서/청크 수, 질의 확장 표현, 검색된 문서명/섹션/청크 ID/유사도를 반환합니다.
+시연용 로그인에 성공한 상태에서 브라우저 관리자 개요 탭의 **검색 디버그**에서 질문을 입력하세요. `GET /api/admin/retrieval-debug?question=...`이 실제 등록 문서/청크 수, 질의 확장 표현, 검색된 문서명/섹션/청크 ID/유사도를 반환합니다.
 
 | 현상 | 먼저 확인할 곳 |
 | --- | --- |
@@ -80,17 +80,17 @@ python import_parsed.py --repo ../../knowledge-mcp --source SRC-0004 --collectio
 | matches는 있는데 답변 불가 | LLM 근거 전달·검증 단계 |
 | 모든 다른 질문도 급여일로 분류됨 | 질의 정규화 과잉 치환 회귀 테스트 |
 
-**중요:** 이는 이 GitHub 브랜치의 **새 FastAPI 서버**를 수정한 것입니다. 원래 \`KTCS/chat/kepco_hr_demo_20261102/\`의 **8811번 앱**은 별개의 사용자 PC 로컬 코드라 자동 업데이트되지 않습니다. 예전 960문항 실험의 검색 코어(\`work/kepco_hr_contextual_20261102/app_core.py\`)도 이 GitHub 저장소에 없으므로 아직 직접 수정하지 못했습니다.
+**중요:** 이는 이 GitHub 브랜치의 **새 FastAPI 서버**를 수정한 것입니다. 원래 `KTCS/chat/kepco_hr_demo_20261102/`의 **8811번 앱**은 별개의 사용자 PC 로컬 코드라 자동 업데이트되지 않습니다. 예전 960문항 실험의 검색 코어(`work/kepco_hr_contextual_20261102/app_core.py`)도 이 GitHub 저장소에 없으므로 아직 직접 수정하지 못했습니다.
 
 원본 PC 인덱스 상태를 확인하려면 사용자 PC에서 다음과 같이 읽기 전용 진단을 실행합니다.
 
-\`\`\`powershell
+```powershell
 cd "C:\Users\hjy10\OneDrive\문서\ChatGPT\KTCS\klink-demo-ui"
 git fetch origin
 git switch feat/live-rag-chat-20261106
 py server/check_local_rag.py --root "C:\Users\hjy10\OneDrive\문서\ChatGPT\KTCS"
-\`\`\`
+```
 
-\`check_local_rag.py\`는 기존 프로젝트 폴더/벡터 후보/8811 서버 응답만 확인하고, **키·원문·개인정보를 출력하거나 데이터/코드를 수정하지 않습니다.** 별도 960문항 로컬 서버의 실제 Top5 검색 추적은 원본 \`app_core.py\`의 API 구조를 확인한 뒤 연결해야 합니다.
+`check_local_rag.py`는 기존 프로젝트 폴더/벡터 후보/8811 서버 응답만 확인하고, **키·원문·개인정보를 출력하거나 데이터/코드를 수정하지 않습니다.** 별도 960문항 로컬 서버의 실제 Top5 검색 추적은 원본 `app_core.py`의 API 구조를 확인한 뒤 연결해야 합니다.
 
-회귀 테스트: \`python -m pytest server/tests -q\`. 외부 LLM API 없이 검색·의도 처리·부정확한 지급일 회피 여부를 검증합니다. 실제 BGE 모델과 원본 248개 승인 구간으로 동일한 질문을 재검증해야 운영 시연에 적용할 수 있습니다.
+회귀 테스트: `python -m pytest server/tests -q`. 외부 LLM API 없이 검색·의도 처리·부정확한 지급일 회피 여부를 검증합니다. 실제 BGE 모델과 원본 248개 승인 구간으로 동일한 질문을 재검증해야 운영 시연에 적용할 수 있습니다.
