@@ -27,6 +27,17 @@ try:
 except ImportError:  # uvicorn app:app from server/ working directory
     from query_strategy import plan_query, evidence_priority, supports_regular_payday, grounded_regular_payday_answer
 
+try:
+    from .supabase_rag import (
+        enabled as supabase_enabled, search_supabase, admin_status,
+        admin_documents, admin_collection_counts,
+    )
+except ImportError:
+    from supabase_rag import (
+        enabled as supabase_enabled, search_supabase, admin_status,
+        admin_documents, admin_collection_counts,
+    )
+
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -210,12 +221,21 @@ def add_message(cid: str, role: str, content: str, *,
 def health():
     with database() as db:
         indexed = db.execute("SELECT COUNT(*) FROM documents WHERE status='ready' AND kind='kb'").fetchone()[0]
+    remote = None
+    if supabase_enabled():
+        try:
+            remote = admin_status()
+        except Exception:
+            pass  # Health must report the disconnected state rather than invent success.
     return {
-        "status": "ok", "mode": "single-user-demo", "indexedDocuments": indexed,
+        "status": "ok" if not supabase_enabled() or remote else "unavailable",
+        "mode": "single-user-demo", "indexedDocuments": remote["readyDocuments"] if remote else indexed,
+        "indexedChunks": remote["indexedChunks"] if remote else None,
         "llmConfigured": bool(OPENAI_KEY),
-        "embeddingProvider": EMBED_PROVIDER,
-        "denseReady": bool(OPENAI_KEY) if EMBED_PROVIDER == "openai" else (LOCAL_MODEL is not None),
-        "supabaseConnected": False,
+        "embeddingProvider": "BGE-m3-ko-pinned" if supabase_enabled() else EMBED_PROVIDER,
+        "denseReady": bool(remote and remote["indexedChunks"]) if supabase_enabled()
+                      else (bool(OPENAI_KEY) if EMBED_PROVIDER == "openai" else (LOCAL_MODEL is not None)),
+        "supabaseConnected": bool(remote) if supabase_enabled() else False,
     }
 
 
@@ -451,12 +471,18 @@ async def upload_attachment(file: UploadFile = File(...), _: dict = Depends(requ
 def list_documents(_: dict = Depends(require_session)):
     with database() as db:
         rows = db.execute("SELECT * FROM documents WHERE kind='kb' ORDER BY uploaded_at DESC").fetchall()
-    return [
+    local_docs = [
         {"id": r["id"], "name": r["name"], "collectionId": r["collection_id"],
          "access": "시연 계정 전용", "uploadedAt": r["uploaded_at"],
          "status": r["status"]}
         for r in rows
     ]
+    if supabase_enabled():
+        try:
+            return admin_documents() + local_docs
+        except Exception:
+            raise HTTPException(503, "Supabase 문서 목록에 접근할 수 없습니다.") from None
+    return local_docs
 
 
 @app.post("/api/admin/documents")
@@ -481,7 +507,7 @@ async def retry_document(doc_id: str, _: dict = Depends(require_session)):
     schedule_index(doc_id)
 
 
-async def search(question: str, attachment_ids: list[str]) -> list[dict]:
+async def search_local(question: str, attachment_ids: list[str]) -> list[dict]:
     """Original Dense + conservative Korean paraphrase + direct source evidence.
 
     The expansion query is a retrieval hint, never an answer. A monthly
@@ -559,6 +585,19 @@ async def search(question: str, attachment_ids: list[str]) -> list[dict]:
 
 
 
+async def search(question: str, attachment_ids: list[str]) -> list[dict]:
+    if not supabase_enabled():
+        return await search_local(question, attachment_ids)
+    remote = await search_supabase(question)
+    if attachment_ids:
+        # Attachments are still local to the conversation; never mix them into
+        # global Supabase knowledge. Search each embedding space separately.
+        attached = await search_local(question, attachment_ids)
+        attached = [r for r in attached if r["row"]["kind"] == "attachment"]
+        return (attached + remote)[:5]
+    return remote
+
+
 @app.get("/api/admin/retrieval-debug")
 async def retrieval_debug(question: str, _: dict = Depends(require_session)):
     """Live evidence audit for the administrator; never returns API keys."""
@@ -582,12 +621,20 @@ async def retrieval_debug(question: str, _: dict = Depends(require_session)):
                WHERE d.status='ready' AND d.kind='kb'
                GROUP BY LENGTH(c.embedding) / 4 ORDER BY dimension"""
         ).fetchall()
+    if supabase_enabled():
+        try:
+            remote_status = admin_status()
+        except Exception:
+            raise HTTPException(503, "Supabase 연결 또는 테이블 적재 상태를 확인해 주세요.") from None
+        ready, count = remote_status["readyDocuments"], remote_status["indexedChunks"]
+        dimensions = [{"dimension": 1024, "chunks": count}] if count else []
     plan = plan_query(question)
     results = await search(question, []) if count else []
     return {
         "question": question, "intent": plan.intent, "queries": list(plan.variants),
         "readyDocuments": ready, "indexedChunks": count,
-        "storedVectorDimensions": [{"dimension": int(row["dimension"]), "chunks": row["total"]} for row in dimensions],
+        "storedVectorDimensions": (dimensions if supabase_enabled() else
+            [{"dimension": int(row["dimension"]), "chunks": row["total"]} for row in dimensions]),
         "pendingOrFailedDocuments": pending,
         "matches": [
             {
@@ -788,6 +835,13 @@ def collections(_: dict = Depends(require_session)):
         ).fetchall()
     summaries = {key: {"total": 0, "processing": 0, "errors": 0, "last": None}
                  for key in COLLECTIONS}
+    if supabase_enabled():
+        try:
+            for domain, count in admin_collection_counts().items():
+                if domain in summaries:
+                    summaries[domain]["total"] += count
+        except Exception:
+            raise HTTPException(503, "Supabase 컬렉션 집계에 접근할 수 없습니다.") from None
     for row in rows:
         summary = summaries[row["collection_id"]]
         summary["total"] += row["total"]
