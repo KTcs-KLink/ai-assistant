@@ -766,6 +766,109 @@
   color: #566e89 !important;
   line-height: 1.8 !important;
 }
+.hr-retrieval-connection {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  padding: 19px 22px;
+  margin-bottom: 24px;
+  border: 1px solid #dbe3ef;
+  border-radius: 9px;
+  background: #fff;
+  color: #254569;
+}
+.hr-retrieval-connection.ready {
+  border-left: 3px solid #548777;
+}
+.hr-retrieval-connection > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.hr-retrieval-connection > div {
+  flex: 1;
+  min-width: 0;
+}
+.hr-retrieval-connection strong {
+  font-size: 13px;
+}
+.hr-retrieval-connection p {
+  margin: 6px 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.hr-retrieval-connection small {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.hr-retrieval-trace {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+.hr-assistant .hr-retrieval-trace > summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.8;
+}
+.hr-assistant .hr-retrieval-trace > summary::before {
+  content: "›";
+  font-size: 17px;
+}
+.hr-assistant .hr-retrieval-trace[open] > summary::before {
+  transform: rotate(90deg);
+}
+.hr-assistant .hr-retrieval-trace > summary > svg {
+  display: inline;
+  flex-shrink: 0;
+  margin: 0;
+}
+.hr-retrieval-trace > p,
+.hr-retrieval-trace article > p {
+  font-size: 11px !important;
+  line-height: 1.8;
+}
+.hr-retrieval-trace article {
+  border-top: 1px solid #dbe3ef;
+  padding: 17px 0 6px;
+  margin-top: 17px;
+}
+.hr-retrieval-trace h3 {
+  font-size: 13px;
+  margin: 0 0 7px;
+}
+.hr-retrieval-trace blockquote {
+  margin: 13px 0;
+  padding: 12px;
+  background: #f5f7fa;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 2;
+}
+.hr-retrieval-trace small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-bottom: 10px;
+}
+@media (max-width: 700px) {
+  .hr-retrieval-connection {
+    padding: 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .hr-retrieval-connection small {
+    font-size: 10px;
+  }
+  .hr-retrieval-trace {
+    padding: 13px 10px;
+  }
+}
 .hr-source-conditions {
   margin: 24px 0;
   border-top: 1px solid #d8e4ed;

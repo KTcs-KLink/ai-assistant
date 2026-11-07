@@ -1,0 +1,6 @@
+{
+  "status": "FAILED",
+  "error": "locator.waitFor: Timeout 60000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.hr-retrieval-connection.ready') to be visible\u001b[22m\n",
+  "pageErrors": [],
+  "stage": "Readiness preflight before question entry; no answer POST or provider generation"
+}

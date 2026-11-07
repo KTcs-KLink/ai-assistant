@@ -9,9 +9,9 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 try:
-    from . import benefit_explanation, hr_evidence, hr_conditions
+    from . import benefit_explanation, hr_evidence, hr_conditions, hr_vector
 except ImportError:
-    import benefit_explanation, hr_evidence, hr_conditions
+    import benefit_explanation, hr_evidence, hr_conditions, hr_vector
 
 
 class AnswerUnavailable(Exception):
@@ -179,10 +179,16 @@ def finalize(draft: Draft,sources: list[dict],question: str=""):
 def generate(question: str) -> dict:
     if not 2 <= len(question.strip()) <= 500 or hr_evidence.PRIVATE.search(question):
         raise AnswerUnavailable("개인정보나 키를 제외한 일반 인사 업무 질문을 입력해 주세요.")
-    sources = hr_evidence.search(question, limit=5)
+    if hr_vector.enabled():
+        try:
+            sources, retrieval = hr_vector.retrieve(question, limit=5)
+        except hr_vector.VectorUnavailable as error:
+            raise AnswerUnavailable(str(error), error.code) from None
+    else:
+        sources, retrieval = hr_evidence.search(question, limit=5), hr_evidence.summary()
     base = dict(company="KEPCO", ktcs_applicable=False, employee_data_sent=False, human_approved=False,
         notice="한국전력 공개 대체자료의 자동 검토 범위입니다. KTcs 현행 규정·실직원 자격·조직의 최종 승인이 아닙니다.",
-        retrieval=hr_evidence.summary())
+        retrieval=retrieval)
     if not sources:
         return dict(**base, status="needs_review", paragraphs=[], missing_information=["허용된 인사 원문에서 필요한 근거를 찾지 못했어요."], sources=[])
     key, model = benefit_explanation.settings()
@@ -223,7 +229,7 @@ def generate(question: str) -> dict:
         with OpenAI(api_key=key, timeout=75, max_retries=0) as client:
             count = client.responses.input_tokens.count(**payload).input_tokens
             if not 0 < count <= 8192:
-                return dict(**base, status="needs_review", paragraphs=[], sources=[], token_count=count,
+                return dict(**base, status="needs_review", paragraphs=[], sources=verified_sources, token_count=count,
                     missing_information=["필수 원문을 보존한 근거 묶음이 요청 한도를 넘어 질문 범위를 좁혀야 해요."])
             response = client.responses.create(**payload, store=False, max_output_tokens=6000)
             calls.append(dict(phase="draft",token_count=count,usage=response.usage.model_dump() if response.usage else None))

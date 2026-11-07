@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "parallel_status_requests": 4,
+  "all_status_ready": true,
+  "parallel_query_embeddings": 4,
+  "all_fresh": true,
+  "execution": "LOCAL_CPU_FP32_OFFICIAL_LAYER_STREAM",
+  "repeat_minimum_cosine": 0.9999999403953552,
+  "paid_model_calls": 0,
+  "cloud_calls": 0
+}

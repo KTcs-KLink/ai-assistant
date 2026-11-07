@@ -147,6 +147,42 @@ export interface SourceCondition {
   kind: "ORIGINAL_SOURCE_PARAGRAPH_NOT_GENERATED";
   human_approved: boolean;
 }
+export interface RetrievedChunk {
+  chunk_id: string;
+  source_id: string;
+  start: number;
+  end: number;
+  text: string;
+  sha256: string;
+  source_sha256: string;
+  rank: number;
+  similarity: number;
+}
+export interface RetrievalTrace {
+  method: string;
+  status?: string;
+  embedding?: {
+    model: string;
+    revision: string;
+    dimension: number;
+    computed: boolean;
+    cached: boolean;
+    location: string;
+    elapsed_ms: number;
+  } | null;
+  index?: { window_count: number; source_count: number; read_only: boolean };
+  matches?: RetrievedChunk[];
+  source_unit_ids?: string[];
+  lexical_fallback?: boolean;
+}
+export interface RetrievalStatus {
+  method: string;
+  ready: boolean;
+  query_embedding: boolean;
+  model?: string;
+  index?: { window_count: number; source_count: number; read_only: boolean };
+  message?: string;
+}
 export interface HrAnswer {
   company: string;
   ktcs_applicable: boolean;
@@ -168,6 +204,7 @@ export interface HrAnswer {
   partial_verified_text?: boolean;
   provider_calls?: { phase: string }[];
   semantic_review?: { independent: boolean; human_approved: boolean };
+  retrieval?: RetrievalTrace;
 }
 export class HrError extends Error {
   constructor(
@@ -367,6 +404,88 @@ export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
         0,
         "조건·예외 원문 해시가 일치하지 않아 답변을 표시하지 않았어요.",
       );
+  }
+  const retrieval = result.retrieval;
+  if (retrieval?.method === "local_bge_m3_dense") {
+    const fail = () =>
+      new HrError(
+        0,
+        "질문 임베딩과 실제 검색 청크의 연결을 확인하지 못해 답변을 표시하지 않았어요.",
+      );
+    if (!Array.isArray(retrieval.matches)) throw fail();
+    if (retrieval.status === "OUT_OF_HR_SCOPE") {
+      if (
+        retrieval.matches.length ||
+        retrieval.embedding ||
+        result.sources.length ||
+        result.paragraphs.length
+      )
+        throw fail();
+    } else {
+      const embedding = retrieval.embedding;
+      if (
+        retrieval.status !== "RETRIEVED" ||
+        embedding?.model !== "BAAI/bge-m3" ||
+        embedding.dimension !== 1024 ||
+        embedding.revision !== "5617a9f61b028005a4858fdac845db406aefb181" ||
+        embedding.computed !== true ||
+        embedding.cached !== false ||
+        embedding.location !== "LOCAL_SERVER" ||
+        retrieval.lexical_fallback !== false ||
+        retrieval.index?.read_only !== true ||
+        !retrieval.matches.length ||
+        retrieval.matches.length > 5 ||
+        !Array.isArray(retrieval.source_unit_ids) ||
+        retrieval.matches.length !== result.sources.length ||
+        retrieval.matches.some(
+          (chunk) => !chunk || typeof chunk !== "object",
+        ) ||
+        retrieval.source_unit_ids.length !== result.sources.length ||
+        retrieval.source_unit_ids.some(
+          (id, index) => id !== result.sources[index]?.id,
+        ) ||
+        new Set(retrieval.matches.map((c) => c.source_id)).size !==
+          retrieval.matches.length
+      )
+        throw fail();
+      for (const [index, chunk] of retrieval.matches.entries()) {
+        const source = result.sources.find(
+          (item) => item.id === chunk.source_id,
+        );
+        const points =
+          source && typeof source.text === "string"
+            ? Array.from(source.text)
+            : [];
+        if (
+          !source ||
+          chunk.rank !== index + 1 ||
+          typeof chunk.chunk_id !== "string" ||
+          !chunk.chunk_id.startsWith("W-") ||
+          typeof chunk.text !== "string" ||
+          !chunk.text.length ||
+          !Number.isInteger(chunk.start) ||
+          !Number.isInteger(chunk.end) ||
+          chunk.start < 0 ||
+          chunk.end <= chunk.start ||
+          chunk.end > points.length ||
+          points.slice(chunk.start, chunk.end).join("") !== chunk.text ||
+          source.sha256 !== chunk.source_sha256 ||
+          !Number.isFinite(chunk.similarity) ||
+          Math.abs(chunk.similarity) > 1.001
+        )
+          throw fail();
+        let hash = hashes.get(source.id);
+        if (!hash) {
+          hash = await sha256(source.text);
+          hashes.set(source.id, hash);
+        }
+        if (
+          hash !== chunk.source_sha256 ||
+          (await sha256(chunk.text)) !== chunk.sha256
+        )
+          throw fail();
+      }
+    }
   }
   if (result.partial_verified_text || result.condition_review_required!.length)
     result.status = "needs_review";

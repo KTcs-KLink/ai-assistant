@@ -1,0 +1,87 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T05:41:54.713Z",
+  "httpStatus": 200,
+  "question": "병가 누계가 7일이 되면 어떤 증빙이 필요한가요?",
+  "actualAnswerRequests": 1,
+  "providerGenerationCalls": 2,
+  "answerStatus": "answered",
+  "paragraphCount": 1,
+  "conditionCards": 2,
+  "retrievalMethod": "local_bge_m3_dense",
+  "embedding": {
+    "model": "BAAI/bge-m3",
+    "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "weights_sha256": "993b2248881724788dcab8c644a91dfd63584b6e5604ff2037cb5541e1e38e7e",
+    "dimension": 1024,
+    "pooling": "CLS_then_FP32_L2",
+    "truncation": false,
+    "computed": true,
+    "cached": false,
+    "location": "LOCAL_SERVER",
+    "execution": "LOCAL_CPU_FP32_OFFICIAL_LAYER_STREAM",
+    "elapsed_ms": 4939.33
+  },
+  "index": {
+    "window_count": 456,
+    "source_count": 449,
+    "stored_window_count": 8511,
+    "vectors_sha256": "36d8f936635fe9f29761691efa241cc765439e1134fcc38b71363c2c1476a98f",
+    "windows_sha256": "9ae1da4bf109c8f6b5c2db2ed1c563f6bc6d887f31947dff11d948b5c75ed1a0",
+    "read_only": true,
+    "scope": "INTERSECTION_WITH_CURRENT_ALLOWED_HR_SOURCES",
+    "numeric_compatibility": {
+      "sampled_windows": 3,
+      "minimum_cosine": 0.99999374,
+      "minimum_required": 0.9999,
+      "all_windows_reembedded": false
+    }
+  },
+  "matchedChunkIds": [
+    "W-1ecd2ea5061000c2d2e59d9fa88a",
+    "W-046dc841f89eb7ce6f89aa16d46d",
+    "W-b881346dae63670acd16e276e664",
+    "W-4237a52a007894ff4aa87d6fa214",
+    "W-9bc09a861c56927727b1e66b751e"
+  ],
+  "sourceIds": [
+    "HF-e8a98aa6c73d32ca427c18551e4e",
+    "HF-1a8ca789bae2d2e51e5c0adc6e16",
+    "HF-d41220c0266c9e338b5df1817772",
+    "HF-24c91794dfadb5493f702743452a",
+    "HF-c7fcd7267aa7eb211dfcbf74e223"
+  ],
+  "sourceSections": [
+    "취업규칙 > 제2장 복무 > 제4절 휴일 및 휴가 > 제30조의2 질병휴가",
+    "인사관리지침 > 제7장 상 벌 > 제47조 증거서류",
+    "취업규칙 > 제2장 복무 > 제3절 출근 및 결근 > 제23조 결근 <개정 2008.12.23., 2017.2.1. 2019.12.3>",
+    "취업규칙 > 제2장 복무 > 제4절 휴일 및 휴가 > 제30조의3 공가",
+    "연봉 및 복리후생관리규정 > 제4장 복리후생 > 제37조 건강진단"
+  ],
+  "fullChunkTextDisplayed": true,
+  "company": "KEPCO",
+  "ktcsApplicable": false,
+  "humanApproved": false,
+  "employeeDataSent": false,
+  "cloudStatusRequests": 0,
+  "pageErrors": [],
+  "viewports": [
+    {
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "width": 360,
+      "documentWidth": 360
+    }
+  ],
+  "scope": "One real query embedding/local-chunk/configured-LLM/UI connection check; not a retrieval benchmark, semantic accuracy score or company approval"
+}

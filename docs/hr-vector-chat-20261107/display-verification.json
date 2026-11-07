@@ -1,0 +1,17 @@
+{
+  "status": "PASSED",
+  "mode": "existing live response display; no new answer or model request",
+  "paidModelCalls": 0,
+  "shots": [
+    {
+      "width": 1440,
+      "chunkCards": 5,
+      "documentWidth": 1440
+    },
+    {
+      "width": 390,
+      "chunkCards": 5,
+      "documentWidth": 390
+    }
+  ]
+}

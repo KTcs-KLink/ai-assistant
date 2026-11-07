@@ -1,0 +1,1086 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T05:44:14.825Z",
+  "checks": [
+    {
+      "name": "Explicit example login, HttpOnly session and company SSO boundary",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Home uses server recommendations and separates company applicability",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Version-bound preparation, server checklist and refresh persistence",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Reminder opt-in, changed conditions and stale preparation invalidate old checks",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Official forms come from BFF and cannot download before connection",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Actual HR search and source lookup preserve KEPCO scope and metadata",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Unsupported question returns server withholding without a model call",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Withheld generated text stays hidden while real source remains readable",
+      "mode": "intercepted response; no model call",
+      "passed": true
+    },
+    {
+      "name": "Provider/transport failure shows an error without a replacement answer",
+      "mode": "intercepted 503; no model call",
+      "passed": true
+    },
+    {
+      "name": "Failed catalog lookup is not replaced by fictional local recommendations",
+      "mode": "intercepted catalog 503",
+      "passed": true
+    },
+    {
+      "name": "Server consent revocation clears plans and reminders and survives refresh",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Responsive connected pages have no horizontal overflow",
+      "mode": "real BFF",
+      "passed": true
+    },
+    {
+      "name": "Logout invalidates server access and session expiry hides private screen",
+      "mode": "real BFF",
+      "passed": true
+    }
+  ],
+  "responsive": [
+    {
+      "width": 1920,
+      "route": "/hr",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/benefits",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/assistant",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/library",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/preparations",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/profile",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "route": "/hr/status",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1440,
+      "route": "/hr",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/benefits",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/assistant",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/library",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/preparations",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/profile",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "route": "/hr/status",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1024,
+      "route": "/hr",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/benefits",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/assistant",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/library",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/preparations",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/profile",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "route": "/hr/status",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 768,
+      "route": "/hr",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/benefits",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/assistant",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/library",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/preparations",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/profile",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "route": "/hr/status",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 390,
+      "route": "/hr",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/benefits",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/assistant",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/library",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/preparations",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/profile",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "route": "/hr/status",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 360,
+      "route": "/hr",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/benefits",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/assistant",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/library",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/preparations",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/profile",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "route": "/hr/status",
+      "viewport": 360,
+      "document": 360
+    }
+  ],
+  "facts": {
+    "cookie": {
+      "httpOnly": true,
+      "sameSite": "Strict",
+      "path": "/api/benefits"
+    },
+    "readiness": {
+      "approvedPolicies": 0,
+      "officialForms": 0,
+      "referenceSources": 449,
+      "humanApprovedSources": 0,
+      "productionReady": false
+    }
+  },
+  "pageErrors": [],
+  "externalBrowserRequests": [],
+  "apiRequests": [
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/session/demo",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/profile/example",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/hr/preparations/:id",
+      "bodyKeys": [
+        "conditions_revision",
+        "policy_sha256"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/benefits/hr/preparations/:id",
+      "bodyKeys": [
+        "index",
+        "checked"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/benefits/hr/preparations/:id",
+      "bodyKeys": [
+        "index",
+        "checked"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/benefits/hr/preparations/:id",
+      "bodyKeys": [
+        "index",
+        "checked"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "PUT",
+      "path": "/api/benefits/hr/reminders",
+      "bodyKeys": [
+        "enabled"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "PUT",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [
+        "employment_consent",
+        "family_consent",
+        "hire_date",
+        "employment_type",
+        "children_ages",
+        "household_size"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/evidence",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/sources/:id",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/hr/answer",
+      "bodyKeys": [
+        "question"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/hr/answer",
+      "bodyKeys": [
+        "question"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/benefits/hr/answer",
+      "bodyKeys": [
+        "question"
+      ],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/catalog",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/profile",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/forms",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/preparations",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/readiness",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/updates",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/retrieval/status",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/hr/capabilities",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/benefits/session",
+      "bodyKeys": [],
+      "authorizationHeaderPresent": false
+    }
+  ],
+  "paidModelCalls": 0,
+  "scope": "New UI with actual BFF plus separately labelled intercepted failure states; not company eligibility approval, independent answer-quality evaluation or physical device testing"
+}

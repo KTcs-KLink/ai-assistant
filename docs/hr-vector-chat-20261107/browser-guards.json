@@ -1,0 +1,24 @@
+{
+  "status": "PASSED",
+  "checks": [
+    {
+      "name": "changed actual chunk offset",
+      "passed": true,
+      "mode": "intercepted tampering of retained actual response"
+    },
+    {
+      "name": "changed actual chunk hash",
+      "passed": true,
+      "mode": "intercepted tampering of retained actual response"
+    },
+    {
+      "name": "query embedding falsely marked cached",
+      "passed": true,
+      "mode": "intercepted tampering of retained actual response"
+    }
+  ],
+  "pageErrors": [],
+  "paidModelCalls": 0,
+  "replay": true,
+  "scope": "Three browser integrity failure checks; not new model answers or semantic-quality grading"
+}

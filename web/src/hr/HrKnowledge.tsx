@@ -23,6 +23,7 @@ import type {
 } from "./api";
 import { Company, SourceView, Unavailable } from "./ui";
 import { ConditionCards } from "./ConditionCards";
+import { RetrievalConnection, RetrievedChunks } from "./RetrievalView";
 
 async function currentSource(item: EvidenceSource, signal?: AbortSignal) {
   const result = await request<EvidenceSource>(
@@ -399,7 +400,7 @@ export function HrAssistant() {
           HR + "/answer",
           "POST",
           { question },
-          AbortSignal.any([current.signal, AbortSignal.timeout(330000)]),
+          AbortSignal.any([current.signal, AbortSignal.timeout(375000)]),
         ),
       );
       if (current.signal.aborted) return;
@@ -463,6 +464,7 @@ export function HrAssistant() {
         서버가 허용한 한국전력 인사 참고자료만 사용합니다. 질문에 실제
         개인정보를 입력하지 마세요.
       </Heading>
+      <RetrievalConnection />
       <div className="p-assistant-layout hr-assistant">
         <section className="p-chat-panel" aria-label="연결된 인사 대화">
           <header>
@@ -534,6 +536,10 @@ export function HrAssistant() {
                           <Company company={message.answer.company} />
                         </div>
                         <Note>{message.answer.notice}</Note>
+                        <RetrievedChunks
+                          answer={message.answer}
+                          openSource={(item) => void openSource(item)}
+                        />
                         {message.answer.validation ===
                           "FINAL_DETERMINISTIC_REVALIDATION_NOT_NEW_GENERATION" && (
                           <p className="hr-replay-label">
@@ -632,8 +638,9 @@ export function HrAssistant() {
                     </div>
                   ) : (
                     <p className="hr-pending" role="status">
-                      답변 초안과 원문을 차례로 대조하고 있어요. 몇 분이 걸릴 수
-                      있으며, 이 자동 검토는 사람의 독립 승인이 아닙니다.
+                      질문을 임베딩하고 로컬 원문을 찾아 답변을 대조하고 있어요.
+                      몇 분이 걸릴 수 있으며, 이 자동 검토는 사람의 독립 승인이
+                      아닙니다.
                     </p>
                   )}
                 </div>

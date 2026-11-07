@@ -11,11 +11,11 @@ from pydantic import Field
 
 try:
     from .benefits_api import current
-    from . import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime
+    from . import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime, hr_vector
     from .hr_policy import StrictModel
 except ImportError:
     from benefits_api import current
-    import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime
+    import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime, hr_vector
     from hr_policy import StrictModel
 
 router = APIRouter(prefix="/api/benefits/hr", tags=["hr-domain"])
@@ -23,7 +23,15 @@ router = APIRouter(prefix="/api/benefits/hr", tags=["hr-domain"])
 
 @router.get("/capabilities")
 def capabilities():
-    return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False)
+    return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False,
+                answer_retrieval=hr_vector.METHOD if hr_vector.enabled() else "hr_lexical_bm25")
+
+
+@router.get("/retrieval/status")
+def retrieval_status(session=Depends(current)):
+    if session["mode"] != "demo":
+        raise HTTPException(403, "KTcs 직원용 승인 원문과 접근권한 연결 전이에요.")
+    return hr_vector.status()
 
 
 def catalog(session: dict) -> list[dict]:
