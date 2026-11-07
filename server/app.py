@@ -31,9 +31,11 @@ from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Respon
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 HERE = Path(__file__).resolve().parent
-load_dotenv(HERE / ".env")
+load_dotenv(os.getenv("KLINK_ENV_FILE", str(HERE / ".env")))
 DATA = Path(os.getenv("KLINK_DATA_DIR", str(HERE / ".data"))).expanduser().resolve()
 DATA.mkdir(parents=True, exist_ok=True)
 (DATA / "files").mkdir(exist_ok=True)
@@ -43,7 +45,7 @@ DEMO_USER = os.getenv("KLINK_DEMO_USER", "klink")
 DEMO_PASSWORD = os.getenv("KLINK_DEMO_PASSWORD", "")
 DEMO_NAME = os.getenv("KLINK_DEMO_NAME", "K:LINK 시연 관리자")
 OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
-LLM_MODEL = os.getenv("KLINK_LLM_MODEL", "gpt-4.1-mini")
+LLM_MODEL = os.getenv("KLINK_LLM_MODEL") or os.getenv("OPENAI_MODEL") or "gpt-4.1-mini"
 EMBED_MODEL = os.getenv("KLINK_EMBED_MODEL", "text-embedding-3-small")
 EMBED_PROVIDER = os.getenv("KLINK_EMBED_PROVIDER", "openai").lower()
 LOCAL_MODEL_NAME = os.getenv("KLINK_LOCAL_MODEL", "BAAI/bge-m3")
@@ -135,9 +137,35 @@ init_db()
 app = FastAPI(title="K:LINK RAG demo", version="0.1.0")
 app.add_middleware(
     CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True, allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],
+    allow_credentials=True, allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Accept"],
 )
+
+try:
+    from .benefits_api import router as benefits_router
+except ImportError:
+    from benefits_api import router as benefits_router
+app.include_router(benefits_router)
+
+
+@app.exception_handler(RequestValidationError)
+async def invalid_request(request: Request, exc: RequestValidationError):
+    # Pydantic's default payload echoes input, including credentials and family data.
+    return JSONResponse(status_code=422, content={"detail": "입력 항목과 값의 범위를 확인해 주세요."})
+
+
+@app.middleware("http")
+async def benefits_privacy(request: Request, call_next):
+    if request.url.path.startswith("/api/benefits"):
+        origin = request.headers.get("origin")
+        if request.method not in {"GET", "HEAD", "OPTIONS"} and origin and origin not in ALLOWED_ORIGINS + [str(request.base_url).rstrip("/")]:
+            return JSONResponse(status_code=403, content={"detail": "허용되지 않은 요청이에요."})
+        if request.url.path == "/api/benefits/session/demo" and request.client and request.client.host not in {"127.0.0.1", "::1", "testclient"}:
+            return JSONResponse(status_code=403, content={"detail": "시연은 이 컴퓨터에서만 열 수 있어요."})
+    response = await call_next(request)
+    if request.url.path.startswith("/api/benefits"):
+        response.headers.update({"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer"})
+    return response
 
 
 class Login(BaseModel):

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/live-rag-chat-20261106
+      - feat/personalized-benefits-20261107
   workflow_dispatch:
 
 permissions:

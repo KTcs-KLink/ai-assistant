@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Database, LogOut, Settings2 } from 'lucide-react'
+import { Database, Gift, LogOut, Settings2 } from 'lucide-react'
 import { api } from '../api/client'
 import { useAuth } from '../auth/AuthContext'
 import { Avatar, cx, Logo } from '../components/ui'
@@ -50,6 +50,12 @@ function ChatSidebar() {
       >
         + 새 대화
       </button>
+      <Link
+        to="/benefits"
+        className="flex items-center gap-2 rounded-lg border border-sel-line bg-sel px-3 py-2 text-sm font-medium text-brand-strong hover:bg-sel-card"
+      >
+        <Gift size={15} /> 나의 맞춤 혜택
+      </Link>
       <Link
         to="/original-data-demo"
         className="flex items-center gap-2 rounded-lg border border-sel-line bg-sel px-3 py-2 text-sm font-medium text-brand-strong hover:bg-sel-card"

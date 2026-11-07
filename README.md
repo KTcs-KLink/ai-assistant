@@ -1,5 +1,17 @@
 # AI Assistant
 
+## 맞춤 혜택 작업 브랜치 (2026-11-07)
+
+`feat/personalized-benefits-20261107`에서 개인 조건에 맞는 복지·수당·휴가 카드와 판정 이유, 근거, 동의 관리, 신청 준비 흐름을 구현했습니다. **현재 카탈로그와 직원은 가상이며 실제 KTcs 자격 검증이 아닙니다.**
+
+로컬에서는 `start_benefits.cmd`를 더블클릭하거나 `python scripts/launch_benefits_demo.py`로 실행합니다. 새 화면은 `http://127.0.0.1:8821/benefits`, 전용 API는 `8820`을 사용합니다. 기존 `.env`를 서버에서 읽고 원문·기존 평가·색인·다른 실행 포트를 수정하지 않습니다. 최초 설치 및 연결 한계는 [실행·검증 안내](docs/benefits-verification-20261107.md)를 보세요.
+
+- [제품 벤치마킹과 확인 범위](docs/benefits-benchmark-20261107.md)
+- [우선순위·저장소·데이터 연결 백로그](docs/benefits-backlog-20261107.md)
+- [단계별 검증 결과와 남은 연결](docs/benefits-verification-20261107.md)
+
+Supabase 직원 인증과 본인 조건 CRUD 경로, RLS SQL을 준비했습니다. 실제 대상 프로젝트에서 스키마·사용자 간 접근 제한이 검증되기 전까지 운영 연동 완료로 표시하지 않습니다. `knowledge-mcp`와 직접 연결되는 MCP 검색 서비스는 아직 없으며, 이번 로컬 조회는 기존 자동 허용 본문을 해시 대조 후 읽는 별도 키워드 참고 조회입니다.
+
 KTcs 업무지식에 질문하고 답변과 근거 출처를 확인하는 AI 어시스턴트 프로젝트입니다. 이 저장소는 사용자 화면과 Assistant 서버·오케스트레이터를 함께 담당합니다. 지식 데이터 처리, 검색 및 MCP 서버는 [`knowledge-mcp`](https://github.com/KTcs-KLink/knowledge-mcp) 저장소에서 관리합니다.
 
 > KTcs가 제공한 데이터는 아직 없습니다. 실제 KTcs 내부 정보가 포함된 기능은 승인된 데이터와 접근 방식이 준비된 뒤에만 구현합니다.

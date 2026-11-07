@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { ApiError, USE_MOCK } from './api/client'
 import { useAuth } from './auth/AuthContext'
@@ -106,6 +106,7 @@ export function LoginPage() {
           <span>{USE_MOCK ? '현재 예시 답변만 표시되는 디자인 시연 모드입니다.' : '서버의 KLINK_DEMO_USER / KLINK_DEMO_PASSWORD로 로그인하세요.'}</span>
         </div>
       </form>
+      <Link to="/benefits" className="text-sm text-brand-strong underline">나의 맞춤 혜택 체험하기</Link>
       <div className="max-w-[520px] text-center text-xs text-faint">LLM API를 사용하면 질문과 관련 문서 내용이 설정된 외부 모델 제공업체로 전송될 수 있습니다. 승인된 시연 자료만 사용하세요.</div>
     </div>
   )

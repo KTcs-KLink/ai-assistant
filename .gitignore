@@ -23,3 +23,7 @@ __pycache__/
 
 # Local launcher output (may contain application logs)
 .demo-logs/
+server/.data/
+.playwright-cli/
+output/playwright/
+supabase/.temp/

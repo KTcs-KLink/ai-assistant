@@ -12,6 +12,7 @@ import { ConversationPage } from './chat/ConversationPage'
 import { NewChatPage } from './chat/NewChatPage'
 import { OriginalDataDemoPage } from './chat/OriginalDataDemoPage'
 import { LoginPage } from './LoginPage'
+import { BenefitsPage } from './benefits/BenefitsPage'
 
 function RequireAuth({ admin, children }: { admin?: boolean; children: ReactNode }) {
   const { user, isLoading } = useAuth()
@@ -27,6 +28,7 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/benefits" element={<BenefitsPage />} />
         <Route path="/login" element={<LoginPage />} />
         {/* 기존 로컬 실데이터 앱은 별도 인증 서버를 요구하지 않습니다. */}
         <Route path="/original-data-demo" element={<div className="flex h-screen bg-canvas"><OriginalDataDemoPage /></div>} />
