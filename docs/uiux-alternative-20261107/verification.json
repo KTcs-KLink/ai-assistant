@@ -1,0 +1,377 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T02:22:12.464Z",
+  "checks": [
+    {
+      "name": "Desktop home: fictional profile and recommendation counts",
+      "passed": true
+    },
+    {
+      "name": "Benefit explanation, source metadata, save and keyboard focus trap",
+      "passed": true
+    },
+    {
+      "name": "Preparation checks remain preparation, with no submission claim",
+      "passed": true
+    },
+    {
+      "name": "Saved, needs-review, ineligible and no-results benefit filters",
+      "passed": true
+    },
+    {
+      "name": "Regulation search and form guide accurately identify unconnected official files",
+      "passed": true
+    },
+    {
+      "name": "Global keyboard search and Escape restore a usable page",
+      "passed": true
+    },
+    {
+      "name": "AI fixture answer cites fictional evidence; unsupported questions withhold",
+      "passed": true
+    },
+    {
+      "name": "Consent gates profile values, recomputes recommendations and clears preparation checks",
+      "passed": true
+    },
+    {
+      "name": "Fictional login preview starts without credentials",
+      "passed": true
+    },
+    {
+      "name": "Responsive layouts across desktop, tablet and phone widths",
+      "passed": true
+    },
+    {
+      "name": "Mobile drawer, preparation and bottom navigation",
+      "passed": true
+    },
+    {
+      "name": "No browser errors, external HTTP requests or backend/API calls",
+      "passed": true
+    }
+  ],
+  "responsive": [
+    {
+      "width": 1920,
+      "path": "/workspace",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/benefits",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/assistant",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/library",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/preparations",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/profile",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1920,
+      "path": "/workspace/login",
+      "viewport": 1920,
+      "document": 1920
+    },
+    {
+      "width": 1440,
+      "path": "/workspace",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/benefits",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/assistant",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/library",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/preparations",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/profile",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1440,
+      "path": "/workspace/login",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "width": 1024,
+      "path": "/workspace",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/benefits",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/assistant",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/library",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/preparations",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/profile",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 1024,
+      "path": "/workspace/login",
+      "viewport": 1024,
+      "document": 1024
+    },
+    {
+      "width": 768,
+      "path": "/workspace",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/benefits",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/assistant",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/library",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/preparations",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/profile",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 768,
+      "path": "/workspace/login",
+      "viewport": 768,
+      "document": 768
+    },
+    {
+      "width": 390,
+      "path": "/workspace",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/benefits",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/assistant",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/library",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/preparations",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/profile",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 390,
+      "path": "/workspace/login",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "width": 360,
+      "path": "/workspace",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/benefits",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/assistant",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/library",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/preparations",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/profile",
+      "viewport": 360,
+      "document": 360
+    },
+    {
+      "width": 360,
+      "path": "/workspace/login",
+      "viewport": 360,
+      "document": 360
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "apiRequests": [],
+  "scope": "UI/interaction/responsive preview verification; not retrieval quality, answer correctness, company eligibility or backend integration approval",
+  "build": {
+    "command": "npm.cmd run build",
+    "status": "PASSED",
+    "includes": [
+      "TypeScript tsc -b",
+      "Vite production build"
+    ],
+    "vite": "8.3.5"
+  },
+  "isolation": {
+    "checkout": "C:\\Users\\hjy10\\OneDrive\\문서\\ChatGPT\\KTCS\\klink-ui-alternative-20261107",
+    "branch": "feat/uiux-alternative-20261107",
+    "base_commit": "756301118cf7e0b1b40bd247917685ecc4b1fdde",
+    "backend_changes": false,
+    "migration_changes": false,
+    "existing_workspace_changes": false,
+    "preview_port": 8824,
+    "connected_services": []
+  },
+  "preserved_paths_diff": [],
+  "screenshots": [
+    {
+      "file": "screenshots/desktop-home-full.png",
+      "sha256": "a5352ee7a76397684b9a3ac0147e5cb41661f0716ccc8450a3190275a22fc24e"
+    },
+    {
+      "file": "screenshots/desktop-benefits.png",
+      "sha256": "e1c48097907d1609d6ee8338b5c129042988910f0cf3f1455b21e7fb8b8a7e74"
+    },
+    {
+      "file": "screenshots/desktop-assistant.png",
+      "sha256": "e8db8b422d8a27038c59ceaad3b7abf44dc9ca38e111b80f077a25228b7a7188"
+    },
+    {
+      "file": "screenshots/desktop-form-guide.png",
+      "sha256": "872b6575858e108e225d1a638f3117148b7575f63892e45f6100d1c1fe19f9a6"
+    },
+    {
+      "file": "screenshots/desktop-login.png",
+      "sha256": "c4b1e5de17757baae865cf660910e5d17168d9b31865ed73db44508aa4adc6e8"
+    },
+    {
+      "file": "screenshots/mobile-home.png",
+      "sha256": "022721b548bae2e752f384184ee9f83b8fda188fcd1d2ea141963c52228e6ac7"
+    },
+    {
+      "file": "screenshots/mobile-drawer.png",
+      "sha256": "9bf761808710b9c2ec12149592d82be6960daa9a39515a12fa721ced9ef95873"
+    },
+    {
+      "file": "screenshots/mobile-assistant-answer.png",
+      "sha256": "83f8bc8e72ac42ae934c6a8e478161950e3e4acdb8c3ecf4f5fa4fd0f6ef8f15"
+    },
+    {
+      "file": "screenshots/mobile-profile.png",
+      "sha256": "b1b84e6ec3578dfa71b21b723dd0a05cbf623175c8ed40cf9fafba79730c999e"
+    }
+  ],
+  "limits": [
+    "Fictional preview data and deterministic local answers only",
+    "No SSO, Supabase, production eligibility, RAG or application integration",
+    "Responsive browser viewports, not physical mobile device tests",
+    "Mechanical UI verification is not answer-quality or company approval",
+    "Last subsequent UI change was the login path text contrast; checked in contrast inspection and final build"
+  ]
+}

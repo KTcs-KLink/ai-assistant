@@ -14,7 +14,7 @@ import { OriginalDataDemoPage } from './chat/OriginalDataDemoPage'
 import { LoginPage } from './LoginPage'
 import { BenefitsPage } from './benefits/BenefitsPage'
 const WorkspaceApp = lazy(() =>
-  import('./workspace/WorkspaceApp').then((m) => ({ default: m.WorkspaceApp })),
+  import('./portal/PortalApp').then((m) => ({ default: m.PortalApp })),
 )
 
 function RequireAuth({ admin, children }: { admin?: boolean; children: ReactNode }) {

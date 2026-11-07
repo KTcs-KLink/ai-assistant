@@ -1,0 +1,90 @@
+{
+  "status": "PASSED",
+  "scope": "Simple computed foreground/background text contrast check; not a full accessibility audit",
+  "pages": [
+    {
+      "path": "/workspace",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/benefits",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/assistant",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/library",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/preparations",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/profile",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/login",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/benefits",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/assistant",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/library",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/preparations",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/profile",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/workspace/login",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    }
+  ]
+}
