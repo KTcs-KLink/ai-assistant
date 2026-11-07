@@ -783,6 +783,36 @@
 .hr-retrieval-connection.configured {
   border-left: 3px solid #527395;
 }
+.hr-assistant .p-message .hr-question-understanding {
+  padding: 12px 14px;
+  margin: 16px 0;
+  border-left: 2px solid #527395;
+  background: #f4f7fb;
+  font-size: 12px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.hr-assistant .p-message .hr-question-understanding strong {
+  display: inline;
+  font-size: inherit;
+  color: #264767;
+}
+.hr-clarification {
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid #dfcfad;
+  background: #fbf5e9;
+  border-radius: 6px;
+}
+.hr-clarification h3 {
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+.hr-assistant .p-message .hr-clarification p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.9;
+}
 .hr-assistant .p-message .hr-quote-method {
   margin: 13px 0;
   font-size: 11px;

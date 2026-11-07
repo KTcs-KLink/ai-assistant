@@ -1,0 +1,135 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T06:38:58.580Z",
+  "upstream": "http://127.0.0.1:8844",
+  "actualAnswerRequests": 2,
+  "providerGenerationCalls": 6,
+  "commonSources": [
+    {
+      "id": "HF-bb7639e356502171f5c669832d3e",
+      "title": "취업규칙",
+      "section": "취업규칙 > 제2장 복무 > 제2절 근무시간 및 휴게시간 > 제20조 휴게시간 <개정 2008.12.23>",
+      "sha256": "55cb8a3662c4b3d27d850b074fd8792f7d14b53cf4bd1da4d244e64462cee2e8"
+    },
+    {
+      "id": "HF-5dbed2d68b095568ec683984fd18",
+      "title": "취업규칙",
+      "section": "취업규칙 > 제2장 복무 > 제2절 근무시간 및 휴게시간 > 제21조 휴게시간의 이용",
+      "sha256": "af25d3b818092c4f26b2e5f221e6194e102ba36fec4e2dad7c5b665f438f80b8"
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "width": 360,
+      "documentWidth": 360
+    }
+  ],
+  "pageErrors": [],
+  "cloudStatusRequests": 0,
+  "scope": "Two actual paraphrase UI/source checks; conclusion comparison requires reading retained text, not a benchmark or independent approval",
+  "answers": [
+    {
+      "question": "통상근무자의 휴게시간을 업무 사정으로 바꿀 수 있나요?",
+      "httpStatus": 200,
+      "status": "answered",
+      "understanding": {
+        "status": "ready",
+        "intents": [
+          "work_break"
+        ],
+        "interpreted_as": "휴게시간 운영",
+        "employment": "unspecified",
+        "explicit_conditions": [
+          "통상근무자",
+          "업무 사정으로"
+        ],
+        "clarification": "",
+        "method": "configured_model_intent_plus_code_constraints",
+        "original_question_preserved": true,
+        "employee_profile_sent": false,
+        "eligibility_decision": false
+      },
+      "model": "gpt-6-luna",
+      "answerMethod": "MODEL_DRAFT_AND_SOURCE_COMPARISON",
+      "paragraphCount": 1,
+      "sourceCount": 5,
+      "conditionCount": 2,
+      "citedSourceIds": [
+        "HF-5dbed2d68b095568ec683984fd18",
+        "HF-bb7639e356502171f5c669832d3e"
+      ],
+      "providerPhases": [
+        "question_understanding",
+        "draft",
+        "source_comparison"
+      ],
+      "company": "KEPCO",
+      "ktcsApplicable": false,
+      "humanApproved": false,
+      "employeeDataSent": false,
+      "quoteMethod": "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES",
+      "validation": "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL"
+    },
+    {
+      "question": "일 때문에 점심 쉬는 시간을 다른 때로 옮겨도 되나요?",
+      "httpStatus": 200,
+      "status": "answered",
+      "understanding": {
+        "status": "ready",
+        "intents": [
+          "work_break"
+        ],
+        "interpreted_as": "휴게시간 운영",
+        "employment": "unspecified",
+        "explicit_conditions": [
+          "일 때문에"
+        ],
+        "clarification": "",
+        "method": "configured_model_intent_plus_code_constraints",
+        "original_question_preserved": true,
+        "employee_profile_sent": false,
+        "eligibility_decision": false
+      },
+      "model": "gpt-6-luna",
+      "answerMethod": "MODEL_DRAFT_AND_SOURCE_COMPARISON",
+      "paragraphCount": 1,
+      "sourceCount": 5,
+      "conditionCount": 3,
+      "citedSourceIds": [
+        "HF-5dbed2d68b095568ec683984fd18",
+        "HF-bb7639e356502171f5c669832d3e"
+      ],
+      "providerPhases": [
+        "question_understanding",
+        "draft",
+        "source_comparison"
+      ],
+      "company": "KEPCO",
+      "ktcsApplicable": false,
+      "humanApproved": false,
+      "employeeDataSent": false,
+      "quoteMethod": "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES",
+      "validation": "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL"
+    }
+  ],
+  "conclusionInspection": {
+    "method": "Codex read both retained answers and common original articles; no new grading model call",
+    "sameCoreConclusion": true,
+    "commonRule": "통상근무자의 원칙적 휴게시간 및 업무사정에 따른 변경 운영 가능",
+    "qualification": "Second answer also describes special-worker scope and absence of specified change authority/approval procedure",
+    "independentHumanApproved": false,
+    "benchmark": false
+  }
+}

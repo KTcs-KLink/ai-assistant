@@ -315,23 +315,69 @@ async function verifyHrPortal(page) {
       await page.screenshot({ path: "output/playwright/hr-portal-source.png" });
       await page.keyboard.press("Escape");
     });
-    await test("Unsupported question returns server withholding without a model call", async () => {
-      await nav("/assistant");
-      await page
-        .getByRole("textbox", { name: "서버 인사 질문", exact: true })
-        .fill("안드로메다 은하의 별을 설명해 주세요");
-      const result = await response(hr + "/answer", "POST", () =>
-        page
-          .getByRole("button", { name: "서버에 인사 질문 보내기", exact: true })
-          .click(),
-      );
-      const answer = await result.json();
-      assert(
-        answer.paragraphs.length === 0 && answer.status === "needs_review",
-        "Unsupported answer was fabricated",
-      );
-      await text("허용된 인사 원문에서 필요한 근거를 찾지 못했어요.");
-    });
+    await test(
+      "Unsupported question stays review-only without fabricated text",
+      async () => {
+        await nav("/assistant");
+        const url = base + hr + "/answer";
+        // Semantic mode uses a model even to classify outside-scope questions.
+        // Keep this regression explicitly synthetic and free of provider calls.
+        await page.route(url, (route) =>
+          route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify({
+              company: "KEPCO",
+              ktcs_applicable: false,
+              human_approved: false,
+              employee_data_sent: false,
+              status: "needs_review",
+              paragraphs: [],
+              sources: [],
+              missing_information: [
+                "허용된 인사 원문에서 필요한 근거를 찾지 못했어요.",
+              ],
+              notice:
+                "화면 검사용 합성 응답 · 한국전력 참고자료 · KTcs 적용 미확인",
+              understanding: {
+                status: "out_of_scope",
+                intents: [],
+                interpreted_as: "",
+                employment: "unspecified",
+                explicit_conditions: [],
+                clarification: "",
+                original_question_preserved: true,
+                employee_profile_sent: false,
+                eligibility_decision: false,
+              },
+              provider_calls: [{ phase: "question_understanding" }],
+            }),
+          }),
+        );
+        try {
+          await page
+            .getByRole("textbox", { name: "서버 인사 질문", exact: true })
+            .fill("안드로메다 은하의 별을 설명해 주세요");
+          const result = await response(hr + "/answer", "POST", () =>
+            page
+              .getByRole("button", {
+                name: "서버에 인사 질문 보내기",
+                exact: true,
+              })
+              .click(),
+          );
+          const answer = await result.json();
+          assert(
+            answer.paragraphs.length === 0 && answer.status === "needs_review",
+            "Unsupported answer was fabricated",
+          );
+          await text("허용된 인사 원문에서 필요한 근거를 찾지 못했어요.");
+        } finally {
+          await page.unroute(url);
+        }
+      },
+      "intercepted synthetic scope response; no model call",
+    );
     await test(
       "Withheld generated text stays hidden while real source remains readable",
       async () => {

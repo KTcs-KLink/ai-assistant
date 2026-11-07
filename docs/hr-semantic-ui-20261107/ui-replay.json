@@ -1,0 +1,65 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T08:14:52.299Z",
+  "checks": [
+    {
+      "name": "retained actual meaning label and cited answer",
+      "mode": "actual response replay",
+      "passed": true
+    },
+    {
+      "name": "source-extracted contract accepts one analysis phase",
+      "mode": "synthetic source-fact transport, not a new backend answer",
+      "passed": true
+    },
+    {
+      "name": "clarification only, no answer/source/duplicate and no answered promotion",
+      "mode": "synthetic clarification transport",
+      "passed": true
+    },
+    {
+      "name": "outside scope remains review-only without regulation text",
+      "mode": "synthetic scope transport",
+      "passed": true
+    },
+    {
+      "name": "condition absent from original question",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "original question not preserved",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "unrecognized intent",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "answer without comparison phase",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "clarification with generated answer",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "malformed provider phase array",
+      "mode": "tampered retained transport",
+      "passed": true
+    },
+    {
+      "name": "source-extracted method with generation phases",
+      "mode": "tampered retained transport",
+      "passed": true
+    }
+  ],
+  "interceptedAnswerRequests": 11,
+  "newModelGenerations": 0,
+  "pageErrors": [],
+  "scope": "Bounded UI protocol/clarification guards; synthetic cases do not establish model intent accuracy"
+}

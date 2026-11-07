@@ -184,9 +184,21 @@ export interface RetrievalStatus {
   ready: boolean;
   query_embedding: boolean;
   configured?: boolean;
+  semantic?: boolean;
   model?: string;
   index?: { window_count: number; source_count: number; read_only: boolean };
   message?: string;
+}
+export interface QuestionUnderstanding {
+  status: "ready" | "needs_clarification" | "out_of_scope";
+  intents: string[];
+  interpreted_as: string;
+  employment: "unspecified" | "regular" | "non_regular" | "executive" | "mixed";
+  explicit_conditions: string[];
+  clarification: string;
+  original_question_preserved: boolean;
+  employee_profile_sent?: boolean;
+  eligibility_decision?: boolean;
 }
 export interface HrAnswer {
   company: string;
@@ -202,6 +214,7 @@ export interface HrAnswer {
   sources: EvidenceSource[];
   notice: string;
   validation?: string;
+  answer_method?: string;
   quote_method?: string;
   generated_text_withheld?: boolean;
   source_conditions?: SourceCondition[];
@@ -211,6 +224,7 @@ export interface HrAnswer {
   provider_calls?: { phase: string }[];
   semantic_review?: { independent: boolean; human_approved: boolean };
   retrieval?: RetrievalTrace;
+  understanding?: QuestionUnderstanding;
 }
 export class HrError extends Error {
   constructor(
@@ -294,12 +308,20 @@ export function checkedCatalog(value: Catalog): Catalog {
   }
   return value;
 }
-export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
+export async function checkedAnswer(
+  value: HrAnswer,
+  originalQuestion?: string,
+): Promise<HrAnswer> {
   if (
     !["answered", "needs_review"].includes(value.status) ||
     !Array.isArray(value.paragraphs) ||
     !Array.isArray(value.sources) ||
-    !Array.isArray(value.missing_information)
+    !Array.isArray(value.missing_information) ||
+    (value.provider_calls !== undefined &&
+      (!Array.isArray(value.provider_calls) ||
+        value.provider_calls.some(
+          (call) => !call || typeof call.phase !== "string",
+        )))
   )
     throw new HrError(0, "답변 형식을 확인하지 못해 내용을 표시하지 않았어요.");
   const result: HrAnswer = {
@@ -310,6 +332,103 @@ export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
     partial_verified_text:
       !value.generated_text_withheld && !!value.partial_verified_text,
   };
+  if (result.understanding !== undefined) {
+    const understanding = result.understanding;
+    const intents = new Set([
+      "regular_payday",
+      "salary_period",
+      "salary_proration",
+      "annual_leave_period",
+      "annual_leave_entitlement",
+      "sick_leave",
+      "leave_permission",
+      "childcare_leave",
+      "resignation_procedure",
+      "retirement_benefit",
+      "contract_renewal",
+      "work_break",
+      "handover",
+      "vacancy_fill",
+      "recruitment",
+      "role_change",
+      "work_injury",
+      "performance_period",
+      "education_evaluation",
+      "welfare",
+      "general_hr",
+    ]);
+    const invalid = () =>
+      new HrError(
+        0,
+        "질문의 의미·조건 분석을 확인하지 못해 답변을 표시하지 않았어요.",
+      );
+    if (
+      !understanding ||
+      !["ready", "needs_clarification", "out_of_scope"].includes(
+        understanding.status,
+      ) ||
+      !Array.isArray(understanding.intents) ||
+      understanding.intents.length > 3 ||
+      understanding.intents.some((intent) => !intents.has(intent)) ||
+      new Set(understanding.intents).size !== understanding.intents.length ||
+      typeof understanding.interpreted_as !== "string" ||
+      understanding.interpreted_as.length > 350 ||
+      !["unspecified", "regular", "non_regular", "executive", "mixed"].includes(
+        understanding.employment,
+      ) ||
+      !Array.isArray(understanding.explicit_conditions) ||
+      understanding.explicit_conditions.length > 500 ||
+      understanding.explicit_conditions.some(
+        (condition) =>
+          typeof condition !== "string" ||
+          !condition.length ||
+          condition.length > 500 ||
+          (originalQuestion !== undefined &&
+            !originalQuestion.includes(condition)),
+      ) ||
+      typeof understanding.clarification !== "string" ||
+      understanding.clarification.length > 180 ||
+      understanding.original_question_preserved !== true ||
+      understanding.employee_profile_sent === true ||
+      understanding.eligibility_decision === true
+    )
+      throw invalid();
+    if (understanding.status === "ready") {
+      if (!understanding.intents.length || !understanding.interpreted_as.trim())
+        throw invalid();
+    } else {
+      if (
+        understanding.status === "needs_clarification" &&
+        !understanding.clarification.trim()
+      )
+        throw invalid();
+      if (
+        result.paragraphs.length ||
+        result.sources.length ||
+        (result.source_conditions?.length ?? 0) ||
+        (result.provider_calls?.some(
+          (call) => call.phase !== "question_understanding",
+        ) ??
+          false)
+      )
+        throw invalid();
+      result.status = "needs_review";
+    }
+    if (result.paragraphs.length) {
+      const phases = result.provider_calls?.map((call) => call.phase).join(",");
+      const sourceFacts = result.answer_method === "SOURCE_EXTRACTED_FACTS";
+      if (
+        sourceFacts
+          ? phases !== "question_understanding" ||
+            ![
+              "SOURCE_EXTRACTED_DAY_AND_EXCEPTION_NOT_HUMAN_APPROVAL",
+              "FINAL_DETERMINISTIC_REVALIDATION_NOT_NEW_GENERATION",
+            ].includes(result.validation ?? "")
+          : phases !== "question_understanding,draft,source_comparison"
+      )
+        throw invalid();
+    }
+  }
   if (
     !Array.isArray(result.source_conditions) ||
     !Array.isArray(result.condition_review_required) ||
@@ -322,7 +441,12 @@ export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
       "AUTOMATIC_ID_QUOTE_NUMBER_CHECKS_NOT_SEMANTIC_APPROVAL",
       "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL",
       "FINAL_DETERMINISTIC_REVALIDATION_NOT_NEW_GENERATION",
-    ].includes(value.validation ?? "")
+    ].includes(value.validation ?? "") &&
+    !(
+      value.answer_method === "SOURCE_EXTRACTED_FACTS" &&
+      value.validation ===
+        "SOURCE_EXTRACTED_DAY_AND_EXCEPTION_NOT_HUMAN_APPROVAL"
+    )
   )
     throw new HrError(
       0,

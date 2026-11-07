@@ -400,8 +400,9 @@ export function HrAssistant() {
           HR + "/answer",
           "POST",
           { question },
-          AbortSignal.any([current.signal, AbortSignal.timeout(375000)]),
+          AbortSignal.any([current.signal, AbortSignal.timeout(540000)]),
         ),
+        question,
       );
       if (current.signal.aborted) return;
       setMessages((previous) =>
@@ -529,18 +530,41 @@ export function HrAssistant() {
                                 : "needs_review")
                             }
                           >
-                            {message.answer.status === "answered"
-                              ? "원문을 인용한 참고 답변"
-                              : "추가 확인 필요"}
+                            {message.answer.understanding?.status ===
+                            "needs_clarification"
+                              ? "질문 확인 필요"
+                              : message.answer.status === "answered"
+                                ? "원문을 인용한 참고 답변"
+                                : "추가 확인 필요"}
                           </span>
                           <Company company={message.answer.company} />
                         </div>
                         <Note>{message.answer.notice}</Note>
+                        {message.answer.understanding?.status === "ready" && (
+                          <p className="hr-question-understanding">
+                            <strong>질문을 이렇게 이해했어요:</strong>{" "}
+                            {message.answer.understanding.interpreted_as}
+                          </p>
+                        )}
+                        {message.answer.understanding?.status ===
+                          "needs_clarification" && (
+                          <section className="hr-clarification">
+                            <h3>질문을 더 확인할게요</h3>
+                            <p>{message.answer.understanding.clarification}</p>
+                          </section>
+                        )}
                         {message.answer.quote_method ===
                           "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES" &&
                           message.answer.paragraphs.length > 0 && (
                             <p className="hr-quote-method">
                               인용문은 선택된 원문 구간에서 그대로 복원했습니다.
+                            </p>
+                          )}
+                        {message.answer.answer_method ===
+                          "SOURCE_EXTRACTED_FACTS" &&
+                          message.answer.paragraphs.length > 0 && (
+                            <p className="hr-quote-method">
+                              지급일·예외를 원문에서 직접 확인한 안내입니다.
                             </p>
                           )}
                         <RetrievedChunks
@@ -595,15 +619,30 @@ export function HrAssistant() {
                           answer={message.answer}
                           openSource={(item) => void openSource(item)}
                         />
-                        {!!message.answer.missing_information.length && (
+                        {!!message.answer.missing_information.filter(
+                          (text) =>
+                            text !==
+                            (message.answer!.understanding?.status ===
+                            "needs_clarification"
+                              ? message.answer!.understanding.clarification
+                              : undefined),
+                        ).length && (
                           <div className="hr-missing">
                             <h3>추가로 확인해 주세요</h3>
                             <ul>
-                              {message.answer.missing_information.map(
-                                (text, index) => (
+                              {message.answer.missing_information
+                                .filter(
+                                  (text) =>
+                                    text !==
+                                    (message.answer!.understanding?.status ===
+                                    "needs_clarification"
+                                      ? message.answer!.understanding
+                                          .clarification
+                                      : undefined),
+                                )
+                                .map((text, index) => (
                                   <li key={index}>{text}</li>
-                                ),
-                              )}
+                                ))}
                             </ul>
                           </div>
                         )}
@@ -645,9 +684,9 @@ export function HrAssistant() {
                     </div>
                   ) : (
                     <p className="hr-pending" role="status">
-                      질문을 임베딩하고 로컬 원문을 찾아 답변을 대조하고 있어요.
-                      몇 분이 걸릴 수 있으며, 이 자동 검토는 사람의 독립 승인이
-                      아닙니다.
+                      질문의 뜻과 조건을 확인한 뒤 원문을 검색하고 답변을
+                      대조하고 있어요. 몇 분이 걸릴 수 있으며, 이 자동 검토는
+                      사람의 독립 승인이 아닙니다.
                     </p>
                   )}
                 </div>

@@ -24,6 +24,7 @@ export function RetrievalConnection() {
       quality_version?: string;
       retrieval_mode?: string;
       answer_retrieval?: string;
+      question_understanding?: string;
     }>(
       HR + "/capabilities",
       "GET",
@@ -41,6 +42,7 @@ export function RetrievalConnection() {
                 configured: true,
                 ready: false,
                 query_embedding: false,
+                semantic: value.question_understanding === "llm",
               }
             : value.answer_retrieval === "local_bge_m3_dense"
               ? await request<RetrievalStatus>(
@@ -97,7 +99,9 @@ export function RetrievalConnection() {
         </strong>
         <p>
           {configured
-            ? "질문 임베딩·단어 검색 → 실제 조문 → AI 답변"
+            ? status?.semantic
+              ? "질문 의미 분석 → 임베딩·단어 검색 → 실제 조문 → AI 답변"
+              : "질문 임베딩·단어 검색 → 실제 조문 → AI 답변"
             : ready
               ? "질문 임베딩 → 실제 청크 검색 → AI 답변"
               : error ||

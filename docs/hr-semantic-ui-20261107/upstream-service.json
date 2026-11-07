@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-11-07T08:15:00.171128+00:00",
+  "note": "Final service/source snapshot after parent restarted 8844; distinct from earlier two-question run timestamp",
+  "capabilities": {
+    "app": "KLINK_HR_DOMAIN",
+    "version": "2026-11-07",
+    "quality_version": "hr-quality-closeout-20261107",
+    "retrieval_mode": "hybrid",
+    "question_understanding": "llm",
+    "demo_scope": "KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS",
+    "production_ready": false
+  },
+  "encoder": {
+    "app_id": "klink-kepco-query-encoder-20261107",
+    "ready": true,
+    "model": "BAAI/bge-m3",
+    "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+    "weights_sha256": "993b2248881724788dcab8c644a91dfd63584b6e5604ff2037cb5541e1e38e7e",
+    "dimension": 1024,
+    "numeric_reference_state": "PASSED",
+    "parameter_readback_passed": true,
+    "resident_encoder_layer_count": 24
+  },
+  "source": {
+    "branch": "feat/hr-semantic-intents-20261107",
+    "head": "558b600b98ab982910699c9f77453a944dae82cd",
+    "files": [
+      {
+        "path": "server/hr_intent.py",
+        "sha256": "c33beb0b5df5f9bc1da8186c1cb70989e16af259c516b56304bfd83e141200ee",
+        "workingTreeState": "?? server/hr_intent.py"
+      },
+      {
+        "path": "server/hr_answer.py",
+        "sha256": "42e483410c8f9047e0c5d8d563bd258583c074813f3fb63ae953bfaf21073618",
+        "workingTreeState": "M server/hr_answer.py"
+      },
+      {
+        "path": "server/hr_api.py",
+        "sha256": "9681270cce2232de436513d913e02557583f5e66fd626dc031767e94256b0ba3",
+        "workingTreeState": "M server/hr_api.py"
+      },
+      {
+        "path": "server/hr_evidence.py",
+        "sha256": "9ad8832705296fdf21c6c634acf29542999dcf2f4015f5c16fc48f6d7a06c34c",
+        "workingTreeState": "M server/hr_evidence.py"
+      },
+      {
+        "path": "server/hr_vectors.py",
+        "sha256": "22b6a16c09814344a87a77f4d00d531ad5ad34bb3a59425c28e0e6048cef4f0b",
+        "workingTreeState": "M server/hr_vectors.py"
+      },
+      {
+        "path": "scripts/launch_hr_domain.py",
+        "sha256": "33206d7db04867f8c20dafb2def647de4deb129357dcb34064efd570101a07e6",
+        "workingTreeState": "M scripts/launch_hr_domain.py"
+      }
+    ]
+  },
+  "unchangedOwnPathsSinceBaseline": [
+    "server",
+    "supabase",
+    "web/src/portal",
+    "web/src/workspace",
+    "web/vite.config.ts"
+  ],
+  "supabaseOperations": "HOLD; no configuration probe, connection validation, ingestion or SQL",
+  "finalBuild": "npm run build: PASSED including TypeScript after source-fact contract update"
+}
