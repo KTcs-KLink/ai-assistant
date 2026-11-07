@@ -30,7 +30,10 @@ import { Company, SourceView, Unavailable } from "./ui";
 import { ConditionCards } from "./ConditionCards";
 import { RetrievalConnection, RetrievedChunks } from "./RetrievalView";
 
-async function currentSource(item: EvidenceSource, signal?: AbortSignal) {
+export async function currentSource(
+  item: EvidenceSource,
+  signal?: AbortSignal,
+) {
   const result = await request<EvidenceSource>(
     HR + "/sources/" + encodeURIComponent(item.id),
     "GET",

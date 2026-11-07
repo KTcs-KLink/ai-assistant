@@ -36,6 +36,7 @@ import { HrLibrary, HrAssistant } from "./HrKnowledge";
 import { HrHome } from "./HrHome";
 import { HrWorkspaceShell } from "./HrWorkspaceShell";
 import { HrWorkspace } from "./HrWorkspace";
+import { HrSaasAssistant } from "./HrSaasAssistant";
 import { attempt } from "./ui";
 import "../portal/portal.css";
 import "./hr.css";
@@ -66,7 +67,7 @@ export function HrPortalApp() {
           <Route element={<HrWorkspaceShell />}>
             <Route index element={<HrWorkspace />} />
             <Route path="benefits" element={<HrBenefits />} />
-            <Route path="assistant" element={<HrAssistant />} />
+            <Route path="assistant" element={<HrSaasAssistant />} />
             <Route path="library" element={<HrLibrary />} />
             <Route path="preparations" element={<HrPreparations />} />
             <Route path="profile" element={<HrProfile />} />
@@ -74,6 +75,7 @@ export function HrPortalApp() {
             <Route path="*" element={<Navigate replace to="/hr" />} />
           </Route>
           <Route element={<HrShell />}>
+            <Route path="assistant-previous" element={<HrAssistant />} />
             <Route path="home-benchmark" element={<HrHome />} />
             <Route path="home-previous" element={<HrDashboard />} />
           </Route>

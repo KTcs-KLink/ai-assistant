@@ -1,0 +1,182 @@
+{
+  "status": "PASSED",
+  "live": {
+    "status": "PASSED",
+    "checkedAt": "2026-11-07T10:37:21.781Z",
+    "question": "통상근무자의 휴게시간을 업무 사정으로 바꿀 수 있나요?",
+    "actualAnswerRequests": 1,
+    "providerGenerationCalls": 3,
+    "providerPhases": [
+      "question_understanding",
+      "draft",
+      "source_comparison"
+    ],
+    "answerStatus": "answered",
+    "paragraphCount": 2,
+    "sourceCount": 5,
+    "exactOriginalLookup": true,
+    "requestBodyKeys": [
+      "question"
+    ],
+    "widths": [
+      {
+        "width": 1440,
+        "documentWidth": 1440
+      },
+      {
+        "width": 768,
+        "documentWidth": 768
+      },
+      {
+        "width": 390,
+        "documentWidth": 390
+      },
+      {
+        "width": 360,
+        "documentWidth": 360
+      }
+    ],
+    "pageErrors": [],
+    "scope": "One real UI/source/answer connection check; not retrieval benchmarking or independent semantic approval",
+    "model": "gpt-6-luna",
+    "company": "KEPCO",
+    "ktcsApplicable": false,
+    "humanApproved": false,
+    "employeeDataSent": false,
+    "quoteMethod": "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES",
+    "answerMethod": "MODEL_DRAFT_AND_SOURCE_COMPARISON",
+    "validation": "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL",
+    "retrieval": {
+      "method": "hr_bge_m3_hybrid",
+      "company": "KEPCO",
+      "ktcs_applicable": false,
+      "source_count": 449,
+      "document_count": 10,
+      "human_approved_count": 0,
+      "rejected_sources": 0,
+      "scope": "HR title allowlist plus existing automatic source-scope and answer gates"
+    },
+    "conditions": 3,
+    "citedSourceIds": [
+      "HF-5dbed2d68b095568ec683984fd18",
+      "HF-b1f16ba6b37d4849a340b63fe085",
+      "HF-bb7639e356502171f5c669832d3e"
+    ]
+  },
+  "replay": {
+    "status": "PASSED",
+    "checkedAt": "2026-11-07T10:39:43.684Z",
+    "checks": [
+      {
+        "name": "Question suggestions draft without provider requests",
+        "mode": "actual UI, no answer POST",
+        "passed": true
+      },
+      {
+        "name": "Inline real source search, hash/scope validation and exact original lookup",
+        "mode": "actual local BFF GETs, no model generation",
+        "passed": true
+      },
+      {
+        "name": "Retained answer, cited current original, question navigation and full copy content",
+        "mode": "actual retained answer/current source; clipboard is explicitly mocked",
+        "passed": true
+      },
+      {
+        "name": "Clarification is shown once without generated answer or sources",
+        "mode": "synthetic clarification transport",
+        "passed": true
+      },
+      {
+        "name": "Withheld and partial responses retain review status",
+        "mode": "explicit synthetic transport flags",
+        "passed": true
+      },
+      {
+        "name": "changed original SHA",
+        "mode": "tampered retained response",
+        "passed": true
+      },
+      {
+        "name": "quote absent from original",
+        "mode": "tampered retained response",
+        "passed": true
+      },
+      {
+        "name": "changed question condition",
+        "mode": "tampered retained response",
+        "passed": true
+      },
+      {
+        "name": "Transport error offers draft recovery without replacement answer",
+        "mode": "synthetic 503",
+        "passed": true
+      },
+      {
+        "name": "Six responsive widths and mobile evidence dialog",
+        "mode": "retained response UI",
+        "passed": true
+      },
+      {
+        "name": "Previous assistant preserved in its original layout",
+        "mode": "actual old route",
+        "passed": true
+      }
+    ],
+    "widths": [
+      {
+        "width": 1920,
+        "documentWidth": 1920
+      },
+      {
+        "width": 1440,
+        "documentWidth": 1440
+      },
+      {
+        "width": 1024,
+        "documentWidth": 1024
+      },
+      {
+        "width": 768,
+        "documentWidth": 768
+      },
+      {
+        "width": 390,
+        "documentWidth": 390
+      },
+      {
+        "width": 360,
+        "documentWidth": 360
+      }
+    ],
+    "interceptedAnswerRequests": 9,
+    "newModelGenerations": 0,
+    "browserErrors": [],
+    "scope": "Source/answer UI and contract preservation; synthetic fixtures/clipboard are identified; not answer-quality evaluation"
+  },
+  "interruptedTransport": {
+    "status": "PASSED",
+    "interceptedRequests": 1,
+    "newModelGenerations": 0,
+    "mode": "synthetic delayed 503; response reception stopped, not backend model cancellation",
+    "lateResponseHidden": true,
+    "newConversationReset": true
+  },
+  "frontendBuild": "PASSED: TypeScript and Vite",
+  "preservedAgainst": "cd456ca5d7e10edd355119cfaf462ad124be3402",
+  "preservedPaths": [
+    "server",
+    "supabase",
+    "web/src/hr/api.ts",
+    "web/src/hr/RetrievalView.tsx",
+    "web/src/hr/ConditionCards.tsx",
+    "web/src/hr/HrHome.tsx",
+    "web/src/hr/HrWorkspace.tsx",
+    "web/src/hr/HrWorkspaceShell.tsx",
+    "web/src/portal",
+    "web/src/workspace",
+    "web/vite.config.ts"
+  ],
+  "existingLibraryAndLegacyAssistantUnchanged": true,
+  "originalSourceLookupBodyUnchanged": true
+}
