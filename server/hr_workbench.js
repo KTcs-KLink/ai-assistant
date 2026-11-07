@@ -291,6 +291,15 @@ $('question-form').addEventListener(
         }
         $('answer').append(block)
       }
+      if (data.source_conditions?.length) {
+        const conditions = node('div', undefined, 'notice')
+        conditions.append(node('h3', '함께 확인할 조건·예외 원문'))
+        conditions.append(node('p', '아래는 인용한 문단 전체를 원문 그대로 표시한 내용입니다. 다른 조문의 필수 조건까지 모두 찾았다는 뜻은 아니에요.'))
+        for (const item of data.source_conditions) {
+          conditions.append(node('p', item.section), node('pre', item.quote, 'source'))
+        }
+        $('answer').append(conditions)
+      }
       for (const text of data.missing_information) $('answer').append(node('p', '확인 필요: ' + text))
       const ids = new Set(data.paragraphs.flatMap((p) => p.citations.map((c) => c.source_id)))
       for (const s of data.sources) if (!data.paragraphs.length || ids.has(s.id)) source($('answer'), s)

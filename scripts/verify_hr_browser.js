@@ -20,6 +20,7 @@ async (page) => {
   }
   await page.goto('http://127.0.0.1:8826/hr-check')
   await page.getByRole('button', { name: '가상 직원으로 기능 확인' }).click()
+  await page.locator('#readiness article').nth(5).waitFor({ timeout: 30000 })
   await verify(
     async () => (await page.locator('#catalog article').count()) === 6,
     'six server-evaluated benefit cards render',
