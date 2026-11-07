@@ -454,6 +454,14 @@ export function HrWorkspace() {
               </span>
             </div>
             <p>KTcs 적용·현행성·최종 승인은 확인 전입니다.</p>
+            {research?.source_scope === "expanded" && (
+              <Link className="ws-review-scope" to="/hr/library?tab=review">
+                검토 전용{" "}
+                {research.review_only_count?.toLocaleString("ko-KR") ??
+                  "미확인"}
+                구간 · 답변 미사용
+              </Link>
+            )}
             <dl>
               <div>
                 <dt>공식 양식</dt>

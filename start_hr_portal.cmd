@@ -6,7 +6,7 @@ if not exist node_modules\vite\bin\vite.js (
   if errorlevel 1 exit /b 1
 )
 echo K:LINK HR portal: http://127.0.0.1:8825/hr
-echo Checking the semantic HR service on 127.0.0.1:8844.
+echo Checking the expanded-source HR service on 127.0.0.1:8846.
 python ..\scripts\check_hr_closeout_service.py
 if errorlevel 1 exit /b 1
 call npm.cmd run dev:hr

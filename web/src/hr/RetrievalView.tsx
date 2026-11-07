@@ -25,6 +25,7 @@ export function RetrievalConnection() {
       retrieval_mode?: string;
       answer_retrieval?: string;
       question_understanding?: string;
+      source_scope?: "baseline" | "expanded";
     }>(
       HR + "/capabilities",
       "GET",
@@ -43,6 +44,7 @@ export function RetrievalConnection() {
                 ready: false,
                 query_embedding: false,
                 semantic: value.question_understanding === "llm",
+                source_scope: value.source_scope,
               }
             : value.answer_retrieval === "local_bge_m3_dense"
               ? await request<RetrievalStatus>(
@@ -116,8 +118,21 @@ export function RetrievalConnection() {
         )}
         {configured && (
           <small>
-            서버에 설정된 검색 경로 · 한국전력 원문{" "}
-            {readiness?.research.source_count ?? "확인 중"}개 · KTcs 적용 미확인
+            {status?.source_scope === "expanded"
+              ? "확장 자료 검색 경로"
+              : "설정된 검색 경로"}{" "}
+            · 답변 참고용 {readiness?.research.source_count ?? "확인 중"}조문
+            {readiness?.research.source_scope === "expanded" && (
+              <>
+                {" "}
+                · 검토 전용{" "}
+                {readiness.research.review_only_count?.toLocaleString(
+                  "ko-KR",
+                ) ?? "미확인"}
+                구간 · 검토 발췌는 답변 미사용
+              </>
+            )}{" "}
+            · KTcs 적용 미확인
           </small>
         )}
       </div>

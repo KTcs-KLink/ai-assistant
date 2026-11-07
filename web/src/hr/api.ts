@@ -101,6 +101,8 @@ export interface Research {
   human_approved_count: number;
   ktcs_applicable: boolean;
   method: string;
+  source_scope?: "baseline" | "expanded";
+  review_only_count?: number;
 }
 export interface Readiness {
   production_ready: boolean;
@@ -131,9 +133,41 @@ export interface EvidenceSource {
   human_approved: boolean;
   effective_status: string;
   ktcs_applicable: boolean;
+  answer_eligible?: boolean;
+  review_only?: boolean;
+  source_mapping_verified?: boolean;
+  used_for_generation?: boolean;
 }
 export interface EvidenceResults extends Research {
   results: EvidenceSource[];
+}
+export interface ReviewExcerpt {
+  id: string;
+  title: string;
+  section: string;
+  text: string;
+  window_id: string;
+  source_range: [number, number];
+  company: "KEPCO";
+  ktcs_applicable: false;
+  human_approved: false;
+  answer_eligible: false;
+  review_only: true;
+  source_mapping_verified: true;
+  excerpt_only: true;
+  hold_reasons: string[];
+  needs_layout_review: boolean;
+  source_scope_decision: string;
+}
+export interface ReviewEvidenceResults {
+  company: "KEPCO";
+  ktcs_applicable: false;
+  human_approved: false;
+  answer_eligible: false;
+  used_for_generation: false;
+  method: "source_only_fts5_bm25";
+  notice: string;
+  results: ReviewExcerpt[];
 }
 export interface SourceCondition {
   source_id: string;
@@ -162,6 +196,8 @@ export interface RetrievalTrace {
   method: string;
   company?: string;
   source_count?: number;
+  source_scope?: "baseline" | "expanded";
+  review_only_count?: number;
   human_approved_count?: number;
   ktcs_applicable?: boolean;
   status?: string;
@@ -185,6 +221,7 @@ export interface RetrievalStatus {
   query_embedding: boolean;
   configured?: boolean;
   semantic?: boolean;
+  source_scope?: "baseline" | "expanded";
   model?: string;
   index?: { window_count: number; source_count: number; read_only: boolean };
   message?: string;
@@ -222,6 +259,8 @@ export interface HrAnswer {
   condition_review_required?: string[];
   partial_verified_text?: boolean;
   provider_calls?: { phase: string }[];
+  review_search_available?: boolean;
+  held_documents?: string[];
   semantic_review?: { independent: boolean; human_approved: boolean };
   retrieval?: RetrievalTrace;
   understanding?: QuestionUnderstanding;
@@ -332,6 +371,42 @@ export async function checkedAnswer(
     partial_verified_text:
       !value.generated_text_withheld && !!value.partial_verified_text,
   };
+  if (
+    result.validation === "NAMED_SOURCE_HELD_NO_SUBSTITUTE_OR_GENERATION" &&
+    (result.status !== "needs_review" ||
+      value.paragraphs.length !== 0 ||
+      result.sources.length !== 0 ||
+      !Array.isArray(result.provider_calls) ||
+      result.provider_calls.length !== 0 ||
+      result.review_search_available !== true ||
+      !Array.isArray(result.held_documents) ||
+      !result.held_documents.length ||
+      result.held_documents.some(
+        (name) => typeof name !== "string" || !name.trim(),
+      ) ||
+      (result.source_conditions?.length ?? 0) !== 0)
+  )
+    throw new HrError(0, "문서 보류·모델 미호출 상태를 확인하지 못했어요.");
+  if (
+    result.sources.some(
+      (source) =>
+        !source ||
+        source.answer_eligible === false ||
+        source.review_only === true ||
+        source.used_for_generation === false,
+    ) ||
+    (result.retrieval?.source_scope === "expanded" &&
+      result.sources.some(
+        (source) =>
+          source.answer_eligible !== true ||
+          source.review_only !== false ||
+          source.source_mapping_verified !== true,
+      ))
+  )
+    throw new HrError(
+      0,
+      "검토 전용 자료가 답변 근거에 섞여 있어 표시하지 않았어요.",
+    );
   if (result.understanding !== undefined) {
     const understanding = result.understanding;
     const intents = new Set([

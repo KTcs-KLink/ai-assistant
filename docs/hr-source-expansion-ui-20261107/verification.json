@@ -1,0 +1,259 @@
+{
+  "checkedAt": "2026-11-07T12:22:57.527Z",
+  "status": "PASSED",
+  "branch": "feat/hr-source-expansion-ui-20261107",
+  "baseCommit": "b5c0e4f2a9719a4fef41fc7d29dcbc55b5adab48",
+  "frontEndBuild": {
+    "command": "npm.cmd run build --prefix web",
+    "status": "PASSED",
+    "typescript": true
+  },
+  "scopeUi": {
+    "status": "PASSED",
+    "checkedAt": "2026-11-07T12:22:57.527Z",
+    "upstream": "http://127.0.0.1:8846",
+    "capabilities": {
+      "app": "KLINK_HR_DOMAIN",
+      "version": "2026-11-07",
+      "quality_version": "hr-quality-closeout-20261107",
+      "retrieval_mode": "hybrid",
+      "question_understanding": "llm",
+      "source_scope": "expanded",
+      "demo_scope": "KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS",
+      "production_ready": false
+    },
+    "research": {
+      "method": "hr_bge_m3_hybrid",
+      "company": "KEPCO",
+      "ktcs_applicable": false,
+      "source_count": 528,
+      "document_count": 23,
+      "human_approved_count": 0,
+      "rejected_sources": 0,
+      "source_scope": "expanded",
+      "review_only_count": 3334,
+      "scope": "Original-file and source-span verified HR units; held units excluded from answers"
+    },
+    "checks": [
+      {
+        "name": "Expanded capability and live 528/3334 counts, human approval remains zero",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "Additional executive-service document and ordinary source lookup retain positive eligibility flags",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "Review-only GET shows exact excerpt, review warning and no generation action",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "Answer/review labels remain clear at four desktop/mobile widths",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "Assistant review pane is separate from answer sources and normal search",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "generation-use flag changed",
+        "mode": "tampered actual review response",
+        "passed": true
+      },
+      {
+        "name": "excerpt promoted into answer eligibility",
+        "mode": "tampered actual review response",
+        "passed": true
+      },
+      {
+        "name": "Expanded answer transport accepts separately eligible current-format sources",
+        "mode": "retained actual answer plus explicitly synthetic expanded-scope flags",
+        "passed": true
+      },
+      {
+        "name": "Current source lookup cannot lose answer-eligibility metadata",
+        "mode": "tampered current source response",
+        "passed": true
+      },
+      {
+        "name": "Named-held real question refuses without provider calls and opens separate review search",
+        "mode": "actual local expanded-service GETs and UI",
+        "passed": true
+      },
+      {
+        "name": "Contradictory named-held model-call state is blocked",
+        "mode": "tampered actual held response",
+        "passed": true
+      },
+      {
+        "name": "review-only source mixed into answer",
+        "mode": "tampered retained answer transport",
+        "passed": true
+      },
+      {
+        "name": "expanded source missing eligibility",
+        "mode": "tampered retained answer transport",
+        "passed": true
+      }
+    ],
+    "widths": [
+      {
+        "width": 1440,
+        "documentWidth": 1440
+      },
+      {
+        "width": 768,
+        "documentWidth": 768
+      },
+      {
+        "width": 390,
+        "documentWidth": 390
+      },
+      {
+        "width": 360,
+        "documentWidth": 360
+      }
+    ],
+    "newModelGenerations": 0,
+    "interceptedAnswerRequests": 4,
+    "actualHeldRequests": 1,
+    "heldDocument": {
+      "question": "단시간근로자 운영지침의 근무시간은 어떻게 되나요?",
+      "validation": "NAMED_SOURCE_HELD_NO_SUBSTITUTE_OR_GENERATION",
+      "providerCalls": [],
+      "heldDocuments": [
+        "단시간근로자 운영지침"
+      ]
+    },
+    "reviewOnly": {
+      "answerEligible": false,
+      "usedForGeneration": false,
+      "resultCount": 5
+    },
+    "pageErrors": [],
+    "scope": "UI connection and source-scope separation, not corpus approval or a retrieval/answer-quality benchmark"
+  },
+  "liveAnswerUi": {
+    "status": "PASSED",
+    "checkedAt": "2026-11-07T12:20:41.804Z",
+    "question": "월급은 매달 며칠 들어오나요?",
+    "actualAnswerRequests": 1,
+    "providerCalls": 1,
+    "providerPhases": [
+      "question_understanding"
+    ],
+    "sourceScope": "expanded",
+    "answerStatus": "answered",
+    "paragraphCount": 1,
+    "citedSourceIds": [
+      "HF-494011cc5429922fc8d467d27746"
+    ],
+    "exactOriginalLookup": true,
+    "requestBodyKeys": [
+      "question"
+    ],
+    "widths": [
+      {
+        "width": 1440,
+        "documentWidth": 1440
+      },
+      {
+        "width": 768,
+        "documentWidth": 768
+      },
+      {
+        "width": 390,
+        "documentWidth": 390
+      },
+      {
+        "width": 360,
+        "documentWidth": 360
+      }
+    ],
+    "pageErrors": [],
+    "scope": "One actual expanded-service UI/source/answer connection; not corpus approval, retrieval benchmarking or independent semantic evaluation"
+  },
+  "preservation": {
+    "baselineMockUrl": "http://127.0.0.1:8824/",
+    "connectedUiUrl": "http://127.0.0.1:8825/hr/assistant",
+    "upstream": "http://127.0.0.1:8846",
+    "protectedTrackedPathsMatchBase": true,
+    "protectedPaths": [
+      "server",
+      "supabase",
+      "web/src/App.tsx",
+      "web/src/PortalApp.tsx",
+      "web/src/portal",
+      "web/src/main.tsx",
+      "web/vite.config.ts"
+    ],
+    "backendSourceCommit": "d1ee080240efb7c8e9fd8c4cdfb06ffe9983efdc",
+    "backendMerged": false,
+    "newEmbeddings": 0,
+    "supabaseIngestion": "HOLD",
+    "cloudDeployment": false,
+    "pullRequestCreated": false
+  },
+  "checkedSourceHashes": {
+    "web/src/hr/api.ts": "cdfa50b5a09a7032cd444194e49266b3ddd5a1c8a315fbbfd7cb44b1334fada2",
+    "web/src/hr/AssistantAnswer.tsx": "b0522d3f9be8fb05379b4f16f57ed21963a91b27c487eb3cd92daf8284009050",
+    "web/src/hr/AssistantEvidence.tsx": "3b540e8d2c771902a09a98b479af26552f67f0f02c086416bc7916760f9b5b72",
+    "web/src/hr/HrSaasAssistant.tsx": "2c3a13f310fbb31315d39684810986525758c7921ebdaefd5edee72a424a2892",
+    "web/src/hr/ReviewEvidence.tsx": "d524134e8c8f9f859f9266bbd9d19a5c8d19e0726316ee13460c7b55514bc7a8",
+    "web/src/hr/HrKnowledge.tsx": "46b969d57ffc51f630b1a29b61f9ef8078c8785a0a1ca669095b841af52f940f",
+    "web/src/hr/HrWorkspace.tsx": "bcc2ee8541ac2704adb0964f5e2dbaa1faada78d5b7f268cf88bcb8352ba245d",
+    "web/src/hr/HrPages.tsx": "1a7173962f1bb282e6cefad4676736db60ff73e0f662e8d531e2505287e9fbd9",
+    "web/src/hr/RetrievalView.tsx": "a7ed9e6240b8cb014da37a707c79a8f3b267673aa8d9964519a06689da04e7ba",
+    "web/src/hr/source-scope.css": "0aef0687667704dc4e75b682f5d4a3448efed37cd2cd53c5be92f22be15b9445",
+    "web/vite.hr.config.ts": "df2ce97f2d4bda93a83b0ffc8df93f8f9aece7c8a5ee905f60cbe97fc8f6be3d"
+  },
+  "backendEvidenceReadOnly": {
+    "auditPath": "C:\\Users\\hjy10\\OneDrive\\문서\\ChatGPT\\KTCS\\outputs\\klink_hr_source_expansion_20261107\\summary-v2.json",
+    "auditSha256": "260d9f9663f82e8ef6f600da7c1e6414c26ccf2fb0e987046c0a1eeece7a4996",
+    "browserProofPath": "C:\\Users\\hjy10\\OneDrive\\문서\\ChatGPT\\KTCS\\outputs\\klink_hr_source_expansion_20261107\\browser-verification.json",
+    "browserProofSha256": "39fdc956939387beb4aae035ea185b4aad42704da00c33bab0205558c453ee1a",
+    "backendTestsCountedAsUiTests": false
+  },
+  "limits": [
+    "UI connection checks are not retrieval benchmarking, semantic completeness evaluation or independent human approval.",
+    "The actual new payday question used one question-understanding model call; the app extracted the payday answer from the original source.",
+    "Retained-answer expanded flags in scope tests are explicitly synthetic; no model generation is attributed to fixture tests.",
+    "Backend source audit and backend answer checks are referenced, not rerun or counted as this UI work.",
+    "KTcs applicability, currency, SSO, official forms and production approvals remain unconfirmed."
+  ],
+  "serviceProbe": [
+    {
+      "port": 8824,
+      "path": "/",
+      "http": 200
+    },
+    {
+      "port": 8824,
+      "path": "/workspace",
+      "http": 404,
+      "note": "Preserved Python preview server; not changed by this task."
+    },
+    {
+      "port": 8825,
+      "path": "/hr/assistant",
+      "http": 200
+    },
+    {
+      "port": 8844,
+      "path": "/api/benefits/hr/capabilities",
+      "http": 200,
+      "source_scope": null
+    },
+    {
+      "port": 8846,
+      "path": "/api/benefits/hr/capabilities",
+      "http": 200,
+      "source_scope": "expanded"
+    }
+  ]
+}

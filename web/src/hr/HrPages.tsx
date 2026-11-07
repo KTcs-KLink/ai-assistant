@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Heading, Modal, Note } from "../portal/ui";
 import { useHr } from "./HrContext";
+import { SourceScopeNotice } from "./ReviewEvidence";
 import type { EmployeeProfile, HrBenefit } from "./api";
 import {
   Company,
@@ -1032,6 +1033,7 @@ export function HrReadiness() {
           <p>승인 규정·공식 양식·조직 인증 연결 대기</p>
         </div>
       </div>
+      <SourceScopeNotice />
       {readiness ? (
         <>
           <div className="hr-gates">

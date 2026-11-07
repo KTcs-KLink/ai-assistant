@@ -47,12 +47,16 @@ export function AssistantAnswer({
   onSource,
   onCopy,
   copied,
+  onReview,
 }: {
   answer: HrAnswer;
   onSource: (source: EvidenceSource) => void;
   onCopy: () => void;
   copied: boolean;
+  onReview: (query: string) => void;
 }) {
+  const held =
+    answer.validation === "NAMED_SOURCE_HELD_NO_SUBSTITUTE_OR_GENERATION";
   const clarification =
     answer.understanding?.status === "needs_clarification"
       ? answer.understanding.clarification
@@ -71,16 +75,31 @@ export function AssistantAnswer({
             "sa-state " + (answer.status === "answered" ? "answered" : "review")
           }
         >
-          {clarification
-            ? "질문 확인 필요"
-            : answer.partial_verified_text
-              ? "일부 답변 · 확인 필요"
-              : answer.status === "answered"
-                ? "원문 인용 답변"
-                : "추가 확인 필요"}
+          {held
+            ? "문서 검토 중 · 답변 보류"
+            : clarification
+              ? "질문 확인 필요"
+              : answer.partial_verified_text
+                ? "일부 답변 · 확인 필요"
+                : answer.status === "answered"
+                  ? "원문 인용 답변"
+                  : "추가 확인 필요"}
         </span>
         <span>한국전력 참고자료</span>
       </div>
+      {held && (
+        <section className="sa-review-note sa-held-document">
+          <h3>지정한 문서는 추가 검토가 필요합니다</h3>
+          <p>{answer.held_documents?.join(" · ")}</p>
+          <p>
+            문서의 표 구조·조문 경계·적용 범위 확인이 남아 있습니다. 모델 호출
+            없이 답변을 보류했습니다.
+          </p>
+          <button onClick={() => onReview(answer.held_documents?.[0] ?? "")}>
+            검토 발췌 검색 열기 <ChevronRight size={13} />
+          </button>
+        </section>
+      )}
       {answer.understanding?.status === "ready" && (
         <p className="sa-understanding">
           질문을 이렇게 이해했어요:{" "}

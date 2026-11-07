@@ -92,8 +92,11 @@ export function HrSaasAssistant() {
     [compact, setCompact] = useState(
       () => window.matchMedia("(max-width: 1100px)").matches,
     ),
-    [sourceMode, setSourceMode] = useState<"answer" | "search">("search"),
+    [sourceMode, setSourceMode] = useState<"answer" | "search" | "review">(
+      "search",
+    ),
     [source, setSource] = useState<EvidenceSource | null>(null),
+    [reviewQuery, setReviewQuery] = useState(""),
     [sourceLoading, setSourceLoading] = useState(false),
     [sourceError, setSourceError] = useState(""),
     [questionListOpen, setQuestionListOpen] = useState(false),
@@ -295,6 +298,7 @@ export function HrSaasAssistant() {
     <AssistantEvidence
       sources={active?.answer?.sources ?? []}
       question={active?.question}
+      reviewQuery={reviewQuery}
       mode={sourceMode}
       setMode={setSourceMode}
       selected={source}
@@ -350,7 +354,24 @@ export function HrSaasAssistant() {
           <div className="sa-chat-topline">
             <span>
               <span className="ws-dot connected" />
-              한전 참고 규정 <b>{readiness?.research.source_count ?? "—"}</b>
+              답변용 한전 규정{" "}
+              <b>{readiness?.research.source_count ?? "—"}조문</b>
+              {readiness?.research.source_scope === "expanded" && (
+                <button
+                  className="sa-review-count"
+                  onClick={() => {
+                    setSourceMode("review");
+                    resetSource();
+                    setPanelOpen(true);
+                  }}
+                >
+                  검토 전용{" "}
+                  {readiness.research.review_only_count?.toLocaleString(
+                    "ko-KR",
+                  ) ?? "미확인"}
+                  구간
+                </button>
+              )}
             </span>
             <details className="sa-connection-details">
               <summary>
@@ -426,6 +447,13 @@ export function HrSaasAssistant() {
                         onSource={(item) => void openSource(item, message.id)}
                         onCopy={() => void copy(message)}
                         copied={copiedId === message.id}
+                        onReview={(query) => {
+                          setActiveId(message.id);
+                          resetSource();
+                          setReviewQuery(query);
+                          setSourceMode("review");
+                          setPanelOpen(true);
+                        }}
                       />
                     ) : message.error ? (
                       <div className="sa-response-error" role="alert">

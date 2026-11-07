@@ -29,11 +29,15 @@ import type {
 import { Company, SourceView, Unavailable } from "./ui";
 import { ConditionCards } from "./ConditionCards";
 import { RetrievalConnection, RetrievedChunks } from "./RetrievalView";
+import { ReviewEvidence, SourceScopeNotice } from "./ReviewEvidence";
+import { validateAssistantSource } from "./AssistantEvidence";
 
 export async function currentSource(
   item: EvidenceSource,
   signal?: AbortSignal,
 ) {
+  if (item.answer_eligible === false || item.review_only === true)
+    throw new HrError(0, "검토 전용 발췌는 답변 원문으로 열 수 없습니다.");
   const result = await request<EvidenceSource>(
     HR + "/sources/" + encodeURIComponent(item.id),
     "GET",
@@ -44,18 +48,30 @@ export async function currentSource(
     result.id !== item.id ||
     typeof result.text !== "string" ||
     result.sha256 !== item.sha256 ||
-    result.version !== item.version
+    result.version !== item.version ||
+    result.answer_eligible === false ||
+    result.review_only === true ||
+    (item.answer_eligible === true &&
+      (result.answer_eligible !== true ||
+        result.review_only !== false ||
+        result.source_mapping_verified !== true))
   )
     throw new HrError(
       409,
       "원문 버전이 변경됐어요. 최신 원문을 다시 검색해 주세요.",
     );
+  await validateAssistantSource(result);
   return result;
 }
 export function HrLibrary() {
-  const { forms, session, refresh } = useHr(),
+  const { forms, session, refresh, readiness } = useHr(),
     [params, setParams] = useSearchParams();
-  const tab = params.get("tab") === "forms" ? "forms" : "rules",
+  const tab =
+      params.get("tab") === "forms"
+        ? "forms"
+        : params.get("tab") === "review"
+          ? "review"
+          : "rules",
     query = params.get("q") ?? "";
   const [input, setInput] = useState(query),
     [results, setResults] = useState<EvidenceResults | null>(null),
@@ -83,9 +99,19 @@ export function HrLibrary() {
       undefined,
       AbortSignal.any([controller.signal, AbortSignal.timeout(20000)]),
     )
-      .then((data) => {
-        if (!Array.isArray(data.results))
+      .then(async (data) => {
+        if (
+          !Array.isArray(data.results) ||
+          (data.source_scope === "expanded" &&
+            data.results.some(
+              (item) =>
+                item.answer_eligible !== true ||
+                item.review_only !== false ||
+                item.source_mapping_verified !== true,
+            ))
+        )
           throw new HrError(0, "원문 검색 응답을 확인하지 못했어요.");
+        await Promise.all(data.results.map(validateAssistantSource));
         if (!controller.signal.aborted) setResults(data);
       })
       .catch((reason) => {
@@ -140,6 +166,7 @@ export function HrLibrary() {
       >
         한국전력 참고자료 검색과 실제 회사 양식의 연결 상태를 구분합니다.
       </Heading>
+      <SourceScopeNotice />
       <div className="p-filter-tabs">
         <button
           aria-pressed={tab === "rules"}
@@ -153,27 +180,39 @@ export function HrLibrary() {
         >
           회사 양식·준비
         </button>
+        {readiness?.research.source_scope === "expanded" && (
+          <button
+            aria-pressed={tab === "review"}
+            onClick={() => changeTab("review")}
+          >
+            검토 전용 발췌
+          </button>
+        )}
       </div>
-      <form className="hr-library-search" onSubmit={submit}>
-        <label className="p-inline-search">
-          <Search size={19} />
-          <input
-            aria-label="서버 규정·양식 검색어"
-            maxLength={500}
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder={
-              tab === "rules"
-                ? "예: 병가, 휴가, 퇴직 · 2자 이상"
-                : "예: 휴가신청서, 출장비 정산서"
-            }
-          />
-        </label>
-        <button className="p-button" type="submit">
-          검색
-        </button>
-      </form>
-      {tab === "rules" ? (
+      {tab !== "review" && (
+        <form className="hr-library-search" onSubmit={submit}>
+          <label className="p-inline-search">
+            <Search size={19} />
+            <input
+              aria-label="서버 규정·양식 검색어"
+              maxLength={500}
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder={
+                tab === "rules"
+                  ? "예: 병가, 휴가, 퇴직 · 2자 이상"
+                  : "예: 휴가신청서, 출장비 정산서"
+              }
+            />
+          </label>
+          <button className="p-button" type="submit">
+            검색
+          </button>
+        </form>
+      )}
+      {tab === "review" ? (
+        <ReviewEvidence />
+      ) : tab === "rules" ? (
         <>
           <Note>
             검색 대상은 한국전력 공개 대체자료입니다. 실제 KTcs 현행 규정이

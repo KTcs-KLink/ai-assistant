@@ -15,12 +15,16 @@ import {
 } from "./api";
 import { useHr } from "./HrContext";
 import { SourceView } from "./ui";
+import { ReviewEvidence } from "./ReviewEvidence";
 
 export async function validateAssistantSource(source: EvidenceSource) {
   if (
     !source ||
     source.company !== "KEPCO" ||
     source.ktcs_applicable !== false ||
+    source.answer_eligible === false ||
+    source.review_only === true ||
+    source.used_for_generation === false ||
     typeof source.id !== "string" ||
     typeof source.title !== "string" ||
     typeof source.section !== "string" ||
@@ -46,6 +50,7 @@ export async function validateAssistantSource(source: EvidenceSource) {
 export function AssistantEvidence({
   sources,
   question,
+  reviewQuery,
   mode,
   setMode,
   selected,
@@ -56,15 +61,16 @@ export function AssistantEvidence({
 }: {
   sources: EvidenceSource[];
   question?: string;
-  mode: "answer" | "search";
-  setMode: (value: "answer" | "search") => void;
+  reviewQuery?: string;
+  mode: "answer" | "search" | "review";
+  setMode: (value: "answer" | "search" | "review") => void;
   selected: EvidenceSource | null;
   loading: boolean;
   error: string;
   onBack: () => void;
   onSource: (source: EvidenceSource) => void;
 }) {
-  const { refresh } = useHr();
+  const { refresh, readiness } = useHr();
   const [query, setQuery] = useState(""),
     [results, setResults] = useState<EvidenceResults | null>(null),
     [searching, setSearching] = useState(false),
@@ -92,7 +98,14 @@ export function AssistantEvidence({
       if (
         data.company !== "KEPCO" ||
         data.ktcs_applicable !== false ||
-        !Array.isArray(data.results)
+        !Array.isArray(data.results) ||
+        (data.source_scope === "expanded" &&
+          data.results.some(
+            (item) =>
+              item.answer_eligible !== true ||
+              item.review_only !== false ||
+              item.source_mapping_verified !== true,
+          ))
       )
         throw new HrError(0, "허용된 한전 원문 검색 결과가 아닙니다.");
       await Promise.all(data.results.map(validateAssistantSource));
@@ -110,7 +123,12 @@ export function AssistantEvidence({
       if (!current.signal.aborted) setSearching(false);
     }
   }
-  const items = mode === "answer" ? sources : (results?.results ?? []);
+  const items =
+    mode === "answer"
+      ? sources
+      : mode === "search"
+        ? (results?.results ?? [])
+        : [];
   return (
     <div className="sa-evidence">
       {selected || loading ? (
@@ -147,10 +165,23 @@ export function AssistantEvidence({
                 setMode("search");
               }}
             >
-              원문 검색
+              답변용 검색
             </button>
+            {readiness?.research.source_scope === "expanded" && (
+              <button
+                aria-pressed={mode === "review"}
+                onClick={() => {
+                  onBack();
+                  setMode("review");
+                }}
+              >
+                검토 발췌
+              </button>
+            )}
           </div>
-          {mode === "search" ? (
+          {mode === "review" ? (
+            <ReviewEvidence initialQuery={reviewQuery} />
+          ) : mode === "search" ? (
             <form className="sa-source-search" onSubmit={search}>
               <label className="p-sr-only" htmlFor="sa-source-query">
                 원문 검색어
@@ -168,9 +199,13 @@ export function AssistantEvidence({
                   검색
                 </button>
               </div>
-              <p>연결된 한전 참고 규정을 검색합니다.</p>
+              <p>
+                답변 참고용 한전 {readiness?.research.source_count ?? "미확인"}
+                조문에서 검색합니다.
+              </p>
             </form>
           ) : (
+            mode === "answer" &&
             question && (
               <p className="sa-source-context">
                 <strong>이 질문의 근거</strong>
@@ -202,7 +237,7 @@ export function AssistantEvidence({
               </button>
             ))}
           </div>
-          {!items.length && !searching && (
+          {mode !== "review" && !items.length && !searching && (
             <div className="sa-evidence-empty">
               <BookOpen size={26} />
               <h3>
