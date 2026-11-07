@@ -1,0 +1,39 @@
+{
+  "status": "PASSED",
+  "checks": [
+    {
+      "name": "retained application-restored answer",
+      "passed": true,
+      "mode": "actual response replay"
+    },
+    {
+      "name": "retained withheld answer remains review-only",
+      "passed": true,
+      "mode": "original backend final case 03-041 replay"
+    },
+    {
+      "name": "partial flag cannot be promoted to answered",
+      "passed": true,
+      "mode": "explicit synthetic partial transport flag"
+    },
+    {
+      "name": "unsupported quote provenance",
+      "passed": true,
+      "mode": "tampered retained response"
+    },
+    {
+      "name": "quote absent from actual original",
+      "passed": true,
+      "mode": "tampered retained response"
+    },
+    {
+      "name": "changed source hash",
+      "passed": true,
+      "mode": "tampered retained response"
+    }
+  ],
+  "pageErrors": [],
+  "newModelGenerations": 0,
+  "replay": true,
+  "scope": "Bounded UI quote/source/withholding checks; not new model answers or semantic accuracy evaluation"
+}

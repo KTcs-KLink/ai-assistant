@@ -780,6 +780,15 @@
 .hr-retrieval-connection.ready {
   border-left: 3px solid #548777;
 }
+.hr-retrieval-connection.configured {
+  border-left: 3px solid #527395;
+}
+.hr-assistant .p-message .hr-quote-method {
+  margin: 13px 0;
+  font-size: 11px;
+  color: #355b72;
+  line-height: 1.8;
+}
 .hr-retrieval-connection > svg {
   flex-shrink: 0;
   margin-top: 2px;

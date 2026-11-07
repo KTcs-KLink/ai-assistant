@@ -160,6 +160,10 @@ export interface RetrievedChunk {
 }
 export interface RetrievalTrace {
   method: string;
+  company?: string;
+  source_count?: number;
+  human_approved_count?: number;
+  ktcs_applicable?: boolean;
   status?: string;
   embedding?: {
     model: string;
@@ -179,6 +183,7 @@ export interface RetrievalStatus {
   method: string;
   ready: boolean;
   query_embedding: boolean;
+  configured?: boolean;
   model?: string;
   index?: { window_count: number; source_count: number; read_only: boolean };
   message?: string;
@@ -197,6 +202,7 @@ export interface HrAnswer {
   sources: EvidenceSource[];
   notice: string;
   validation?: string;
+  quote_method?: string;
   generated_text_withheld?: boolean;
   source_conditions?: SourceCondition[];
   condition_coverage?: string;
@@ -406,6 +412,40 @@ export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
       );
   }
   const retrieval = result.retrieval;
+  if (retrieval?.method === "hr_bge_m3_hybrid") {
+    if (
+      result.company !== "KEPCO" ||
+      result.ktcs_applicable !== false ||
+      result.human_approved !== false ||
+      result.employee_data_sent !== false ||
+      retrieval.company !== "KEPCO" ||
+      retrieval.ktcs_applicable !== false ||
+      (result.paragraphs.length &&
+        result.quote_method !==
+          "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES") ||
+      (result.quote_method !== undefined &&
+        result.quote_method !==
+          "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES") ||
+      new Set(result.sources.map((source) => source.id)).size !==
+        result.sources.length
+    )
+      throw new HrError(
+        0,
+        "한전 검색 범위와 원문 구간 인용 방식을 확인하지 못해 답변을 표시하지 않았어요.",
+      );
+    for (const source of result.sources) {
+      if (
+        source.company !== "KEPCO" ||
+        source.ktcs_applicable !== false ||
+        typeof source.text !== "string" ||
+        (await sha256(source.text)) !== source.sha256
+      )
+        throw new HrError(
+          0,
+          "조회된 한전 원문의 회사·본문 해시가 일치하지 않아 답변을 표시하지 않았어요.",
+        );
+    }
+  }
   if (retrieval?.method === "local_bge_m3_dense") {
     const fail = () =>
       new HrError(

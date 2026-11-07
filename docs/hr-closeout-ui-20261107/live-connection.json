@@ -1,0 +1,42 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T06:08:57.725Z",
+  "upstream": "http://127.0.0.1:8842",
+  "question": "연간 질병휴가가 7일째일 때 필요한 증빙과 동일 사유로 다시 쉬는 경우의 예외를 알려주세요.",
+  "httpStatus": 200,
+  "answerStatus": "answered",
+  "paragraphCount": 1,
+  "sourceCount": 5,
+  "conditionCards": 3,
+  "quoteMethod": "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES",
+  "retrievalMethod": "hr_bge_m3_hybrid",
+  "actualAnswerRequests": 1,
+  "providerGenerationCalls": 2,
+  "company": "KEPCO",
+  "ktcsApplicable": false,
+  "humanApproved": false,
+  "employeeDataSent": false,
+  "exactOriginalsAndConditions": true,
+  "cloudStatusRequests": 0,
+  "unsupportedStatusRequests": 0,
+  "pageErrors": [],
+  "viewports": [
+    {
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "width": 360,
+      "documentWidth": 360
+    }
+  ],
+  "scope": "One latest-service UI/source/quote connection check; not a new retrieval benchmark or independent semantic approval"
+}

@@ -536,6 +536,13 @@ export function HrAssistant() {
                           <Company company={message.answer.company} />
                         </div>
                         <Note>{message.answer.notice}</Note>
+                        {message.answer.quote_method ===
+                          "APPLICATION_RECONSTRUCTED_ORIGINAL_SPANS_NO_GENERATED_QUOTES" &&
+                          message.answer.paragraphs.length > 0 && (
+                            <p className="hr-quote-method">
+                              인용문은 선택된 원문 구간에서 그대로 복원했습니다.
+                            </p>
+                          )}
                         <RetrievedChunks
                           answer={message.answer}
                           openSource={(item) => void openSource(item)}
