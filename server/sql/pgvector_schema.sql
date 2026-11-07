@@ -1,5 +1,6 @@
 -- K:LINK publicly sourced KEPCO PoC corpus. No employee data is stored here.
 -- Use only from the server over a private Postgres DSN; never expose the DSN in Vite.
+create schema if not exists extensions;
 create extension if not exists vector with schema extensions;
 
 create table if not exists public.klink_rag_documents (
