@@ -52,6 +52,16 @@ def test_unspecified_employee_does_not_become_a_regular_employee():
     assert hr_intent.accept(proposal(),'직원의 월급 지급일은?','test').proposal.employment=='unspecified'
 
 
+@pytest.mark.parametrize('question,employment',[
+    ('시간제 직원의 근무시간은?','unspecified'),('단시간근로자와 시간선택제 채용직원의 근무시간은?','unspecified'),
+    ('정규직 단시간근로자의 근무시간은?','regular'),('계약직 시간제 직원의 근무시간은?','non_regular'),
+])
+def test_working_time_pattern_does_not_invent_an_employment_contract(question,employment):
+    plan=hr_intent.accept(proposal(intents=['general_hr'],employment=employment),question,'test')
+    assert plan.proposal.employment==employment
+    assert any(word in plan.conditions for word in ['시간제','시간선택제','단시간근로자'])
+
+
 @pytest.mark.parametrize('q',['병가 문의 test@example.invalid','병가 sk-TEST_ONLY_ABCDEFGHIJKLMNOP','병가 ｓｋ－ＴＥＳＴ＿ＯＮＬＹ＿ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰ'])
 def test_private_or_obfuscated_key_is_blocked_before_model_settings_or_network(monkeypatch,q):
     def forbidden():raise AssertionError('must not read credentials')
@@ -76,6 +86,7 @@ def test_understanding_uses_the_existing_model_and_never_sends_credentials_or_pr
         def create(self,**payload):
             assert payload['store'] is False
             assert payload['text']['format']['strict'] is True
+            assert payload['text']['format']['schema']['properties']['employment']['enum']==['unspecified']
             return SimpleNamespace(status='completed',output_text=proposal().model_dump_json(),usage=None)
         def __enter__(self):return self
         def __exit__(self,*a):pass

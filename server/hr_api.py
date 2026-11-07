@@ -13,11 +13,11 @@ from pydantic import Field
 
 try:
     from .benefits_api import current
-    from . import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime
+    from . import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime, hr_source_scope
     from .hr_policy import StrictModel
 except ImportError:
     from benefits_api import current
-    import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime
+    import hr_policy, hr_evidence, hr_answer, hr_forms, hr_runtime, hr_source_scope
     from hr_policy import StrictModel
 
 router = APIRouter(prefix="/api/benefits/hr", tags=["hr-domain"])
@@ -28,6 +28,7 @@ def capabilities():
     return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", quality_version="hr-quality-closeout-20261107",
         retrieval_mode="hybrid" if os.getenv("KLINK_HR_RETRIEVAL") == "hybrid" else "bm25",
         question_understanding="llm" if os.getenv("KLINK_HR_INTENT_MODE") == "llm" else "off",
+        source_scope="expanded" if hr_source_scope.expanded() else "baseline",
         demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False)
 
 
@@ -84,6 +85,21 @@ def source(source_id: str, session=Depends(current)):
     if not row:
         raise HTTPException(404, "허용된 인사 원문이 아니거나 본문이 변경됐어요.")
     return row
+
+
+@router.get("/review-evidence")
+def review_evidence(q: str, session=Depends(current)):
+    if session['mode'] != 'demo':
+        raise HTTPException(403, '추가 검토 원문은 한전 공개자료 체험에서만 확인해요.')
+    if not 2 <= len(q.strip()) <= 500 or hr_evidence.PRIVATE.search(unicodedata.normalize('NFKC',q)):
+        raise HTTPException(422, '개인정보나 키 없이 일반 인사 검색어를 입력해 주세요.')
+    try:
+        return dict(company='KEPCO', ktcs_applicable=False, human_approved=False,
+            answer_eligible=False, used_for_generation=False, method='source_only_fts5_bm25',
+            notice='파일·문자 위치 대조만 통과한 추가 검토 원문입니다. 업무 범위·표 구조·적용 대상 확인이 남아 답변 근거로 사용하지 않습니다.',
+            results=hr_evidence.review_search(q))
+    except (OSError,ValueError,KeyError):
+        raise HTTPException(503, '추가 검토 원문의 검증 기록을 확인하지 못했어요.') from None
 
 
 class Question(StrictModel):

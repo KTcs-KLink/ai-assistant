@@ -81,7 +81,7 @@ def private_or_invalid(question):
 def explicit_employment(question):
     compact=re.sub(r'\s','',question)
     negative_regular=bool(re.search(r'(?<!비)정규직.{0,4}(?:아닌|아니|않)',compact))
-    non_regular=negative_regular or bool(re.search(r'비정규직|계약직|기간제|아르바이트|알바|시간제|일용직',compact))
+    non_regular=negative_regular or bool(re.search(r'비정규직|계약직|기간제|일용직',compact))
     regular=bool(re.search(r'(?<!비)정규직',compact)) and not negative_regular
     executive='임원' in compact
     scopes=[name for name,present in [('regular',regular),('non_regular',non_regular),('executive',executive)] if present]
@@ -92,7 +92,7 @@ def hard_conditions(question):
     """Keep exact dates/quantities, employee kinds, and logical qualifiers as question data."""
     patterns=[r'\d+(?:\.\d+)?\s*(?:년|개월|달|월|일|시간|세|주|직급|퍼센트|%)?(?:\s*(?:이상|이하|미만|초과|이내|전|후))?',
         r'(?:열두|열한|열|아홉|여덟|일곱|여섯|다섯|네|세|두|한)\s*(?:개월|달|년|일|시간|주)',
-        r'비정규직|정규직|계약직|기간제|아르바이트|알바|시간제|일용직|임원',
+        r'비정규직|정규직|계약직|기간제|아르바이트|알바|시간선택제|단시간근로자|시간제|일용직|임원',
         r'업무상|공상|일반\s*질병|사전|사후|출산[^?!.]{0,45}(?:이어|직후|바로|뒤)|가족돌봄|육아휴직|아닌|아니|않|못|제외']
     result=[]
     for pattern in patterns:
@@ -162,7 +162,8 @@ INSTRUCTIONS="""한전 공개 인사자료를 검색하기 전에 일반 인사 
 육아휴직 자체의 대상·기간과 장기 부재 시 사람을 보충하는 vacancy_fill을 구분하라. 단어가 아니라 질문이 요구하는 업무를 읽어라.
 회사에서 일하다 질병으로 쉬는 조건·한도는 sick_leave다. 일반적인 치료·투자·코딩 질문 등 인사 밖 질문은 out_of_scope다.
 대상 업무를 알 수 없는 '그거 언제 돼요' 등은 needs_clarification으로 하고 짧은 확인 질문을 작성하라. 명확한 구어체를 이유로 무조건 확인을 요구하지 마라.
-employment는 명시된 단어만 사용하라: 정규직=regular, 비정규직/계약직/기간제/알바/아르바이트/시간제/일용직=non_regular, 임원=executive, 둘 이상 비교=mixed.
+employment는 코드가 원질문에서 확인한 explicit_employment 값을 그대로 사용하라: 정규직=regular, 비정규직/계약직/기간제/일용직=non_regular, 임원=executive, 둘 이상 비교=mixed.
+시간제·단시간·시간선택제·아르바이트·알바는 근로시간 또는 일상 표현이다. 그 말만으로 정규직/비정규직을 추론하지 말고 원문 조건으로 보존하라.
 '정규직이 아닌'은 non_regular이다. 일반 직원이라는 말만 있거나 고용형태가 없으면 unspecified다. 실제 직원 고용형태를 추론하지 마라.
 condition_quotes에는 고용형태·나이·기간·근속·날짜·업무상/일반·사전/사후·선행조건·부정·비교 등 답을 바꿀 수 있는 원질문의 연속 문자열을 그대로 복사하라.
 새 조건이나 수치를 만들거나, 네 달을 4개월처럼 바꾸어 복사하지 마라. 조건 구간은 짧게 최대 10개다. 원질문 전체를 다시 쓸 필요는 없다.
@@ -173,9 +174,12 @@ def understand(question):
     if private_or_invalid(question):raise IntentUnavailable(code='PRIVATE_OR_INVALID_QUESTION')
     key,model=benefit_explanation.settings()
     if not key or not model:raise IntentUnavailable('서버의 지정 모델 설정을 확인해야 해요.','INTENT_CONFIGURATION_REQUIRED')
+    employment=explicit_employment(question)
+    schema=Proposal.model_json_schema()
+    schema['properties']['employment']={'type':'string','enum':[employment]}
     payload=dict(model=model,instructions=INSTRUCTIONS,
-        input=json.dumps(dict(question=question,intent_catalog={k:v[0] for k,v in CATALOG.items()}),ensure_ascii=False),
-        text={'format':dict(type='json_schema',name='hr_question_understanding',strict=True,schema=Proposal.model_json_schema())},
+        input=json.dumps(dict(question=question,explicit_employment=employment,intent_catalog={k:v[0] for k,v in CATALOG.items()}),ensure_ascii=False),
+        text={'format':dict(type='json_schema',name='hr_question_understanding',strict=True,schema=schema)},
         truncation='disabled')
     from openai import OpenAI
     call=None

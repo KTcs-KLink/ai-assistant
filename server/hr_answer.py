@@ -243,6 +243,8 @@ def check_general_leave_branch(draft: Draft, sources: list[dict], question: str)
 
 
 def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
+    if any(s.get('review_only') is True or s.get('answer_eligible') is False for s in sources):
+        raise AnswerUnavailable('추가 검토 원문은 답변 근거로 사용할 수 없어요.')
     allowed = {s["id"]: s for s in sources}
     if not 1 <= len(draft.paragraphs) <= 6 or len(draft.missing_information) > 8:
         raise AnswerUnavailable("답변 형식을 확인하지 못했어요.")
@@ -424,6 +426,12 @@ def generate(question: str) -> dict:
         retrieval=hr_evidence.summary())
     calls=[]
     semantic_plan=None
+    from . import hr_source_scope
+    held=hr_source_scope.held_named_documents(question,hr_evidence.local_evidence.corpus_path())
+    if held:
+        return dict(**base,status='needs_review',paragraphs=[],sources=[],provider_calls=[],
+            missing_information=['요청한 '+ ' · '.join(held)+' 원문은 보유하고 있지만, 표 구조·조문 경계 또는 적용 범위의 추가 검토가 필요해 답변 생성을 보류했어요. 추가 검토 원문 검색에서 확인할 수 있어요.'],
+            validation='NAMED_SOURCE_HELD_NO_SUBSTITUTE_OR_GENERATION',review_search_available=True,held_documents=held)
     if os.getenv('KLINK_HR_INTENT_MODE')=='llm':
         from . import hr_intent
         try:
@@ -445,6 +453,9 @@ def generate(question: str) -> dict:
             validation="KEPCO_RETRIEVAL_UNAVAILABLE_NO_GENERATION",provider_calls=calls)
     if not sources:
         return dict(**base, status="needs_review", paragraphs=[], missing_information=["허용된 인사 원문에서 필요한 근거를 찾지 못했어요."], sources=[],provider_calls=calls)
+    if any(s.get('review_only') is True or s.get('answer_eligible') is False for s in sources):
+        return dict(**base,status='needs_review',paragraphs=[],sources=[],provider_calls=calls,
+            missing_information=['추가 검토 원문은 답변 근거로 사용할 수 없어요.'],validation='REVIEW_ONLY_SOURCE_NOT_FOR_GENERATION')
     factual=source_payday(question,semantic_plan,sources)
     if factual:
         draft,condition_data=finalize(factual,sources,question)

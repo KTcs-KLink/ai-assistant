@@ -67,12 +67,13 @@ def listening(port: int) -> bool:
         return False
 
 
-def marker(origin: str, retrieval: str | None = None, understanding: str | None = None) -> bool:
+def marker(origin: str, retrieval: str | None = None, understanding: str | None = None, source_scope: str | None = None) -> bool:
     try:
         with urlopen(origin+"/api/benefits/hr/capabilities", timeout=2) as response:
             state = json.load(response)
             return (state.get("app") == "KLINK_HR_DOMAIN" and (retrieval is None or state.get("retrieval_mode") == retrieval)
-                and (understanding is None or state.get("question_understanding") == understanding))
+                and (understanding is None or state.get("question_understanding") == understanding)
+                and (source_scope is None or state.get('source_scope') == source_scope))
     except (OSError, ValueError):
         return False
 
@@ -84,13 +85,16 @@ def launch():
     parser.add_argument("--retrieval", choices=["hybrid", "bm25"], default="hybrid")
     parser.add_argument("--encoder-port", type=int, default=8841)
     parser.add_argument("--understanding", choices=["llm", "off"], default="llm")
+    parser.add_argument("--source-scope", choices=["baseline", "expanded"], default="expanded")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535 or not 1024 <= args.encoder_port <= 65535 or args.port == args.encoder_port:
         raise SystemExit("1024~65535 사이 포트를 지정해 주세요.")
     origin = f"http://127.0.0.1:{args.port}"
+    if args.source_scope == 'expanded' and not (ROOT.parent/'outputs/klink_hr_source_expansion_20261107/source-manifest-v2.json').is_file():
+        raise SystemExit('확장 원문 검증 기록이 없어요. scripts/audit_hr_source_expansion.py를 먼저 실행해 주세요.')
     encoder_origin = ensure_encoder(args.encoder_port) if args.retrieval == "hybrid" else ""
     if listening(args.port):
-        if not marker(origin, args.retrieval, args.understanding):
+        if not marker(origin, args.retrieval, args.understanding, args.source_scope):
             raise SystemExit("이 포트에는 다른 버전 또는 다른 프로그램이 실행 중이에요. --port로 다른 번호를 지정해 주세요.")
     else:
         interpreter = ROOT/"server/.venv/Scripts/python.exe"
@@ -103,6 +107,7 @@ def launch():
         env.update(KLINK_ENV_FILE=str(ROOT.parent/".env"), KLINK_DATA_DIR=str(logs/f"isolated-data-{args.port}"),
             KLINK_BENEFITS_DEMO="true", KLINK_ALLOWED_ORIGINS=allowed, PYTHONIOENCODING="utf-8",
             KLINK_HR_RETRIEVAL=args.retrieval, KLINK_HR_ENCODER_URL=encoder_origin, KLINK_HR_INTENT_MODE=args.understanding,
+            KLINK_HR_SOURCE_SCOPE=args.source_scope,
             OPENBLAS_NUM_THREADS='2',OMP_NUM_THREADS='2',MKL_NUM_THREADS='2')
         corpus = ROOT.parent/"outputs/kepco_hr_full_20261102/data/reviewed_units.jsonl"
         if corpus.is_file():
@@ -111,10 +116,10 @@ def launch():
             proc = subprocess.Popen([str(interpreter), "-m", "uvicorn", "server.app:app", "--host", "127.0.0.1",
                 "--port", str(args.port), "--no-access-log"], cwd=ROOT, env=env, stdout=log, stderr=log,
                 creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
-        (logs/f"process-{args.port}.json").write_text(json.dumps({"pid":proc.pid,"port":args.port}), encoding="utf-8")
+        (logs/f"process-{args.port}.json").write_text(json.dumps({"pid":proc.pid,"port":args.port,"source_scope":args.source_scope}), encoding="utf-8")
         deadline = time.monotonic()+35
         while time.monotonic() < deadline:
-            if marker(origin, args.retrieval, args.understanding):
+            if marker(origin, args.retrieval, args.understanding, args.source_scope):
                 break
             if proc.poll() is not None:
                 raise SystemExit("실행을 확인하지 못했어요. .demo-logs/hr-domain/server.log를 확인해 주세요.")

@@ -10,6 +10,8 @@ import os
 import re
 from pathlib import Path
 
+from . import hr_source_scope
+
 try:
     from . import local_evidence
 except ImportError:
@@ -87,15 +89,19 @@ def reference_links(records):
     return result
 
 
-@lru_cache(maxsize=2)
-def _load(path: str, mtime: int, size: int):
+@lru_cache(maxsize=4)
+def _load(path: str, mtime: int, size: int, verified=None, review_only=False):
     records, seen, rejected = [], set(), 0
     with Path(path).open(encoding="utf-8") as file:
         for line in file:
             row = json.loads(line)
-            if title_key(row.get("document_title", "")) not in HR_TITLES:
+            if verified is None:
+                if title_key(row.get("document_title", "")) not in HR_TITLES:
+                    continue
+            elif (row['id'],row.get('text_sha256'),row.get('source_file_sha256'),row.get('file_version_key')) not in verified:
                 continue
-            if not all(row.get(key) is True for key in ("searchable", "answer_eligible", "source_scope_reviewed")):
+            required = ("searchable", "source_scope_reviewed") if review_only else ("searchable", "answer_eligible", "source_scope_reviewed")
+            if not all(row.get(key) is True for key in required):
                 continue
             if hashlib.sha256(row.get("text", "").encode()).hexdigest() != row.get("text_sha256") or row["id"] in seen or PRIVATE.search(row.get("text", "")):
                 rejected += 1
@@ -105,7 +111,11 @@ def _load(path: str, mtime: int, size: int):
                 sha256=row["text_sha256"], source_file_sha256=row.get("source_file_sha256"), version=row.get("file_version_key"),
                 company="KEPCO", employee_scope=row.get("employee_scope", "적용 대상 확인 필요"),
                 review_status=row.get("review_status"), human_approved=row.get("human_approved") is True,
-                effective_status=row.get("effective_status"), ktcs_applicable=False))
+                effective_status=row.get("effective_status"), ktcs_applicable=False,
+                answer_eligible=not review_only, review_only=review_only,
+                source_mapping_verified=verified is not None,
+                needs_layout_review=bool(row.get('needs_layout_review')),
+                scope_gate=row.get('scope_gate'), source_scope_decision=row.get('decision')))
     links=reference_links(records)
     lookup={r['id']:r for r in records}
     for row in records:
@@ -117,27 +127,48 @@ def _load(path: str, mtime: int, size: int):
     return records, counters, frequencies, lengths, rejected
 
 
-def corpus():
+def corpus(review_only=False):
     path = local_evidence.corpus_path()
     if not path or not path.is_file():
         return [], [], Counter(), [], 0
+    manifest = hr_source_scope.load(path)
+    if review_only and manifest is None:
+        return [], [], Counter(), [], 0
+    verified = None if manifest is None else hr_source_scope.signature(e for e in manifest['units']
+        if e['structural_verified'] and (not e['answer_eligible'] if review_only else e['answer_eligible']))
     stat = path.stat()
-    return _load(str(path), stat.st_mtime_ns, stat.st_size)
+    return _load(str(path), stat.st_mtime_ns, stat.st_size, verified, review_only)
 
 
 def summary() -> dict:
     rows, _, _, _, rejected = corpus()
+    manifest=hr_source_scope.load(local_evidence.corpus_path()) if hr_source_scope.expanded() and local_evidence.corpus_path() else None
     return dict(method="hr_bge_m3_hybrid" if os.getenv('KLINK_HR_RETRIEVAL')=='hybrid' else "hr_lexical_bm25", company="KEPCO", ktcs_applicable=False, source_count=len(rows),
         document_count=len({r["title"] for r in rows}), human_approved_count=sum(r["human_approved"] for r in rows),
-        rejected_sources=rejected, scope="HR title allowlist plus existing automatic source-scope and answer gates")
+        rejected_sources=rejected, source_scope="expanded" if hr_source_scope.expanded() else "baseline",
+        review_only_count=sum(e['structural_verified'] and not e['answer_eligible'] for e in manifest['units']) if manifest else 0,
+        scope="Original-file and source-span verified HR units; held units excluded from answers" if hr_source_scope.expanded()
+            else "HR title allowlist plus existing automatic source-scope and answer gates")
 
 
-def lexical_search(question: str, limit: int = 449) -> list[dict]:
+def lexical_search(question: str, limit: int | None = None) -> list[dict]:
+    return _lexical_search(question, corpus(), limit)
+
+
+def review_search(question: str, limit: int=5) -> list[dict]:
+    """Source-only review search; never used as an answer evidence provider."""
+    from . import hr_review_index
+    return hr_review_index.search(question,limit)
+
+
+def _lexical_search(question, data, limit):
     if PRIVATE.search(question):
         raise ValueError("개인정보나 키를 제외하고 일반적인 업무 질문만 입력해 주세요.")
-    if not HR_TERMS.search(question):
+    rows, counters, df, lengths, _ = data
+    known_titles={title_key(row['title']) for row in rows}
+    named={name for name in known_titles if name in title_key(question)}
+    if not HR_TERMS.search(question) and not named:
         return []
-    rows, counters, df, lengths, _ = corpus()
     expanded = question + " " + " ".join(alias for pattern, alias in QUERY_ALIASES if re.search(pattern, question))
     if re.search(r"급여|보수|임금", question) and re.search(r"입사|신규|승진|전근|신분.*변경", question):
         expanded += " 지급기준 발령일"
@@ -150,7 +181,6 @@ def lexical_search(question: str, limit: int = 449) -> list[dict]:
     lookup={r['id']:r for r in rows}
     mixed_scope=bool(re.search(r'(?<!비)정규직|일반\s*직원',question)) and '비정규직' in question
     q_articles={article_key(m) for m in re.findall(r'제\s*\d+\s*조(?:\s*의\s*\d+)?',question)}
-    named={name for name in HR_TITLES if name in title_key(question)}
     for row, counts, length in zip(rows, counters, lengths):
         # A contract form cannot establish a universal payday for all employees.
         if re.search(r"급여|월급|임금|보수", question) and re.search(r"언제|지급일|급여일|월급날|며칠", question) and "계약서" not in question:
@@ -183,15 +213,17 @@ def lexical_search(question: str, limit: int = 449) -> list[dict]:
         if score > 0:
             hits.append((score, row))
     hits.sort(key=lambda pair: (-pair[0], pair[1]["id"]))
-    return [{**row, "score": round(score, 5)} for score, row in hits[:max(1, min(limit, 449))]]
+    maximum = len(rows) if limit is None else max(1,min(limit,len(rows)))
+    return [{**row, "score": round(score, 5)} for score, row in hits[:maximum]]
 
 
 def search(question: str,limit: int=3,semantic_plan=None) -> list[dict]:
     if semantic_plan is not None:
         return semantic_search(question,semantic_plan,limit)
-    hits=lexical_search(question,449)
+    hits=lexical_search(question)
     if os.getenv('KLINK_HR_RETRIEVAL')!='hybrid':return hits[:max(1,min(limit,5))]
-    if PRIVATE.search(question) or not HR_TERMS.search(question):return []
+    if PRIVATE.search(question):return []
+    if not hits and not HR_TERMS.search(question):return []
     from . import hr_vectors
     rows=corpus()[0]
     if not rows:return []
@@ -220,7 +252,7 @@ def semantic_search(question,plan,limit=5):
         index=hr_vectors.get_index(rows,local_evidence.corpus_path())
     else:index=None
     for i,query in enumerate(queries):
-        lexical=lexical_search(query,449)
+        lexical=lexical_search(query)
         if index is not None:
             fused=hr_vectors.fuse([r['id'] for r in lexical],index.search(query))
             ranking=sorted(fused,key=lambda rid:(-fused[rid],rid))
@@ -245,10 +277,14 @@ def select_facets(question,ranking,rows):
     def add(rid):
         if rid in lookup and rid not in result:result.append(rid)
     qrefs={article_key(m) for m in re.findall(r'제\s*\d+\s*조(?:\s*의\s*\d+)?',question)}
-    named={name for name in HR_TITLES if name in title_key(question)}
+    named={title_key(row['title']) for row in rows if title_key(row['title']) in title_key(question)}
     explicit=[rid for rid in ranking if named and article_key(section_heading(lookup[rid]['section'])) in qrefs and
         title_key(lookup[rid]['title']) in named]
     for rid in explicit:add(rid)
+    # A named specialist regulation owns the requested topic even without an
+    # article number. Do not replace part-time hours with general staff hours.
+    if named and not explicit:
+        for rid in [rid for rid in ranking if title_key(lookup[rid]['title']) in named][:2]:add(rid)
     if ranking:add(ranking[0])
     mixed=bool(re.search(r'(?<!비)정규직|일반\s*직원',question)) and '비정규직' in question
     if not (explicit and named and not mixed):
@@ -260,7 +296,7 @@ def select_facets(question,ranking,rows):
         if '비정규직' in question and re.search(r'재해|(?:공상|순직).*인정',question):facets.append(('비정규직 재해보상','재해보상'))
         if re.search(r'보수|급여',question) and re.search(r'각각|구분|연결|별도\s*규정',question):facets.append(('직원 보수','보수'))
         for subquery,heading in facets:
-            candidates=[r for r in lexical_search(subquery,449) if heading in section_heading(r['section'])]
+            candidates=[r for r in lexical_search(subquery,len(rows)) if heading in section_heading(r['section'])]
             if candidates:add(candidates[0]['id'])
         query_terms=set(tokens(question))-STOPWORDS-{'규정','제조','기준','내용','경우','직원','계약','대한','하는','하여'}
         for seed in list(dict.fromkeys(result+ranking[:2])):

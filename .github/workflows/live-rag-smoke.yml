@@ -10,6 +10,7 @@ on:
       - feat/hr-answer-quality-20261107
       - feat/hr-quality-closeout-20261107
       - feat/hr-semantic-intents-20261107
+      - feat/hr-source-expansion-20261107
   workflow_dispatch:
 
 permissions:
@@ -30,6 +31,9 @@ jobs:
       - name: Test real SSE and PDF ingestion (no paid API calls)
         env:
           KLINK_DEMO_PASSWORD: ci-only-password
+          OPENBLAS_NUM_THREADS: "2"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
         run: python -m pytest server/tests scripts/tests -q
 
   frontend:

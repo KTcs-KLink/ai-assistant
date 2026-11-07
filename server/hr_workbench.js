@@ -62,6 +62,7 @@ function source(parent, item) {
     node('p', '한국전력 참고자료 · KTcs 적용 미확인', 'muted'),
     node('pre', item.text || item.quote, 'source'),
   )
+  if (item.excerpt_only) d.append(node('p', '검색된 원문의 일부입니다. 전체 조문과 표의 확인이 필요합니다.', 'muted'))
   parent.append(d)
 }
 function updateProfile(p) {
@@ -187,7 +188,7 @@ async function refreshReadiness() {
     $('readiness').append(div)
   }
   $('corpus-status').textContent =
-    `한국전력 인사 참고자료 ${data.research.source_count}개 · 실제 KTcs 자료 아님 · 검색 성능 재평가 아님`
+    `한국전력 인사 답변용 원문 ${data.research.source_count}개 · 추가 검토 원문 ${data.research.review_only_count || 0}개 · 실제 KTcs 자료 아님`
 }
 async function refreshUpdates() {
   const data = await request(base + '/updates')
@@ -322,4 +323,24 @@ $('reminders').addEventListener(
   }),
 )
 $('refresh-updates').addEventListener('click', action(refreshUpdates))
+$('review-form').addEventListener('submit', action(async () => {
+  $('review-results').replaceChildren(node('p', '추가 검토 원문을 찾고 있어요.'))
+  const data = await request(base + '/review-evidence?q=' + encodeURIComponent($('review-question').value))
+  $('review-results').replaceChildren(node('p', data.notice, 'notice'))
+  if (!data.results.length) $('review-results').append(node('p', '일치하는 추가 검토 원문이 없어요.'))
+  for (const item of data.results) {
+    const article = node('article', undefined, 'card')
+    article.append(node('p', '추가 검토 필요 · 답변 생성에 사용하지 않음', 'tag'))
+    const reasonLabels = {
+      HR_SCOPE_REVIEW_REQUIRED: '인사 업무 범위 확인 필요', EXISTING_ANSWER_GATE_HELD: '답변용 원문 검토 미완료',
+      INCOMPLETE_ARTICLE_OR_FORM: '조문 전체·표·서식 확인 필요', LAYOUT_REVIEW_REQUIRED: '표·글리프·배치 확인 필요',
+      NEW_SOURCE_LAYOUT_OR_BOUNDARY_UNVERIFIED: '표 순서·조문 경계 확인 필요',
+      ARTICLE_BODY_MISSING_OR_TOO_SHORT: '제목 외 본문 확인 필요', PARAGRAPH_SEQUENCE_INCOMPLETE: '항 번호·누락 확인 필요',
+    }
+    const reasons = [...new Set((item.hold_reasons || []).map(reason => reasonLabels[reason] || reason))]
+    if (reasons.length) article.append(node('p', reasons.join(' · ')))
+    source(article, item)
+    $('review-results').append(article)
+  }
+}))
 $('hire-date').max = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date())

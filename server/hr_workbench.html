@@ -37,6 +37,11 @@
       <form id="question-form" class="row"><input id="question" aria-label="일반 인사 업무 질문" maxlength="500" value="병가는 어떤 경우에 사용할 수 있나요?"><button id="ask">근거와 함께 질문하기</button></form>
       <p class="muted">질문과 허용된 공개 원문만 서버에서 GPT에 전달합니다. 프로필 조건은 전달하지 않습니다. 인용 검사 통과가 사람의 의미 검토·회사 승인과 같지는 않습니다.</p>
       <div id="answer" aria-live="polite"></div>
+      <details><summary>추가 검토가 필요한 원문 검색</summary>
+        <p class="muted">원본 파일·문자 위치가 일치해도 표 구조·인사 적용 범위 확인이 남은 자료입니다. 이 결과는 답변 생성 근거로 사용하지 않습니다.</p>
+        <form id="review-form" class="row"><input id="review-question" aria-label="추가 검토 원문 검색어" maxlength="500" value="인사 근무"><button>추가 검토 원문 찾기</button></form>
+        <div id="review-results" aria-live="polite"></div>
+      </details>
     </section>
     <section aria-labelledby="forms-heading"><h2 id="forms-heading">4. 공식 양식과 신청 준비</h2><div id="forms" class="grid"></div><h3>내 준비 목록</h3><div id="preparations"></div></section>
     <section aria-labelledby="updates-heading"><h2 id="updates-heading">5. 조건·규정 변경과 마감</h2>
