@@ -7,6 +7,7 @@ on:
       - feat/personalized-benefits-20261107
       - feat/final-uiux-20261107
       - feat/hr-domain-priorities-20261107
+      - feat/hr-answer-quality-20261107
   workflow_dispatch:
 
 permissions:

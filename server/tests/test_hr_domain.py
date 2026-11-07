@@ -283,10 +283,103 @@ def test_article_numbers_use_exact_source_context_while_factual_numbers_still_ne
         hr_answer.validate(draft("제52조에서 3년 이내로 정해요."), [source|dict(section="가상 규정 제52조의2")])
 
 
+def test_whitespace_only_quote_recovery_returns_the_original_contiguous_span():
+    original="정원이 증가하거\n나 결원이 발생한 때에 한하여 채용할 수 있다."
+    assert hr_answer.original_quote(original.replace("\n", ""), original)==original
+    for changed in [original.replace("한하여", "무조건"), original.replace("결원", "정원")]:
+        with pytest.raises(hr_answer.AnswerUnavailable):
+            hr_answer.original_quote(changed,original)
+    ambiguous="가상 조건은\n동일합니다. 다른 가상 조건은 \n동일합니다."
+    with pytest.raises(hr_answer.AnswerUnavailable):
+        hr_answer.original_quote("가상 조건은동일합니다.",ambiguous)
+    amended="첫 번째 가상 조건이다. <신설 2023.2.28>\n두 번째 가상 조건이다."
+    assert hr_answer.original_quote("첫 번째 가상 조건이다. 두 번째 가상 조건이다.",amended)==amended
+    for quote in [amended.replace("2023.2.28","2024.2.28"),"첫 번째 실제 조건이다. 두 번째 가상 조건이다."]:
+        with pytest.raises(hr_answer.AnswerUnavailable):hr_answer.original_quote(quote,amended)
+    substantive="첫 번째 가상 조건이다. <단, 허가를 받아야 한다> 두 번째 가상 조건이다."
+    with pytest.raises(hr_answer.AnswerUnavailable):
+        hr_answer.original_quote("첫 번째 가상 조건이다. 두 번째 가상 조건이다.",substantive)
+
+
+def test_quantity_formats_and_implicit_single_units_do_not_create_new_limits():
+    source=dict(id="TEST",section="가상 테스트 제1조",text="가상 한도는 1,000,000원이다. 연 미만은 월할, 월 미만은 절상한다.")
+    def draft(text):
+        return hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text=text,
+            citations=[hr_answer.Citation(source_id="TEST",quote=source["text"])])],missing_information=[])
+    assert hr_answer.validate(draft("가상 한도는 1000000원입니다. 1년 미만은 월할, 1개월 미만은 절상합니다."),[source])
+    for text in ["가상 한도는 2000000원입니다.","2년 미만은 월할합니다.","한도는 2.5원입니다."]:
+        with pytest.raises(hr_answer.AnswerUnavailable):hr_answer.validate(draft(text),[source])
+
+
+def test_user_scenario_numbers_require_an_explicit_verbatim_question_quote():
+    source=dict(id="TEST",section="가상 테스트",text="가상 재계약 기준은 계약 만료 후 6개월 이내인 경우이다.")
+    question="계약 종료 4개월 후 같은 근로자를 재고용할 수 있나요?"
+    def draft(text):
+        return hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text=text,
+            citations=[hr_answer.Citation(source_id="TEST",quote=source["text"])])],missing_information=[])
+    assert hr_answer.validate(draft('질문의 “4개월” 공백은 가상 기준의 6개월 이내입니다.'),[source],question)
+    for text in ['질문의 “9개월” 공백은 기준 이내입니다.',"4개월까지 재계약할 수 있습니다."]:
+        with pytest.raises(hr_answer.AnswerUnavailable):hr_answer.validate(draft(text),[source],question)
+
+
+def test_source_heading_scope_is_recovered_but_unrelated_numeric_facts_still_fail():
+    source=dict(id="TEST",title="가상 규정",section="제24조의2 4직급 직원",text="제24조의2(4직급 직원) 동일 사업소에서 10년 이상 근무한 자는 이동이 원칙이다.")
+    def draft(text):
+        return hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text=text,
+            citations=[hr_answer.Citation(source_id="TEST",quote="동일 사업소에서 10년 이상 근무한 자는 이동이 원칙이다.")])],missing_information=[])
+    result=hr_answer.validate(draft("4직급 직원은 10년 이상 근무 시 이동이 원칙입니다."),[source])
+    assert result.paragraphs[0].citations[0].quote==source["text"]
+    with pytest.raises(hr_answer.AnswerUnavailable):hr_answer.validate(draft("4년의 휴가를 줍니다."),[source])
+
+
+def test_logical_and_is_not_silently_weakened_to_or():
+    source=dict(id="TEST",text="가상 기준으로 출석 및 성적이 미달된 자는 낙제로 한다.",section="제1조")
+    draft=hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text="출석 또는 성적이 미달되면 낙제입니다.",
+        citations=[hr_answer.Citation(source_id="TEST",quote=source["text"])])],missing_information=[])
+    with pytest.raises(hr_answer.AnswerUnavailable):hr_answer.validate(draft,[source])
+    # The conjunction in a list of eligible school types is not a joint
+    # eligibility predicate requiring attendance at both schools.
+    source["text"]="고등학교 및 대학교에 재학 중인 자녀가 대상이다."
+    draft.paragraphs[0].text="고등학교 또는 대학교에 재학 중인 자녀가 대상입니다."
+    draft.paragraphs[0].citations[0].quote=source["text"]
+    assert hr_answer.validate(draft,[source])
+
+
+def test_internal_paragraph_dependency_and_circled_reference_preserve_numeric_evidence():
+    text="제1조(가상)\n① 교육기간의 3배로 한다.\n② 제1항에 의한 기간의 최소는 2년이다."
+    source=dict(id="TEST",text=text,section="제1조")
+    draft=hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text="제2항의 최소는 2년이며 교육기간의 3배 기준입니다.",
+        citations=[hr_answer.Citation(source_id="TEST",quote="② 제1항에 의한 기간의 최소는 2년이다.")])],missing_information=[])
+    result=hr_answer.validate(draft,[source])
+    assert "①" in result.paragraphs[0].citations[0].quote and "3배" in result.paragraphs[0].citations[0].quote
+
+
+def test_partial_unverified_paragraph_is_removed_and_output_requires_review():
+    source=dict(id="TEST",text="가상 기간은 3일이며 사전 승인이 원칙이다.",section="제1조")
+    draft=hr_answer.Draft(status="answered",paragraphs=[hr_answer.Paragraph(text="가상 기간은 3일입니다.",
+        citations=[hr_answer.Citation(source_id="TEST",quote=source["text"])]),hr_answer.Paragraph(text="출처가 없는 안내입니다.",citations=[])],missing_information=[])
+    result,extra=hr_answer.finalize(draft,[source])
+    assert result.status=="needs_review" and len(result.paragraphs)==1
+    assert extra["partial_verified_text"] and extra["source_conditions"][0]["quote"]==source["text"]
+
+
+@pytest.mark.parametrize("question,heading",[("희망 보직 결정 기준은 무엇인가요?","제19조 보직의 원칙"),
+    ("계약 종료 뒤 재고용 기준은 무엇인가요?","제11조 재고용계약"),
+    ("점심 휴게시간을 바꿀 수 있나요?","제20조 휴게시간"),
+    ("갑자기 아파 결근하면 어떻게 하나요?","제23조 결근"),
+    ("건강검진 주기는 무엇인가요?","제37조 건강진단")])
+def test_legitimate_hr_topics_are_not_rejected_by_the_domain_gate(tmp_path,monkeypatch,question,heading):
+    row=source_row("가상 테스트 원문으로 실제 회사 규정이 아닙니다. "+heading,heading_path=heading)
+    path=tmp_path/"source.jsonl"
+    path.write_text(json.dumps(row,ensure_ascii=False)+"\n",encoding="utf-8")
+    monkeypatch.setenv("KLINK_LOCAL_REVIEWED_UNITS",str(path))
+    assert hr_evidence.search(question)[0]["id"]==row["id"]
+
+
 def test_oversized_complete_evidence_is_not_truncated_or_sent_for_generation(monkeypatch):
     from openai import OpenAI
     from types import SimpleNamespace
-    monkeypatch.setattr(hr_evidence, "search", lambda q: [source_row()|dict(company="KEPCO", title="취업규칙", section="가상 테스트")])
+    monkeypatch.setattr(hr_evidence, "search", lambda q, **kw: [source_row()|dict(company="KEPCO", title="취업규칙", section="가상 테스트")])
     monkeypatch.setattr(hr_evidence, "summary", lambda: {"source_count": 1})
     monkeypatch.setattr(hr_answer.benefit_explanation, "settings", lambda: ("test-key", "test-model"))
     class Fake:
@@ -307,7 +400,7 @@ def test_oversized_complete_evidence_is_not_truncated_or_sent_for_generation(mon
 def test_invalid_generated_text_is_withheld_but_verified_sources_remain_available(monkeypatch):
     from types import SimpleNamespace
     row = source_row("가상 테스트에서 확인 기간은 3일입니다.")|dict(company="KEPCO", title="가상 테스트", section="제1조")
-    monkeypatch.setattr(hr_evidence, "search", lambda q: [row])
+    monkeypatch.setattr(hr_evidence, "search", lambda q, **kw: [row])
     monkeypatch.setattr(hr_evidence, "summary", lambda: {"source_count": 1})
     monkeypatch.setattr(hr_answer.benefit_explanation, "settings", lambda: ("test-key", "test-model"))
     class Fake:
@@ -326,12 +419,40 @@ def test_invalid_generated_text_is_withheld_but_verified_sources_remain_availabl
     assert result["sources"][0]["text"] == row["text"]
 
 
+def test_source_comparison_rechecks_the_draft_without_changing_model_or_claiming_human_approval(monkeypatch):
+    from types import SimpleNamespace
+    row=source_row("가상 요건이 충족되면 허가하여야 하며 실제 회사 규정이 아닙니다.")|dict(company="KEPCO",title="가상 테스트",section="제1조")
+    monkeypatch.setattr(hr_evidence,"search",lambda q,**kw:[row])
+    monkeypatch.setattr(hr_evidence,"summary",lambda:{"source_count":1})
+    monkeypatch.setattr(hr_answer.benefit_explanation,"settings",lambda:("test-key","test-model"))
+    phases=[]
+    class Fake:
+        def __init__(self,**kw):
+            self.responses=SimpleNamespace(input_tokens=SimpleNamespace(count=lambda **kw:SimpleNamespace(input_tokens=100)),create=self.create)
+        def create(self,**payload):
+            assert payload["model"]=="test-model" and payload["store"] is False
+            assert "test-key" not in str(payload) and "hire_date" not in str(payload)
+            user=json.loads(payload["input"])
+            phases.append("source_comparison" if "candidate" in user else "draft")
+            text="가상 요건 충족 시 허가할 수 있습니다." if len(phases)==1 else "가상 요건 충족 시 허가하여야 합니다."
+            data=dict(status="answered",paragraphs=[dict(text=text,citations=[dict(source_id=row["id"],quote=row["text"])])],missing_information=[])
+            return SimpleNamespace(status="completed",output_text=json.dumps(data),usage=None)
+        def __enter__(self):return self
+        def __exit__(self,*a):pass
+    monkeypatch.setattr("openai.OpenAI",Fake)
+    result=hr_answer.generate("병가 허가가 의무인가요?")
+    assert phases==["draft","source_comparison"]
+    assert result["paragraphs"][0]["text"]=="가상 요건 충족 시 허가하여야 합니다."
+    assert not result["semantic_review"]["independent"] and not result["human_approved"]
+    assert len(result["provider_calls"])==2
+
+
 def test_provider_rate_limit_diagnostic_never_exposes_provider_body(monkeypatch):
     import httpx
     import openai
     from types import SimpleNamespace
     row=source_row()|dict(company="KEPCO",title="가상 테스트",section="제1조")
-    monkeypatch.setattr(hr_evidence,"search",lambda q:[row])
+    monkeypatch.setattr(hr_evidence,"search",lambda q, **kw:[row])
     monkeypatch.setattr(hr_evidence,"summary",lambda:{"source_count":1})
     monkeypatch.setattr(hr_answer.benefit_explanation,"settings",lambda:("test-key","test-model"))
     class Fake:
