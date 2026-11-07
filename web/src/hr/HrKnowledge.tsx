@@ -386,11 +386,13 @@ export function HrAssistant() {
   const controller = useRef<AbortController | null>(null),
     transcript = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (draft)
+    if (draft) {
+      if (draft.length >= 2 && draft.length <= 500) setInput(draft);
       navigate(location.pathname + location.search, {
         replace: true,
         state: null,
       });
+    }
   }, [draft, location.pathname, location.search, navigate]);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {

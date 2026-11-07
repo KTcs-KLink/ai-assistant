@@ -1,0 +1,98 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T08:59:43.623Z",
+  "checks": [
+    {
+      "name": "Working navigation, compact work dashboard and source metadata",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Open exact work item, save checklist through real PATCH, retain it after refresh",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Status filters, work-name search, reset, progress sorting and review edit lock",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Ctrl+K searches the actual reference library",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Global AI drafts update even on the same assistant route, without automatic submission",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Change-notice settings use the current account API and send no external messages",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Six dashboard widths, mobile navigation and five inner-page layouts",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    },
+    {
+      "name": "Failed preparation lookup stays unknown and retryable",
+      "mode": "explicit synthetic 503 response",
+      "passed": true
+    },
+    {
+      "name": "Both prior home designs remain in their original shell",
+      "mode": "actual local demo BFF and UI",
+      "passed": true
+    }
+  ],
+  "widths": [
+    {
+      "width": 1920,
+      "documentWidth": 1920
+    },
+    {
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "width": 1024,
+      "documentWidth": 1024
+    },
+    {
+      "width": 768,
+      "documentWidth": 768
+    },
+    {
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "width": 360,
+      "documentWidth": 360
+    }
+  ],
+  "examplePlansSeeded": 3,
+  "actualChecklistPatchVerified": true,
+  "blockedAnswers": 0,
+  "newLlmAnswerRequests": 0,
+  "configurationRequests": 0,
+  "browserAuthorizationHeaders": 0,
+  "pageErrors": [],
+  "scope": "Local example-account work CRUD and UI verification; not production identity, tenant isolation, submissions or a new RAG evaluation",
+  "preservedPaths": [
+    "server",
+    "supabase",
+    "web/src/hr/HrHome.tsx",
+    "web/src/hr/home.css",
+    "web/src/hr/HrPages.tsx",
+    "web/src/portal",
+    "web/src/workspace",
+    "web/vite.config.ts"
+  ],
+  "preservedAgainst": "8bc30009b4fe2e0bbafb81f25e8829b6b6390bee",
+  "build": "PASSED: TypeScript and Vite production build",
+  "screenshotData": "Three example catalog preparations created only in an isolated local demo account; not actual employee tasks"
+}
