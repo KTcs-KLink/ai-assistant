@@ -162,12 +162,34 @@ def grounded_regular_payday_answer(results: list[dict]) -> str | None:
         )
     day = next(iter(days))
     best_id = next(cid for cid, fact_day, _ in facts if fact_day == day)
-    answer = f"등록된 시연 규정에 따르면, 정기 보수(급여)는 **매월 {day}일** 지급합니다[[{best_id}]]."
+    best_row = next(item["row"] for n, item in enumerate(results, start=1)
+                    if f"c{n}" == best_id)
+    # The actual KEPCO 25th-day snippet lives in a standard employment
+    # contract *template* (appendix 3-2), not a verified universal payroll policy.
+    # The archive's article-only chunks may omit the parent appendix header.
+    scope_text = (best_row["section"] + " " + best_row["content"])
+    template = (
+        "근로계약서 표준 양식" in scope_text
+        or ("초임기준급" in scope_text and "수습임용" in scope_text)
+    )
+    if template:
+        answer = (
+            "한국전력 공개 대체자료의 **근로계약서 표준 양식 제5조(보수)**에는 "
+            f"보수를 **매월 {day}일** 입금한다고 기재되어 있습니다[[{best_id}]]."
+        )
+    else:
+        answer = (
+            "등록된 공개 대체자료의 **보수 관련 조항**에는 "
+            f"**매월 {day}일** 지급한다고 기재되어 있습니다[[{best_id}]]."
+        )
     preceding_ids = [cid for cid, _, preceding in facts if preceding]
     if preceding_ids:
         answer += (
             " 해당 규정에는 **지급일이 토요일 또는 휴일이면 그 전일에 지급**하도록 되어 있습니다"
             f"[[{preceding_ids[0]}]]."
         )
-    answer += " 이 내용은 등록된 대체자료 기준이며 KTcs 실제 급여일을 확정한 것은 아닙니다."
+    answer += (
+        " 이 문구가 전체 직원에게 동일하게 적용되는지는 별도 확인이 필요합니다. "
+        "KTcs 실제 급여일을 확정한 것은 아닙니다."
+    )
     return answer
