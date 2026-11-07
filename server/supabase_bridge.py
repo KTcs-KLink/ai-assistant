@@ -90,6 +90,20 @@ def identity(token: str) -> str:
     return user["id"]
 
 
+def employee_authorized(token: str, uid: str) -> bool:
+    from uuid import UUID
+    try:
+        uid = str(UUID(uid))
+    except (ValueError, TypeError):
+        return False
+    rows = call("GET", f"/rest/v1/klink_employee_memberships?user_id=eq.{uid}&company=eq.KTCS&active=eq.true&select=user_id&limit=1", token=token)
+    return bool(isinstance(rows, list) and rows and rows[0].get("user_id") == uid)
+
+
+def logout(token: str):
+    call("POST", "/auth/v1/logout?scope=local", token=token)
+
+
 def get_profile(token: str, uid: str) -> dict | None:
     rows = call("GET", f"/rest/v1/klink_benefit_profiles?user_id=eq.{uid}&select=profile&limit=1", token=token)
     return rows[0]["profile"] if rows else None

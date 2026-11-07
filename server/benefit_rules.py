@@ -2,10 +2,14 @@
 from __future__ import annotations
 
 import hashlib
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+def business_date():
+    return datetime.now(timezone(timedelta(hours=9))).date()
 
 
 class BenefitProfile(BaseModel):
@@ -27,7 +31,7 @@ class BenefitProfile(BaseModel):
     @field_validator("hire_date")
     @classmethod
     def valid_date(cls, value):
-        if value and not date(1960, 1, 1) <= value <= date.today():
+        if value and not date(1960, 1, 1) <= value <= business_date():
             raise ValueError("입사일을 확인하세요.")
         return value
 
@@ -95,7 +99,7 @@ def catalog_item(benefit_id: str) -> dict | None:
 def evaluate(policy: dict, profile: BenefitProfile, *, as_of: date | None = None,
              company: str = "DEMO", approved: bool = False) -> dict:
     """False wins over unknown in an AND rule; company/source gates always fail closed."""
-    today = as_of or date.today()
+    today = as_of or business_date()
     p = profile.consented()
     checks = []
 

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'self'">
+  <link rel="icon" href="data:,">
+  <title>K:LINK 인사 기능 연결 확인</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f6f8fa;color:#253644;font:15px/1.7 system-ui,'Malgun Gothic',sans-serif}main{max-width:1220px;margin:auto;padding:32px 24px 80px}h1{font-size:27px;margin:0 0 12px}h2{font-size:20px;margin:0 0 15px}h3{font-size:17px;margin:8px 0}p{margin:8px 0}section{padding:24px;background:white;border:1px solid #dce3e9;border-radius:12px;margin-top:22px}button,input,select{font:inherit}button{background:#185a80;color:#fff;border:0;border-radius:7px;padding:10px 15px;cursor:pointer;min-height:44px}button.secondary{background:#e8eef4;color:#23455b}button:disabled{background:#e6eaed;color:#5b6b75;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b46d15;outline-offset:3px}input,select{padding:10px;border:1px solid #9bafbd;border-radius:6px;max-width:100%}input[type=checkbox]{height:18px;width:18px}label{display:flex;gap:9px;align-items:center;margin:10px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.card{border:1px solid #dce3e9;padding:18px;border-radius:9px;overflow-wrap:anywhere}.card p{font-size:14px}.tag{display:inline-block;background:#eaf0f5;padding:3px 8px;border-radius:5px;font-size:12px;color:#36536b}.notice{background:#fff3dc;border:1px solid #e5c58a;padding:16px;border-radius:8px}.muted{color:#586b7a;font-size:14px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.inputs>label{display:flex;flex-direction:column;align-items:stretch}.source{white-space:pre-wrap;background:#f1f5f8;padding:16px;border-radius:8px;overflow-wrap:anywhere}details{margin-top:12px}summary{cursor:pointer;color:#235e84}#error{position:sticky;top:0;z-index:5;background:#922d29;color:#fff;padding:13px 20px}#error:empty{display:none}.answer-part{border-left:3px solid #86a8bf;padding:6px 16px;margin:18px 0}.answer-part button{display:block;background:#edf2f7;color:#254964;margin-top:10px;text-align:left}#question{flex:1;min-width:200px}.checklist{padding:10px 0;border-top:1px solid #e1e7ec}.status{font-weight:650;color:#24587b}#content[hidden]{display:none}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.inputs{grid-template-columns:1fr}main{padding:22px 16px}.row>button{flex-grow:1}}@media(max-width:520px){.grid{grid-template-columns:1fr}section{padding:18px}h1{font-size:23px}input,select{font-size:16px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+  <script src="/hr-check.js" defer></script>
+</head>
+<body>
+<div id="error" role="alert"></div>
+<main>
+  <h1>K:LINK 인사 기능 연결 확인</h1>
+  <p>화면 디자인 대안과 별도로, 추천·인사 자료·신청 준비가 서버와 연결되는지 확인하는 체험 화면입니다.</p>
+  <div class="notice"><strong>가상 조건과 한국전력 공개 참고자료를 사용합니다.</strong><p>실제 KTcs 혜택·직원 자격·현행 사규가 아닙니다. 실제 개인정보나 API 키를 입력하지 마세요. 준비 체크는 실제 신청이나 승인이 아닙니다.</p></div>
+  <p class="row"><button id="start">가상 직원으로 기능 확인</button><button id="logout" class="secondary" disabled>체험 종료</button></p>
+  <div id="content" hidden>
+    <section aria-labelledby="profile-heading"><h2 id="profile-heading">1·2. 추천 조건과 동의</h2>
+      <p class="muted">예시 조건을 저장하면 서버가 규정 버전과 필수 조건을 다시 비교합니다.</p>
+      <form id="profile-form">
+        <label><input id="employment-consent" type="checkbox" checked>예시 근무 정보 사용에 동의</label>
+        <label><input id="family-consent" type="checkbox" checked>예시 가족 정보 사용에 동의</label>
+        <div class="inputs"><label>예시 고용형태<select id="employment"><option value="regular">정규직</option><option value="fixed_term">기간제</option><option value="part_time">시간제</option><option value="">미제공</option></select></label>
+        <label>예시 입사일<input id="hire-date" type="date" value="2019-03-11" min="1960-01-01"></label>
+        <label>예시 자녀 만 나이<input id="ages" value="5, 9" inputmode="numeric" placeholder="비우면 미제공"></label>
+        <label>예시 가구원 수<input id="household" type="number" min="1" max="20" value="4"></label></div>
+        <label><input id="no-children" type="checkbox">자녀 없음</label>
+        <div class="row"><button>예시 조건 저장</button><button id="revoke" type="button" class="secondary">동의 철회·조건과 준비 기록 삭제</button></div>
+      </form><p id="profile-status" role="status"></p><div id="catalog" class="grid"></div>
+    </section>
+    <section aria-labelledby="answer-heading"><h2 id="answer-heading">3. 실제 인사 원문과 GPT 답변</h2>
+      <p class="muted" id="corpus-status">인사 자료 확인 중</p>
+      <form id="question-form" class="row"><input id="question" aria-label="일반 인사 업무 질문" maxlength="500" value="병가는 어떤 경우에 사용할 수 있나요?"><button id="ask">근거와 함께 질문하기</button></form>
+      <p class="muted">질문과 허용된 공개 원문만 서버에서 GPT에 전달합니다. 프로필 조건은 전달하지 않습니다. 인용 검사 통과가 사람의 의미 검토·회사 승인과 같지는 않습니다.</p>
+      <div id="answer" aria-live="polite"></div>
+    </section>
+    <section aria-labelledby="forms-heading"><h2 id="forms-heading">4. 공식 양식과 신청 준비</h2><div id="forms" class="grid"></div><h3>내 준비 목록</h3><div id="preparations"></div></section>
+    <section aria-labelledby="updates-heading"><h2 id="updates-heading">5. 조건·규정 변경과 마감</h2>
+      <label><input id="reminders" type="checkbox">이 체험 화면에서 변경·마감 안내 받기</label>
+      <button id="refresh-updates" class="secondary">최신 변경 확인</button><div id="updates" aria-live="polite"></div><p class="muted">외부 메시지나 실제 알림은 발송하지 않습니다.</p>
+    </section>
+    <section aria-labelledby="ready-heading"><h2 id="ready-heading">6. 실사용 전 준비 상태</h2><div id="readiness" class="grid"></div><p class="muted">회사 규정·직원 인증·DB 권한·공식 양식·결재·운영 검증이 모두 충족되어야 실사용 완료로 판단합니다.</p></section>
+  </div>
+</main>
+</body></html>

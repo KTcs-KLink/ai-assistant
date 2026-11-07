@@ -1,5 +1,11 @@
 # AI Assistant
 
+## 인사 도메인 1~6순위 개발 (2026-11-07)
+
+`feat/hr-domain-priorities-20261107`에서 규정 승인/버전 기반 추천, 본인 동의·회원 확인, 실제 인사 참고 원문 RAG, 신청 준비·무효화, 동의한 변경/마감 안내, 6단계 운영 gate를 구현했습니다. `start_hr.cmd` 또는 `python scripts/launch_hr_domain.py`로 `http://127.0.0.1:8826/hr-check`를 엽니다. **실제 KTcs 규정·DB/RLS·정식 인증·공식 양식/신청·운영 검증은 별도이며 현재 운영 준비 완료가 아닙니다.**
+
+[단계별 완료 판단·실행·프론트 API 계약·검증 기록](docs/hr-domain-20261107.md)을 보세요. 회사 원문과 키·직원 정보는 Git에 넣지 않습니다. 기존 UI와 960 평가·원본 색인은 보존했습니다.
+
 ## 최종 UI/UX 시안 (2026-11-07)
 
 `feat/final-uiux-20261107`에서 홈·맞춤 혜택·AI 어시스턴트·규정/양식·신청 준비·내 정보/동의·로그인 미리보기를 하나의 PC/모바일 화면 흐름으로 연결했습니다. `start_uiux.cmd`를 더블클릭하거나 `python scripts/launch_uiux_preview.py`로 실행한 뒤 `http://127.0.0.1:8822/workspace`에서 체험합니다. 최초 한 번 `npm ci --prefix web`이 필요합니다. 코드를 수정한 후에는 `python scripts/launch_uiux_preview.py --rebuild`를 사용합니다.

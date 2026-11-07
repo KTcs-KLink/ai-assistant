@@ -12,6 +12,11 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 try:
+    from . import hr_runtime
+except ImportError:
+    import hr_runtime
+
+try:
     from .benefit_rules import BenefitProfile, CATALOG, DEMO_PROFILE, catalog_item, evaluate
     from . import local_evidence, benefit_explanation, supabase_bridge as supabase
 except ImportError:
@@ -26,16 +31,20 @@ SESSIONS: dict[str, dict] = {}
 LOCK = RLock()
 
 
+def purge_expired_sessions():
+    with LOCK:
+        for key in [k for k, v in SESSIONS.items() if v["expires"] <= time.time()]:
+            SESSIONS.pop(key, None)
+
+
 def _cookie(response, token):
     response.set_cookie(COOKIE, token, httponly=True, samesite="strict", secure=os.getenv("KLINK_SECURE_COOKIE") == "true", max_age=3600, path="/api/benefits")
 
 
 def _create_session(response: Response, **attributes):
     token = secrets.token_urlsafe(36)
+    purge_expired_sessions()
     with LOCK:
-        expired = [k for k, v in SESSIONS.items() if v["expires"] < time.time()]
-        for key in expired:
-            SESSIONS.pop(key, None)
         if len(SESSIONS) >= 1000:
             raise HTTPException(503, "현재 접속자가 많아요. 잠시 후 다시 시도해 주세요.")
         session = dict(profile=BenefitProfile(), saved=set(), prepared=set(), explanations={}, explaining=set(), expires=time.time() + 3600, **attributes)
@@ -49,10 +58,14 @@ def current(request: Request):
     with LOCK:
         session = SESSIONS.get(key)
     if not session or session["expires"] < time.time():
+        with LOCK:
+            SESSIONS.pop(key, None)
         raise HTTPException(401, "혜택 화면에 다시 로그인해 주세요.")
     if session["mode"] == "supabase":
         try:
             if supabase.identity(session["access_token"]) != session["uid"]:
+                raise supabase.IntegrationUnavailable()
+            if not supabase.employee_authorized(session["access_token"], session["uid"]):
                 raise supabase.IntegrationUnavailable()
         except supabase.IntegrationUnavailable:
             with LOCK:
@@ -88,10 +101,13 @@ class EmployeeLogin(BaseModel):
 
 
 @router.post("/session/login")
-def employee_login(payload: EmployeeLogin, response: Response):
+def employee_login(payload: EmployeeLogin, response: Response, request: Request):
+    hr_runtime.limit("employee_login", request.client.host if request.client else "unknown", 6, 60)
     try:
         result = supabase.login(payload.email, payload.password)
         uid = supabase.identity(result["access_token"])
+        if not supabase.employee_authorized(result["access_token"], uid):
+            raise supabase.IntegrationUnavailable()
         # Only load through the employee's JWT and RLS. No service-role fallback.
         stored = supabase.get_profile(result["access_token"], uid)
         validated = BenefitProfile(**stored).consented() if stored else BenefitProfile()
@@ -99,6 +115,7 @@ def employee_login(payload: EmployeeLogin, response: Response):
         session["profile"] = validated
         return public_session(session)
     except (supabase.IntegrationUnavailable, KeyError, ValueError):
+        hr_runtime.record("login_rejected")
         raise HTTPException(503, "직원 로그인 또는 개인 조건 저장소가 준비되지 않았어요. 계정·키·DB 권한을 확인해 주세요.") from None
 
 
@@ -111,7 +128,13 @@ def me(session=Depends(current)):
 def logout(request: Request, response: Response):
     key = hashlib.sha256(request.cookies.get(COOKIE, "").encode()).hexdigest()
     with LOCK:
-        SESSIONS.pop(key, None)
+        session = SESSIONS.pop(key, None)
+    if session and session["mode"] == "supabase":
+        try:
+            supabase.logout(session["access_token"])
+        except supabase.IntegrationUnavailable:
+            pass  # The local session is already invalid. Provider diagnostics are never returned.
+    hr_runtime.record("logout")
     response.delete_cookie(COOKIE, path="/api/benefits")
 
 
@@ -130,6 +153,7 @@ def update_profile(payload: BenefitProfile, session=Depends(current)):
             raise HTTPException(503, "조건을 저장하지 못했어요. 이전 조건을 유지하고 있어요.") from None
     session["profile"] = profile
     session["prepared"].clear()
+    hr_runtime.record("profile_saved")
     return profile
 
 
@@ -150,6 +174,9 @@ def revoke(session=Depends(current)):
             raise HTTPException(503, "서버에서 동의 정보를 삭제하지 못했어요. 다시 시도해 주세요.") from None
     session["profile"] = BenefitProfile()
     session["prepared"].clear()
+    session["saved"].clear()
+    session.pop("hr", None)
+    hr_runtime.record("consent_revoked")
 
 
 @router.get("/recommendations")
