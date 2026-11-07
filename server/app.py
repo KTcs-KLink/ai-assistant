@@ -16,7 +16,7 @@ import secrets
 import sqlite3
 import uuid
 from array import array
-from contextlib import contextmanager
+from contextlib import contextmanager, asynccontextmanager, suppress
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -134,7 +134,28 @@ def init_db() -> None:
 
 
 init_db()
-app = FastAPI(title="K:LINK RAG demo", version="0.1.0")
+
+
+@asynccontextmanager
+async def lifespan(application):
+    async def purge_loop():
+        try:
+            from .benefits_api import purge_expired_sessions
+        except ImportError:
+            from benefits_api import purge_expired_sessions
+        while True:
+            purge_expired_sessions()
+            await asyncio.sleep(60)
+    task = asyncio.create_task(purge_loop())
+    try:
+        yield
+    finally:
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task
+
+
+app = FastAPI(title="K:LINK RAG demo", version="0.1.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware, allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True, allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -147,6 +168,24 @@ except ImportError:
     from benefits_api import router as benefits_router
 app.include_router(benefits_router)
 
+try:
+    from .hr_api import router as hr_router
+except ImportError:
+    from hr_api import router as hr_router
+app.include_router(hr_router)
+
+
+@app.get("/hr-check", include_in_schema=False)
+def hr_check():
+    from fastapi.responses import FileResponse
+    return FileResponse(HERE / "hr_workbench.html", headers={"Cache-Control": "no-store", "Content-Security-Policy": "frame-ancestors 'none'", "X-Content-Type-Options": "nosniff"})
+
+
+@app.get("/hr-check.js", include_in_schema=False)
+def hr_check_script():
+    from fastapi.responses import FileResponse
+    return FileResponse(HERE / "hr_workbench.js", media_type="text/javascript", headers={"Cache-Control": "no-store"})
+
 
 @app.exception_handler(RequestValidationError)
 async def invalid_request(request: Request, exc: RequestValidationError):
@@ -158,6 +197,12 @@ async def invalid_request(request: Request, exc: RequestValidationError):
 async def benefits_privacy(request: Request, call_next):
     if request.url.path.startswith("/api/benefits"):
         origin = request.headers.get("origin")
+        if request.method not in {"GET", "HEAD", "OPTIONS"} and request.headers.get("sec-fetch-site") == "cross-site":
+            return JSONResponse(status_code=403, content={"detail": "허용되지 않은 요청이에요."})
+        if request.method in {"POST", "PUT", "PATCH"}:
+            length = request.headers.get("content-length", "0")
+            if not length.isdigit() or int(length) > 16384:
+                return JSONResponse(status_code=413, content={"detail": "요청 크기 한도를 초과했어요."})
         if request.method not in {"GET", "HEAD", "OPTIONS"} and origin and origin not in ALLOWED_ORIGINS + [str(request.base_url).rstrip("/")]:
             return JSONResponse(status_code=403, content={"detail": "허용되지 않은 요청이에요."})
         if request.url.path == "/api/benefits/session/demo" and request.client and request.client.host not in {"127.0.0.1", "::1", "testclient"}:

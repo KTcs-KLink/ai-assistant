@@ -1,0 +1,62 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "policy_id": {
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "company": {
+      "const": "KTCS",
+      "title": "Company",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "policy_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Policy Sha256",
+      "type": "string"
+    },
+    "source_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "approval_ref": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,100}$",
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "approved_on": {
+      "format": "date",
+      "title": "Approved On",
+      "type": "string"
+    },
+    "expires_on": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires On"
+    }
+  },
+  "required": [
+    "policy_id",
+    "company",
+    "version",
+    "policy_sha256",
+    "source_sha256",
+    "approval_ref",
+    "approved_on"
+  ],
+  "title": "Approval",
+  "type": "object"
+}

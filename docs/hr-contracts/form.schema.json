@@ -1,0 +1,59 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^[a-z0-9_-]{1,80}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "company": {
+      "pattern": "^KTCS$",
+      "title": "Company",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    },
+    "source_url": {
+      "maxLength": 1000,
+      "minLength": 10,
+      "title": "Source Url",
+      "type": "string"
+    },
+    "approval_ref": {
+      "pattern": "^[A-Za-z0-9_.:-]{1,100}$",
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "blank_template_verified": {
+      "title": "Blank Template Verified",
+      "type": "boolean"
+    },
+    "filename": {
+      "maxLength": 150,
+      "minLength": 1,
+      "title": "Filename",
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "company",
+    "version",
+    "source_url",
+    "approval_ref",
+    "blank_template_verified",
+    "filename",
+    "sha256"
+  ],
+  "title": "VerifiedForm",
+  "type": "object"
+}

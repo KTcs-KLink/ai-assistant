@@ -81,6 +81,9 @@ def benefits(tmp_path, monkeypatch):
     monkeypatch.setenv("KLINK_BENEFITS_DEMO", "true")
     monkeypatch.delenv("KLINK_ENV_FILE", raising=False)
     monkeypatch.setattr(supabase_bridge, "settings", lambda: ("", ""))
+    from server import hr_runtime
+    hr_runtime.WINDOWS.clear()
+    monkeypatch.setattr(supabase_bridge, "employee_authorized", lambda token, uid: True)
     app = importlib.reload(importlib.import_module("server.app")).app
     with TestClient(app) as client:
         yield client, app

@@ -1,0 +1,292 @@
+{
+  "$defs": {
+    "Condition": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9_-]{1,60}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "employment",
+            "tenure",
+            "children",
+            "household"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "employment_types": {
+          "items": {
+            "enum": [
+              "regular",
+              "fixed_term",
+              "part_time"
+            ],
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Employment Types",
+          "type": "array"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "maximum": 70,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "maximum": 70,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "negate": {
+          "default": false,
+          "title": "Negate",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind"
+      ],
+      "title": "Condition",
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z0-9_.:-]{1,120}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "company": {
+          "enum": [
+            "KTCS",
+            "DEMO"
+          ],
+          "title": "Company",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "section": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Section",
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "quote": {
+          "maxLength": 60000,
+          "minLength": 8,
+          "title": "Quote",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "company",
+        "title",
+        "section",
+        "version",
+        "quote",
+        "sha256"
+      ],
+      "title": "Source",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^[a-z0-9_-]{1,80}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "company": {
+      "enum": [
+        "KTCS",
+        "DEMO"
+      ],
+      "title": "Company",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    },
+    "title": {
+      "maxLength": 150,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "category": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Category",
+      "type": "string"
+    },
+    "value": {
+      "maxLength": 150,
+      "minLength": 1,
+      "title": "Value",
+      "type": "string"
+    },
+    "effective_from": {
+      "format": "date",
+      "title": "Effective From",
+      "type": "string"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Effective To"
+    },
+    "deadline": {
+      "anyOf": [
+        {
+          "format": "date",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Deadline"
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    },
+    "conditions": {
+      "items": {
+        "$ref": "#/$defs/Condition"
+      },
+      "maxItems": 25,
+      "minItems": 1,
+      "title": "Conditions",
+      "type": "array"
+    },
+    "exceptions": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 25,
+      "title": "Exceptions",
+      "type": "array"
+    },
+    "exclusions": {
+      "items": {
+        "items": {
+          "$ref": "#/$defs/Condition"
+        },
+        "type": "array"
+      },
+      "maxItems": 25,
+      "title": "Exclusions",
+      "type": "array"
+    },
+    "unresolved": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 25,
+      "title": "Unresolved",
+      "type": "array"
+    },
+    "conditions_complete": {
+      "default": false,
+      "title": "Conditions Complete",
+      "type": "boolean"
+    },
+    "checklist": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 25,
+      "minItems": 1,
+      "title": "Checklist",
+      "type": "array"
+    },
+    "form_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-z0-9_-]{1,80}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Form Id"
+    }
+  },
+  "required": [
+    "id",
+    "company",
+    "version",
+    "title",
+    "category",
+    "value",
+    "effective_from",
+    "source",
+    "conditions",
+    "checklist"
+  ],
+  "title": "Policy",
+  "type": "object"
+}
