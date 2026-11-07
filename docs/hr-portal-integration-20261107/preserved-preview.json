@@ -1,0 +1,11 @@
+{
+  "status": "PASSED",
+  "previewUrl": "http://127.0.0.1:8824/workspace",
+  "apiRequests": 0,
+  "pageErrors": [],
+  "checks": [
+    "Original fictional recommendation counts",
+    "Original fixed-answer boundary",
+    "No backend request from preserved preview"
+  ]
+}

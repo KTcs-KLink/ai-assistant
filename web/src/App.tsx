@@ -16,6 +16,9 @@ import { BenefitsPage } from './benefits/BenefitsPage'
 const WorkspaceApp = lazy(() =>
   import('./portal/PortalApp').then((m) => ({ default: m.PortalApp })),
 )
+const HrPortalApp = lazy(() =>
+  import('./hr/HrPortalApp').then((m) => ({ default: m.HrPortalApp })),
+)
 
 function RequireAuth({ admin, children }: { admin?: boolean; children: ReactNode }) {
   const { user, isLoading } = useAuth()
@@ -31,6 +34,14 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+          path="/hr/*"
+          element={
+            <Suspense fallback={<div className="p-8">인사 화면을 준비하고 있어요…</div>}>
+              <HrPortalApp />
+            </Suspense>
+          }
+        />
         <Route
           path="/workspace/*"
           element={

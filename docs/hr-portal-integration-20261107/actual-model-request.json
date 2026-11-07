@@ -1,0 +1,19 @@
+{
+  "status": "PASSED",
+  "checkedAt": "2026-11-07T02:50:04.732Z",
+  "httpStatus": 200,
+  "answerStatus": "needs_review",
+  "paragraphCount": 0,
+  "sourceCount": 3,
+  "validation": "REJECTED_DRAFT_WITHHELD_VERIFIED_SOURCES_AVAILABLE",
+  "generatedTextWithheld": true,
+  "company": "KEPCO",
+  "ktcsApplicable": false,
+  "humanApproved": false,
+  "employeeDataSent": false,
+  "actualAnswerRequests": 1,
+  "configuredModelCalled": true,
+  "sourceLookupStatus": 200,
+  "desktopAndMobileCaptured": true,
+  "scope": "One actual UI/BFF/configured-model request and original-source display; not independent answer-quality evaluation or KTcs eligibility approval"
+}

@@ -1,0 +1,96 @@
+{
+  "status": "PASSED",
+  "scope": "Computed text foreground/background contrast only; not full accessibility compliance",
+  "pages": [
+    {
+      "path": "/hr/assistant (actual answer state)",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/benefits",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/assistant",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/library",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/preparations",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/profile",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/status",
+      "width": 1440,
+      "documentWidth": 1440,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/benefits",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/assistant",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/library",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/preparations",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/profile",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    },
+    {
+      "path": "/hr/status",
+      "width": 390,
+      "documentWidth": 390,
+      "lowContrast": {}
+    }
+  ]
+}

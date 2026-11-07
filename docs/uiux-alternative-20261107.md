@@ -1,5 +1,7 @@
 # K:LINK 직원 포털 대안 시안
 
+이 문서는 보존된 디자인 예시 화면의 기록입니다. 후속 인사 기능 연결은 [별도 연결 문서](hr-portal-integration-20261107.md)를 참고하세요.
+
 기준일: 2026-11-07 (Asia/Seoul). 기준 커밋: `756301118cf7e0b1b40bd247917685ecc4b1fdde`.
 별도 일반 clone `klink-ui-alternative-20261107`, 브랜치 `feat/uiux-alternative-20261107`에서만 작업했다.
 
