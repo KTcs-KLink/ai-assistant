@@ -1,5 +1,5 @@
 // CLI flow test, no paid API/model calls. Start the dedicated HR server first.
-;async (page) => {
+async (page) => {
   const checks = [],
     errors = [],
     unexpected = []
