@@ -9,6 +9,7 @@ on:
       - feat/hr-domain-priorities-20261107
       - feat/hr-answer-quality-20261107
       - feat/hr-quality-closeout-20261107
+      - feat/hr-corpus-expansion-20261107
   workflow_dispatch:
 
 permissions:

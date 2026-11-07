@@ -85,7 +85,7 @@ def review(stage, workers, review_name, cohort_path=None, check_all_visible_fiel
         sources={s["id"]:s for s in case["designated_full_sources"]}
         sources.update({s["id"]:s for s in response.get("sources",[])})
         user=dict(question=case["question"],required_points=case["required_points"],
-            original_sources=[{k:s.get(k) for k in ("id","title","section","text","company","employee_scope","effective_status","review_status","human_approved","ktcs_applicable","version")} for s in sources.values()],
+            original_sources=[{k:s.get(k) for k in ("id","title","section","text","company","employee_scope","effective_status","review_status","human_approved","ktcs_applicable","version","source_role","source_context")} for s in sources.values()],
             candidate={k:response.get(k) for k in ("status","paragraphs","missing_information","notice","company","ktcs_applicable","human_approved")})
         from openai import OpenAI
         start=time.monotonic()

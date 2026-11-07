@@ -243,15 +243,16 @@ def test_official_form_registry_fails_closed(hr, tmp_path, monkeypatch):
 def source_row(text="병가는 질병으로 근무할 수 없을 때 확인하는 가상 테스트 문구입니다.", **patch):
     return dict(id="TEST-HR-1", document_title="취업규칙", heading_path="가상 테스트 제1조", text=text,
         text_sha256=hashlib.sha256(text.encode()).hexdigest(), searchable=True, answer_eligible=True, source_scope_reviewed=True,
-        human_approved=False, employee_scope="가상 테스트 직원", file_version_key="test-only") | patch
+        human_approved=False, employee_scope="가상 테스트 직원", file_version_key="test-only",decision="HR") | patch
 
 
 def test_hr_reader_filters_other_domains_unreviewed_and_changed_text(tmp_path, monkeypatch):
     good = source_row()
-    rows = [good, good|dict(id="OTHER", document_title="회계규정"), good|dict(id="UNREVIEWED", source_scope_reviewed=False), good|dict(id="CHANGED", text="본문 변경"), source_row("개인 연락처 private@example.invalid", id="PRIVATE")]
+    rows = [good, good|dict(id="OTHER", document_title="회계규정",decision="NON_HR"), good|dict(id="UNREVIEWED", source_scope_reviewed=False), good|dict(id="CHANGED", text="본문 변경"), source_row("개인 연락처 private@example.invalid", id="PRIVATE")]
     path = tmp_path/"units.jsonl"
     path.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows), encoding="utf-8")
     monkeypatch.setenv("KLINK_LOCAL_REVIEWED_UNITS", str(path))
+    monkeypatch.setattr(hr_evidence,'CANONICAL_CORPUS',path)
     assert hr_evidence.summary()["source_count"] == 1
     assert [r["id"] for r in hr_evidence.search("병가")] == ["TEST-HR-1"]
     assert not hr_evidence.source("CHANGED")
@@ -373,6 +374,7 @@ def test_legitimate_hr_topics_are_not_rejected_by_the_domain_gate(tmp_path,monke
     path=tmp_path/"source.jsonl"
     path.write_text(json.dumps(row,ensure_ascii=False)+"\n",encoding="utf-8")
     monkeypatch.setenv("KLINK_LOCAL_REVIEWED_UNITS",str(path))
+    monkeypatch.setattr(hr_evidence,'CANONICAL_CORPUS',path)
     assert hr_evidence.search(question)[0]["id"]==row["id"]
 
 

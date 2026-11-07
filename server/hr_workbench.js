@@ -187,7 +187,7 @@ async function refreshReadiness() {
     $('readiness').append(div)
   }
   $('corpus-status').textContent =
-    `한국전력 인사 참고자료 ${data.research.source_count}개 · 실제 KTcs 자료 아님 · 검색 성능 재평가 아님`
+    `한국전력 참고 문서 ${data.research.document_count ?? 0}종 · ${data.research.source_count}개 원문 구간 · 실제 KTcs 자료 아님`
 }
 async function refreshUpdates() {
   const data = await request(base + '/updates')

@@ -79,6 +79,26 @@ git -C $REPO pull --ff-only origin feat/live-rag-chat-20261106
 
 현재 `web/`은 React 사용자 화면을, `server/`는 시연용 FastAPI RAG 서버를 담당합니다. SSE API는 작동 테스트를 통과했으며 모델 외부 호출과 데이터베이스 운영 연동은 실제 키와 허용된 자료가 구성된 환경에서 별도 검증해야 합니다. `knowledge-mcp`와 정식 검색 MCP 연결은 후속 작업입니다.
 
+## 로컬 인사 원문 확장 검증 (2026-11-07)
+
+`feat/hr-corpus-expansion-20261107`은 기존 checkout과 별도로 작업합니다. Supabase 적재는 보류하며 PR은 생성하지 않습니다. 한국전력 공개 대체자료만 사용하며 KTcs 현행 규정·실직원 자격·사람 승인으로 표시하지 않습니다.
+
+기존 449구간에서 누락됐던 153구간과 검토 대기 3,268구간을 원본 파일·문자층·위치·적용범위와 대조했습니다. 현재 허용은 **873구간 / 기존 BAAI/bge-m3 벡터 891개**입니다. 누락 자료 146개와 대기 자료 289개를 연결했고, 원문·표·열 순서 문제로 기존 602개 중 18개를 다시 보류했습니다. 원문·골든셋 960문항·벡터 배열을 바꾸거나 문서 임베딩을 새로 계산하지 않았습니다.
+
+허용 목록과 전체 검토 기록은 작업 폴더의 `outputs/klink_hr_corpus_expansion_20261107/`에 보존하며 Git에 넣지 않습니다. 서버는 같은 폴더의 `review-overlay.json`과 해시가 일치하는 `runtime-source-units.jsonl`을 읽습니다. 원문 본문·ID·조건·예외는 그대로이며, 원본 검토 파일과의 모든 반환 필드 일치를 확인했습니다. 다른 프로젝트의 자료 경로·변조된 목록·미선택 중복 버전은 답변에 사용하지 않습니다.
+
+서버 Python 환경과 기존 KTCS 데이터가 있는 이 checkout에서 실행합니다.
+
+```powershell
+python scripts/launch_hr_domain.py --port 8856 --no-open
+python -m pytest server/tests scripts/tests -q
+npm run build --prefix web
+```
+
+원문 재검토 도구는 `scripts/expand_hr_sources.py`의 `freeze-baseline`, `prepare`, `review`, `compile`입니다. 기준 기록은 덮어쓰지 않습니다. `finalize_hr_original_audit.py`, `refine_hr_source_structure.py`, `freeze_hr_answer_cohort.py`는 각각 발견된 페이지 머리말 오인식, 항 순서 혼선, 잘린 문장을 기록한 재검토 단계입니다. 이력 없이 순서를 생략하거나 원문의 검토 플래그를 일괄 해제하지 않습니다.
+
+검색 성능은 `evaluate_hr_expansion.py retrieve`로 기존 960문항을 평가하고, 실제 GPT 답변은 별도로 보존한 133문항과 수정 영향 문항을 실행합니다. 새 원문 질문은 원문 기반 초안이며 독립 골든셋이 아닙니다. 자동 의미 판정·코드 검사·사람 승인은 구분합니다. 상세 로컬 결과는 `validation-report.html`과 `result-summary.json`에서 확인합니다. 기존 `.env`는 서버에서만 읽으며 화면·평가 입력·Git에 포함하지 않습니다.
+
 ## 폴더 구조
 
 ```text

@@ -28,6 +28,23 @@ def test_bare_article_reference_does_not_displace_the_actual_question_topic(monk
     assert hr_evidence.select_facets("제8조에 따라 채용된 직원의 전문분야 보직을 변경할 수 있나요?",ranking,rows)[0]=="topic"
 
 
+def test_family_preference_does_not_hide_a_scope_specific_hiring_prohibition(monkeypatch):
+    rows=[record('limited','가상 특정직급 규정','제1조 채용','임직원 가족을 우대하여 채용하여서는 아니 된다.'),
+        record('contract','가상 비정규직 규정','제2조 고용방식','채용권자는 임직원의 가족 또는 사적관계 지인 등을 채용하여서는 안 된다.')]
+    monkeypatch.setattr(hr_evidence,'lexical_search',lambda *args:rows)
+    result=hr_evidence.select_facets('가족을 우대하지 않은 공개경쟁이면 채용권자가 가족을 채용해도 되나요?', ['limited','contract'],rows)
+    assert set(result[:2])=={'limited','contract'}
+
+
+def test_renewal_workflow_keeps_the_required_written_contract_alongside_procedure(monkeypatch):
+    rows=[record('renew','가상 비정규직 규정','제1조 재고용계약'),
+        record('procedure','가상 비정규직 규정','제2조 고용절차'),
+        record('written','가상 비정규직 규정','제3조 근로계약서')]
+    monkeypatch.setattr(hr_evidence,'lexical_search',lambda *args:rows)
+    ids=hr_evidence.select_facets('비정규직 계약이 끝난 뒤 같은 사람을 다시 고용하려면 신규 고용절차도 필요한가요?', ['renew','procedure','written'],rows)
+    assert {'renew','written'}<=set(ids[:2])
+
+
 def test_named_article_only_prioritizes_the_named_regulation(monkeypatch):
     rows=[record("general","인사관리규정","제8조 채용"),record("specific","복지업무실무지침","제8조 공상 및 순직의 인정")]
     monkeypatch.setattr(hr_evidence,"lexical_search",lambda *args:[])

@@ -24,7 +24,7 @@ router = APIRouter(prefix="/api/benefits/hr", tags=["hr-domain"])
 
 @router.get("/capabilities")
 def capabilities():
-    return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", quality_version="hr-quality-closeout-20261107",
+    return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", quality_version="hr-corpus-expansion-20261107",
         retrieval_mode="hybrid" if os.getenv("KLINK_HR_RETRIEVAL") == "hybrid" else "bm25",
         demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False)
 

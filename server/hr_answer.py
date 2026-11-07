@@ -65,6 +65,17 @@ def source_spans(source: dict) -> list[dict]:
         for index,(start,end) in enumerate(zip(boundaries,boundaries[1:])) if start<end]
 
 
+def span_schema(sources):
+    schema=SpanDraft.model_json_schema()
+    variants=[]
+    for source in sources:
+        variants.append(dict(type='object',properties=dict(source_id=dict(type='string',enum=[source['id']]),
+            span_ids=dict(type='array',items=dict(type='string',enum=[s['id'] for s in source_spans(source)]))),
+            required=['source_id','span_ids'],additionalProperties=False))
+    schema['$defs']['SpanCitation']={'anyOf':variants}
+    return schema
+
+
 def resolve_spans(draft: SpanDraft, sources: list[dict]) -> Draft:
     allowed = {source["id"]:{span["id"]:span for span in source_spans(source)} for source in sources}
     paragraphs = []
@@ -149,7 +160,8 @@ def restore_article_citations(paragraph: Paragraph, allowed: dict) -> None:
         candidates = [s for s in allowed.values()
             if hr_evidence.article_key(hr_evidence.section_heading(s.get("section", ""))) == key]
         prefix = hr_evidence.title_key(paragraph.text[:ref.start()])
-        named = [(prefix.rfind(title), title) for title in hr_evidence.HR_TITLES if title in prefix]
+        titles={hr_evidence.title_key(s.get('title','')) for s in allowed.values()}-set([''])
+        named = [(prefix.rfind(title), title) for title in titles if title in prefix]
         if named:
             title = max(named)[1]
             candidates = [s for s in candidates if hr_evidence.title_key(s.get("title", "")) == title]
@@ -240,7 +252,45 @@ def check_general_leave_branch(draft: Draft, sources: list[dict], question: str)
                 raise error
 
 
-def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
+def check_absence_approval_branch(draft,sources,question):
+    if not ('결근' in question and re.search(r'사전|승인',question)):return
+    for source in sources:
+        rule=re.search(r'사전에\s*소속장의\s*승인을\s*받아야\s*한다',source['text'])
+        if not rule:continue
+        prose=' '.join(p.text for p in draft.paragraphs)
+        if '소속장' not in prose:
+            error=AnswerUnavailable('결근의 승인 주체와 사전 승인 원칙을 함께 설명해야 해요.','CRITICAL_CONDITION_OMISSION')
+            error.repair_details=dict(source_id=source['id'],original_clause=rule.group(),instruction='사전 소속장 승인 원칙과 불가피한 경우의 당일 사후 승인 절차를 구분해서 설명할 것')
+            raise error
+
+
+def check_measured_scope_omissions(draft,sources,question):
+    prose=' '.join(p.text for p in draft.paragraphs)
+    compact_prose=re.sub(r'\s','',prose)
+    for source in sources:
+        body=source['text'];compact_body=re.sub(r'\s','',body)
+        cited_prose=' '.join(p.text for p in draft.paragraphs if any(c.source_id==source['id'] for c in p.citations))
+        compact_cited=re.sub(r'\s','',cited_prose)
+        issue=None
+        if ('가족' in question and '채용' in question and re.search(r'범위|구분',question)
+            and '가족또는사적관계에의한지인' in compact_body and '지인' not in prose):
+            issue='채용 금지 범위를 설명할 때 해당 원문에 함께 열거된 사적 관계의 지인도 설명할 것'
+        if ('외부위원' in compact_cited and '외부관련전문가' in compact_body and '전문가' not in cited_prose):
+            issue='단순 외부위원 수뿐 아니라 원문이 요구하는 외부 관련 전문가라는 자격도 설명할 것'
+        if ('단시간' in question and '비정규직' in question and re.search(r'임금|급여',question) and re.search(r'산정|계산',question)
+            and source.get('source_role')=='contract_template' and cited_prose):
+            line=next((s['text'] for s in source_spans(source) if '가산임금율' in s['text']),None)
+            if line:
+                rates=re.findall(r'\d+(?:\.\d+)?\s*%',line)
+                if any(re.sub(r'\s','',rate) not in compact_prose for rate in rates):
+                    issue='두 자료의 임금 산정 원칙 비교에는 첨부 계약서 견본의 가산임금율과 적용되는 근로 범위도 함께 설명할 것'
+        if issue:
+            error=AnswerUnavailable('답변에서 질문에 필요한 적용 범위나 조건이 빠졌어요.','CRITICAL_CONDITION_OMISSION')
+            error.repair_details=dict(source_id=source['id'],instruction=issue)
+            raise error
+
+
+def validate(draft: Draft, sources: list[dict], question: str = "", *, check_completeness=True) -> Draft:
     allowed = {s["id"]: s for s in sources}
     if not 1 <= len(draft.paragraphs) <= 6 or len(draft.missing_information) > 8:
         raise AnswerUnavailable("답변 형식을 확인하지 못했어요.")
@@ -282,6 +332,23 @@ def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
             if len(c.quote) > 4000:
                 raise AnswerUnavailable("인용 범위가 너무 길어 표시하지 않았어요.")
         evidence = " ".join(c.quote for c in p.citations)
+        if (re.search(r'별도(?:의)?\s*(?:규정|기준|지침|절차)에\s*따라',p.text)
+            and not re.search(r'별도|따로|정하는|지침|시행세칙|준용|따른다|법령|정관',evidence)):
+            error=AnswerUnavailable('원문에 없는 별도 규정이나 기준을 추가할 수 없어요.','UNSUPPORTED_EXTERNAL_AUTHORITY')
+            error.repair_details=dict(instruction='이 출처에는 별도 기준에 따른다는 위임이 없으므로 그런 표현을 빼고 해당 조항 자체의 조건만 설명할 것')
+            raise error
+        # A choice of schedule/method must not turn the underlying mandatory
+        # provision into an optional grant. Guard the observed narrow failure.
+        if (re.search(r'휴게[^\n]*부여한다',evidence) and re.search(r'부여할\s*수\s*있',p.text)
+            and not re.search(r'부여(?:해야|하여야|합니다|한다|하도록\s*(?:정|규정))',p.text)):
+            error=AnswerUnavailable('휴게 부여 의무와 일괄·분할 방식의 선택을 구분해야 해요.','SOURCE_MODALITY_CHANGED')
+            error.repair_details=dict(instruction='휴게는 부여한다는 의무를 유지하고 선택 가능한 것은 일괄 또는 분할 방식임을 구분할 것')
+            raise error
+        if (re.search(r'정부의\s*지시가\s*있을\s*때에는\s*이에\s*따르',evidence)
+            and re.search(r'정부[^.\n]*(?:있거나|또는)[^.\n]*정할\s*수',p.text)):
+            error=AnswerUnavailable('정부 지시의 준수와 상호 필요에 따른 변경 가능성을 구분해야 해요.','SOURCE_MODALITY_CHANGED')
+            error.repair_details=dict(instruction='정부 지시가 있으면 그 지시에 따르는 의무와 상호 필요에 따라 달리 정할 수 있는 경우를 각각 설명할 것')
+            raise error
         # Job grades are organizational ranks, not ordinary numeric inequality.
         # Until an authorized hierarchy is provided, do not infer that a different
         # grade is included/excluded from an exception's '이상/이하' wording.
@@ -289,7 +356,8 @@ def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
         if rank_limits:
             for sentence in re.split(r"(?<=[.!?])\s+",p.text):
                 claim=re.search(r"(?:이\s*예외|예외\s*범위)[^.]*?(\d+)\s*직급[^.]*?(?:포함|적용|해당)",sentence)
-                uncertainty=re.search(r"(?:확인|단정).{0,15}(?:필요|없|못|어렵|않)|불명|미확인",sentence)
+                if not claim:claim=re.search(r'(\d+)\s*직급[^.]*예외[^.]*(?:포함|적용|해당|전환[^.]*가능)',sentence)
+                uncertainty=re.search(r"(?:확인|단정).{0,15}(?:필요|없|못|어렵|않)|확인(?:해야|하여야)|추가\s*확인|불명|미확인",sentence)
                 if claim and int(claim[1]) not in rank_limits and not uncertainty:
                     error=AnswerUnavailable("직급의 상하관계 근거 없이 예외의 포함·제외를 확정할 수 없어요.","UNVERIFIED_RANK_SCOPE")
                     error.repair_details=dict(source_boundary_grades=sorted(rank_limits),
@@ -313,7 +381,10 @@ def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
             left,right=connective.groups()
             if len(right)>2 and right[-1] in "이가을를은는":right=right[:-1]
             if re.search(re.escape(left)+r"\s*또는\s*"+re.escape(right),p.text):
-                raise AnswerUnavailable("원문의 조건 연결 표현이 달라 추가 확인이 필요해요.")
+                error=AnswerUnavailable("원문의 조건 연결 표현이 달라 추가 확인이 필요해요.",'SOURCE_CONNECTIVE_CHANGED')
+                error.repair_details=dict(left=left,right=right,original_connective='및',
+                    instruction='이 조건의 원문 연결 표현을 그대로 유지하고 및을 또는이나 둘 중 하나로 풀어 쓰지 말 것')
+                raise error
         context = " ".join(allowed[c.source_id].get("section", "") + " " + allowed[c.source_id]["text"] for c in p.citations)
         article = r"제\s*\d+\s*조(?:의\s*\d+)?"
         normalize = lambda text: re.sub(r"\s+", "", text)
@@ -337,6 +408,16 @@ def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
         for match in re.finditer(r'질문의\s*“([^”]+)”', factual_text):
             if question and match.group(1) in question:
                 factual_text = factual_text.replace(match.group(0), "질문의 해당 조건")
+        # A verbatim scenario value explicitly labelled as coming from the
+        # question is not a policy amount. Keep every unlabelled amount checked.
+        scenario_spans=[]
+        for match in re.finditer(r'\d+\s*(?:시간|개월|직급|일|년|주|세)(?:\s*(?:이상|미만|이하|초과))?',factual_text):
+            prefix=factual_text[max(0,match.start()-55):match.start()]
+            suffix=factual_text[match.end():match.end()+25]
+            if (question and match.group() in question and re.search(r'질문(?:처럼|에서\s*(?:제시|가정)한)[^.。\n]*$',prefix)
+                and re.search(r'으로|인\s*경우|일\s*때|이어도|정한',suffix)):
+                scenario_spans.append(match.span())
+        for a,b in reversed(scenario_spans):factual_text=factual_text[:a]+'질문에서 제시한 조건값'+factual_text[b:]
         # Exact unit equivalence, not a guessed benefit or an arithmetic result.
         for numeric, original in ((r"(?<!\d)1\s*년\s*미만", r"연\s*미만"), (r"(?<!\d)1\s*개월\s*미만", r"월\s*미만")):
             if re.search(original, evidence):
@@ -349,7 +430,10 @@ def validate(draft: Draft, sources: list[dict], question: str = "") -> Draft:
             raise error
         if hr_evidence.PRIVATE.search(p.text):
             raise AnswerUnavailable("답변에 표시할 수 없는 정보가 있어요.")
-    check_general_leave_branch(draft,sources,question)
+    if check_completeness:
+        check_general_leave_branch(draft,sources,question)
+        check_absence_approval_branch(draft,sources,question)
+        check_measured_scope_omissions(draft,sources,question)
     return draft
 
 
@@ -365,12 +449,12 @@ def finalize(draft: Draft,sources: list[dict],question: str=""):
     try:
         draft=validate(draft,sources,question)
     except AnswerUnavailable as original_error:
-        if original_error.code in {"CRITICAL_CONDITION_OMISSION","UNVERIFIED_RANK_SCOPE"}:
+        if original_error.code in {"CRITICAL_CONDITION_OMISSION","UNVERIFIED_RANK_SCOPE","SOURCE_MODALITY_CHANGED","SOURCE_CONNECTIVE_CHANGED","UNSUPPORTED_EXTERNAL_AUTHORITY"}:
             raise
         valid=[]
         for paragraph in draft.paragraphs:
             try:
-                checked=validate(Draft(status="answered",paragraphs=[paragraph],missing_information=[]),sources,question)
+                checked=validate(Draft(status="answered",paragraphs=[paragraph],missing_information=[]),sources,question,check_completeness=False)
                 valid.extend(checked.paragraphs)
             except AnswerUnavailable:pass
         if not valid:raise original_error
@@ -391,15 +475,27 @@ def generate(question: str) -> dict:
     if not 2 <= len(question.strip()) <= 500 or hr_evidence.PRIVATE.search(question):
         raise AnswerUnavailable("개인정보나 키를 제외한 일반 인사 업무 질문을 입력해 주세요.")
     base = dict(company="KEPCO", ktcs_applicable=False, employee_data_sent=False, human_approved=False,
-        notice="한국전력 공개 대체자료의 자동 검토 범위입니다. KTcs 현행 규정·실직원 자격·조직의 최종 승인이 아닙니다.",
-        retrieval=hr_evidence.summary())
+        notice="한국전력 공개 대체자료의 자동 검토 범위입니다. KTcs 현행 규정·실직원 자격·조직의 최종 승인이 아닙니다.")
     try:
+        base['retrieval']=hr_evidence.summary()
         sources = hr_evidence.search(question, limit=5)
     except ValueError:
-        return dict(**base,status="needs_review",paragraphs=[],sources=[],missing_information=["한전 전용 의미 검색의 준비 상태를 확인해야 해요. 확인 전 답변을 생성하지 않았어요."],
+        base.setdefault('retrieval',dict(company='KEPCO',available=False))
+        return dict(**base,status="needs_review",paragraphs=[],sources=[],missing_information=["한전 원문 검토 기록이나 검색 연결을 확인해야 해요. 확인 전 답변을 생성하지 않았어요."],
             validation="KEPCO_RETRIEVAL_UNAVAILABLE_NO_GENERATION")
     if not sources:
         return dict(**base, status="needs_review", paragraphs=[], missing_information=["허용된 인사 원문에서 필요한 근거를 찾지 못했어요."], sources=[])
+    ambiguous=set(hr_evidence.ambiguous_versions(question,sources))
+    explicitly_requested=any(hr_evidence.title_key(s['title']) in hr_evidence.title_key(question) for s in sources if s['id'] in ambiguous)
+    if sources[0]['id'] in ambiguous or explicitly_requested:
+        return dict(**base,status='needs_review',paragraphs=[],sources=[{k:v for k,v in s.items() if k!='score'} for s in sources],
+            missing_information=['같은 규정의 여러 수집 버전이 있어 적용할 원문 버전을 먼저 확인해야 해요. 버전을 섞어 답변하지 않았어요.'],
+            validation='AMBIGUOUS_SOURCE_VERSION_NO_GENERATION')
+    if ambiguous:
+        # Deferred versions cannot contaminate unrelated, unambiguous evidence.
+        # If those missing sources are essential, the model must ask for review.
+        sources=[s for s in sources if s['id'] not in ambiguous]
+        base['retrieval']['unselected_version_candidates_excluded']=len(ambiguous)
     key, model = benefit_explanation.settings()
     if not key or not model:
         raise AnswerUnavailable("서버의 GPT 키와 지정 모델 설정이 필요해요.", "CONFIGURATION_REQUIRED")
@@ -416,9 +512,17 @@ def generate(question: str) -> dict:
         "예외 요건만 말해 일반 원칙에 해당하는 다른 경우를 제외하지 마라. 비교 질문은 각 규정의 대상·기준을 나누어 설명하라. "
         "인용문에만 조건을 숨기지 말고 답변 본문에도 명확히 써라. 원칙을 무조건으로, 가능을 의무로, 의무를 재량으로 바꾸지 마라. "
         "서로 다른 규정의 적용대상·기간을 합치지 마라. 별도 기준을 따르거나 예외가 있는 한계를 포함하라. "
+        "source_role이 contract_template이면 검증된 첨부 계약서 견본의 조항이다. 그 사실을 본문에서 구분하고 모든 직원에게 적용되는 일반 규정으로 확대하지 마라. "
+        "정부 지시가 있으면 그 지시에 따른다는 의무와 당사자 상호 필요에 따라 시간을 달리 정할 수 있다는 재량을 한 조건으로 합치지 마라. "
+        "휴게시간을 부여한다는 의무는 유지하고, 일괄 또는 분할 중 방식을 정할 수 있다는 점과 부여 여부를 구분하라. "
         "답변 문단마다 source_id와 제공된 원문 구간의 span_ids를 선택하라. 원문 문장을 다시 쓰지 마라. 프로그램이 선택된 실제 원문을 그대로 인용한다. "
         "조문 번호는 해당 출처의 section 또는 본문과 정확히 일치시켜라. 기간·나이·일수·금액 등 사실 수치는 선택한 원문 구간 안에 있어야 한다. "
         "수치·단위는 원문 표기를 유지하고 환산하지 마라. 질문에서만 온 수치를 꼭 반복해야 하면 질문의 “원문 그대로” 형식으로 표시하라. "
+        "한도·범위·비율·기간·연령이 질문의 조건이면 그 말만 쓰지 말고 실제 원문에 있는 수치와 단위도 본문에 모두 적어라. "
+        "원문의 또는/및 연결과 선택 관계를 보존하라. 두 적용대상을 또는로 연결했다면 과로 합쳐 동시 요건처럼 만들지 마라. "
+        "원문이 법령명·조문으로 대상이나 행위를 한정하면 그 한정을 생략하여 범위를 넓히지 마라. 외부 관련 전문가 등 자격 요건도 보존하라. "
+        "교육비와 학비처럼 뜻이 달라질 수 있는 규정 용어를 임의로 바꾸지 마라. "
+        "단순히 서로 다른 항에서 정한 기준을 원문에 없는 별도 규정·별도 기준에 따른다고 꾸미지 마라. 확인할 수 없다는 한계와 적용 금지를 구분하라. "
         "원문에 없는 문단 번호나 목록 번호를 만들지 말고, 문서 버전 숫자는 답변 본문에 반복하지 마라. "
         "span_ids는 해당 source_id의 source_spans에 실제 존재하는 ID만 선택하라. 번호를 만들어내지 마라. 필요한 조건과 예외 구간을 모두 선택하라. "
         "문단마다 서로 다른 출처는 최대 5개다. 같은 조문의 여러 항이 필요하면 각각의 구간을 선택하라. "
@@ -428,13 +532,14 @@ def generate(question: str) -> dict:
         "paragraphs에는 업무 규정 설명만 포함하고 회사·현행성·사람승인 안내 문단을 만들지 마라. 공통 notice를 코드가 별도 표시하므로 메타데이터를 quote로 인용하지 마라. "
         "필요한 실질 근거·조건이 없으면 needs_review로 하고 구체적으로 누락된 근거를 밝혀라. "
         "질문과 무관한 조문은 설명하지 말고, 서로 다른 적용 대상의 조문을 질문 대상에게 혼합하지 마라. "
+        "질문에 고용형태나 직급이 없으면 임의로 6직급·비정규직 등 하나의 대상이라고 추정하지 마라. 서로 다른 채용 금지와 우대 금지는 각 규정의 적용대상을 명시하여 구분하고 실제 적용대상은 추가 확인으로 남겨라. "
         "필요한 설명은 간결한 문단으로 쓰되 관련 조건·예외는 생략하지 마라. 중복 인용과 같은 경고 반복을 피하라. "
         "허용된 근거가 말하는 내용만 쓰고 지급·휴가·퇴직을 승인하거나 실제 신청을 제출했다고 말하지 마라."
     )
     payload = dict(model=model, instructions=instructions,
-        input=json.dumps(dict(question=question, sources=[{**{k: s.get(k) for k in ("id", "title", "section", "version", "company", "employee_scope", "effective_status", "review_status", "human_approved", "ktcs_applicable")},
+        input=json.dumps(dict(question=question, sources=[{**{k: s.get(k) for k in ("id", "title", "section", "version", "company", "employee_scope", "effective_status", "review_status", "human_approved", "ktcs_applicable","source_role","source_context")},
             "source_spans":[dict(id=span["id"],text=span["text"]) for span in source_spans(s)]} for s in sources]), ensure_ascii=False),
-        text={"format": dict(type="json_schema", name="hr_source_span_answer", strict=True, schema=SpanDraft.model_json_schema())}, truncation="disabled")
+        text={"format": dict(type="json_schema", name="hr_source_span_answer", strict=True, schema=span_schema(sources))}, truncation="disabled")
     from openai import OpenAI, RateLimitError, APITimeoutError, AuthenticationError
     verified_sources=[{k: v for k, v in s.items() if k != "score"} for s in sources]
     calls=[]
@@ -473,7 +578,7 @@ def generate(question: str) -> dict:
             # repair measured quote/number failures without weakening checks.
             issues=[]
             for index, paragraph in enumerate(candidate.paragraphs):
-                try:validate(Draft(status="answered",paragraphs=[paragraph.model_copy(deep=True)],missing_information=[]),sources,question)
+                try:validate(Draft(status="answered",paragraphs=[paragraph.model_copy(deep=True)],missing_information=[]),sources,question,check_completeness=False)
                 except AnswerUnavailable as error:issues.append(dict(paragraph_index=index,reason=str(error),details=getattr(error,"repair_details",None)))
             review_input["paragraph_code_issues"]=issues
             review_instructions=(instructions +
