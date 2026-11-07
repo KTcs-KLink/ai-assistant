@@ -1,5 +1,13 @@
 # AI Assistant
 
+## 최종 UI/UX 시안 (2026-11-07)
+
+`feat/final-uiux-20261107`에서 홈·맞춤 혜택·AI 어시스턴트·규정/양식·신청 준비·내 정보/동의·로그인 미리보기를 하나의 PC/모바일 화면 흐름으로 연결했습니다. `start_uiux.cmd`를 더블클릭하거나 `python scripts/launch_uiux_preview.py`로 실행한 뒤 `http://127.0.0.1:8822/workspace`에서 체험합니다. 최초 한 번 `npm ci --prefix web`이 필요합니다. 코드를 수정한 후에는 `python scripts/launch_uiux_preview.py --rebuild`를 사용합니다.
+
+**이 경로는 가상 직원·예시 규정만 사용하는 프론트엔드 시안입니다.** 실제 회사 자격 검증, 정식 로그인, AI/RAG 호출, Supabase 저장, 공식 양식 다운로드와 실제 제출은 연결 전입니다. 조건·저장·대화는 현재 탭 메모리에만 유지되며 새로고침하면 초기화됩니다. 기존 `/benefits` 및 RAG 화면과 구분됩니다.
+
+- [화면 구성·벤치마킹 적용·연결 경계·검증 기록](docs/final-uiux-20261107.md)
+
 ## 맞춤 혜택 작업 브랜치 (2026-11-07)
 
 `feat/personalized-benefits-20261107`에서 개인 조건에 맞는 복지·수당·휴가 카드와 판정 이유, 근거, 동의 관리, 신청 준비 흐름을 구현했습니다. **현재 카탈로그와 직원은 가상이며 실제 KTcs 자격 검증이 아닙니다.**

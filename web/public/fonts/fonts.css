@@ -1,0 +1,8 @@
+/* Pretendard v1.3.9, copyright Kil Hyung-jin; SIL OFL 1.1 in OFL-Pretendard.txt. */
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./PretendardVariable.woff2") format("woff2");
+}
