@@ -1,0 +1,11 @@
+# Optional Supabase pgvector & archived BGE-m3-ko 1024D retrieval.
+# Original benchmark environment: Python 3.12, torch 2.6.0+cpu,
+# transformers 4.51.3, tokenizers 0.21.1, numpy 2.3.5.
+-r requirements.txt
+psycopg[binary]>=3.2,<4
+numpy==2.3.5
+torch==2.6.0
+transformers==4.51.3
+tokenizers==0.21.1
+huggingface-hub==0.30.2
+safetensors==0.5.3
