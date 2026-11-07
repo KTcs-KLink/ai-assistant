@@ -33,6 +33,7 @@ import {
   HrReadiness,
 } from "./HrPages";
 import { HrLibrary, HrAssistant } from "./HrKnowledge";
+import { HrHome } from "./HrHome";
 import { attempt } from "./ui";
 import "../portal/portal.css";
 import "./hr.css";
@@ -61,7 +62,8 @@ export function HrPortalApp() {
         <Route path="login" element={<HrLogin />} />
         <Route element={<HrGate />}>
           <Route element={<HrShell />}>
-            <Route index element={<HrDashboard />} />
+            <Route index element={<HrHome />} />
+            <Route path="home-previous" element={<HrDashboard />} />
             <Route path="benefits" element={<HrBenefits />} />
             <Route path="assistant" element={<HrAssistant />} />
             <Route path="library" element={<HrLibrary />} />

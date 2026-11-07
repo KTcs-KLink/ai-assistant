@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import {
   ArrowRight,
   BookOpen,
@@ -364,14 +369,29 @@ interface Message {
   error?: string;
 }
 export function HrAssistant() {
+  const location = useLocation(),
+    navigate = useNavigate();
+  const draft =
+    typeof location.state?.draftQuestion === "string"
+      ? location.state.draftQuestion.trim()
+      : "";
   const { refresh } = useHr(),
-    [input, setInput] = useState(""),
+    [input, setInput] = useState(() =>
+      draft.length >= 2 && draft.length <= 500 ? draft : "",
+    ),
     [messages, setMessages] = useState<Message[]>([]),
     [pending, setPending] = useState(false),
     [source, setSource] = useState<EvidenceSource | null>(null),
     [sourceError, setSourceError] = useState("");
   const controller = useRef<AbortController | null>(null),
     transcript = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (draft)
+      navigate(location.pathname + location.search, {
+        replace: true,
+        state: null,
+      });
+  }, [draft, location.pathname, location.search, navigate]);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
     const container = transcript.current;
