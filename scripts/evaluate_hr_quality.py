@@ -31,7 +31,10 @@ os.environ["KLINK_ENV_FILE"] = str(WORKSPACE / ".env")
 
 
 def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    value=hashlib.sha256()
+    with Path(path).open('rb') as file:
+        for block in iter(lambda:file.read(1048576),b''):value.update(block)
+    return value.hexdigest()
 
 
 def readl(path):
@@ -41,7 +44,7 @@ def readl(path):
 def write(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary = path.with_name(f".{path.name}.{os.getpid()}.{threading.get_ident()}.tmp")
     temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
 

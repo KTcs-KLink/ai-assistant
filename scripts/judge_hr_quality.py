@@ -66,10 +66,10 @@ unsupported_claims에는 실제 답변에 존재하는 주장만 기록한다. �
 """
 
 
-def review(stage, workers, review_name):
+def review(stage, workers, review_name, cohort_path=None, check_all_visible_fields=False):
     key,model=benefit_explanation.settings()
     if not key or not model:raise SystemExit("Configured model and credential required (never printed).")
-    cases=readl(ROOT / "cohort.jsonl")
+    cases=readl(cohort_path or ROOT / "cohort.jsonl")
     def one(case):
         answer_path=ROOT / stage / "answers" / (case["case_id"]+".json")
         path=ROOT / stage / review_name / (case["case_id"]+".json")
@@ -106,6 +106,8 @@ def review(stage, workers, review_name):
                 assert omission.source_id in sources
                 omission.original_quote=hr_answer.original_quote(omission.original_quote,sources[omission.source_id]["text"])
             text=" ".join(p["text"] for p in response["paragraphs"])
+            if check_all_visible_fields:
+                text += " " + " ".join(response.get("missing_information", [])) + " " + response.get("notice", "")
             for claim in judgment.unsupported_claims:
                 assert claim.answer_claim in text
             if judgment.verdict=="complete":

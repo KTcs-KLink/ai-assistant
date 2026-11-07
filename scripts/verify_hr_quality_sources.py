@@ -3,6 +3,7 @@
 Does not reparse originals, change approval, or modify any corpus/index/gold file.
 """
 import hashlib
+import argparse
 import json
 from pathlib import Path
 import re
@@ -12,11 +13,12 @@ from evaluate_hr_quality import ROOT, WORKSPACE, CORPUS, readl, write, digest
 from server import hr_evidence
 
 
-def main():
+def main(output_root=ROOT):
     sys.stdout.reconfigure(encoding="utf-8")
     full=WORKSPACE / "outputs/kepco_hr_full_20261102"
     allowed={r["id"] for r in hr_evidence.corpus()[0]}
-    rows=[r for r in readl(CORPUS) if r["id"] in allowed]
+    with CORPUS.open(encoding='utf-8') as file:
+        rows=[row for line in file if (row:=json.loads(line))["id"] in allowed]
     docs={r["unit_id"]:r for r in readl(full / "data/documents.jsonl")}
     provenance=json.loads((full / "provenance/original_attachment_validation.json").read_text(encoding="utf-8"))
     originals={r["unit_id"]:r for r in provenance["document_units"]}
@@ -57,7 +59,7 @@ def main():
         proof.append(dict(source_id=r["id"],unit_id=r["unit_id"],section=r["heading_path"],sha256=r["text_sha256"],
             source_parts=parts,errors=unit_errors))
         if unit_errors:errors.append(dict(source_id=r["id"],kinds=unit_errors))
-    cohorts=readl(ROOT / "cohort.jsonl")
+    cohorts=readl(output_root / "cohort.jsonl")
     evidence_count=0
     for c in cohorts:
         for ev in c["original_evidence"]:
@@ -65,7 +67,7 @@ def main():
             compact=re.sub(r"\s","",ev["quote"])
             matching=[s for s in c["designated_full_sources"] if s["source_file_sha256"]==ev["source_file_sha256"] and compact in re.sub(r"\s","",s["text"])]
             if not matching:errors.append(dict(case_id=c["case_id"],evidence_id=ev["evidence_id"],kind="GOLD_QUOTE_NOT_IN_MAPPED_VERSION"))
-    write(ROOT / "source-verification.json",dict(status="passed" if not errors else "failed",source_sha256=digest(CORPUS),
+    write(output_root / "source-verification.json",dict(status="passed" if not errors else "failed",source_sha256=digest(CORPUS),
         runtime_units=len(rows),documents=len(files),source_parts_checked=part_count,whitespace_gaps_checked=gap_count,
         cohort_cases=len(cohorts),designated_evidence_checked=evidence_count,errors=errors,files=files,
         excerpts=proof,original_files_reparsed_this_run=False,source_currentness_verified=False,
@@ -75,4 +77,8 @@ def main():
     if errors:raise SystemExit(1)
 
 
-if __name__=="__main__":main()
+if __name__=="__main__":
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,default=ROOT)
+    args=parser.parse_args()
+    main(args.output.resolve())

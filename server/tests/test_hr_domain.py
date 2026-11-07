@@ -408,7 +408,7 @@ def test_invalid_generated_text_is_withheld_but_verified_sources_remain_availabl
             self.responses=SimpleNamespace(input_tokens=SimpleNamespace(count=lambda **kw: SimpleNamespace(input_tokens=100)), create=self.create)
         def create(self, **payload):
             assert payload["store"] is False
-            invalid=dict(status="answered", paragraphs=[dict(text="가상 테스트의 기간은 999일입니다.", citations=[dict(source_id=row["id"], quote=row["text"])])],missing_information=[])
+            invalid=dict(status="answered", paragraphs=[dict(text="가상 테스트의 기간은 999일입니다.", citations=[dict(source_id=row["id"], span_ids=["S0"])])],missing_information=[])
             return SimpleNamespace(status="completed", output_text=json.dumps(invalid), usage=None)
         def __enter__(self): return self
         def __exit__(self,*a): pass
@@ -435,7 +435,7 @@ def test_source_comparison_rechecks_the_draft_without_changing_model_or_claiming
             user=json.loads(payload["input"])
             phases.append("source_comparison" if "candidate" in user else "draft")
             text="가상 요건 충족 시 허가할 수 있습니다." if len(phases)==1 else "가상 요건 충족 시 허가하여야 합니다."
-            data=dict(status="answered",paragraphs=[dict(text=text,citations=[dict(source_id=row["id"],quote=row["text"])])],missing_information=[])
+            data=dict(status="answered",paragraphs=[dict(text=text,citations=[dict(source_id=row["id"],span_ids=["S0"])])],missing_information=[])
             return SimpleNamespace(status="completed",output_text=json.dumps(data),usage=None)
         def __enter__(self):return self
         def __exit__(self,*a):pass
