@@ -27,6 +27,14 @@ EXPECTED_CHUNKS = 1933
 EXPECTED_DIMENSIONS = 1024
 
 
+# Verified against knowledge-mcp/data/parsed/인사관리규정_20cbc4e2/parsing.md
+# The archived chunk lost its parent appendix header; preserve the actual scope
+# as corrected metadata without altering its text or the precomputed embedding.
+ARCHIVE_SCOPE_OVERRIDES = {
+    "SRC-0007-c0315": "【별표 3-2】 근로계약서 표준 양식 (제10조 관련)",
+}
+
+
 def domain_for(title: str) -> str:
     """Conservative PoC labels. Unknown documents stay unclassified."""
     if "회계" in title:
@@ -142,7 +150,8 @@ def write_to_pg(dsn: str, sources: list, chunks: list, body: np.ndarray, path: n
                     c = chunks[i]
                     rows.append((
                         c["chunk_id"], c["source_id"], c.get("unit_id"), c.get("unit_kind"),
-                        c.get("article"), c.get("chapter"), c.get("section"), c["kind"],
+                        c.get("article"), ARCHIVE_SCOPE_OVERRIDES.get(c["chunk_id"], c.get("chapter")),
+                        c.get("section"), c["kind"],
                         c["text"], json.dumps(c["spans"], ensure_ascii=False),
                         c.get("page"), vector_literal(body[i]), vector_literal(path[i]),
                         c["snapshot_commit"], MODEL, REVISION,
