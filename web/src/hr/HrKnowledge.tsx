@@ -22,6 +22,7 @@ import type {
   OfficialForm,
 } from "./api";
 import { Company, SourceView, Unavailable } from "./ui";
+import { ConditionCards } from "./ConditionCards";
 
 async function currentSource(item: EvidenceSource, signal?: AbortSignal) {
   const result = await request<EvidenceSource>(
@@ -369,10 +370,17 @@ export function HrAssistant() {
     [source, setSource] = useState<EvidenceSource | null>(null),
     [sourceError, setSourceError] = useState("");
   const controller = useRef<AbortController | null>(null),
-    bottom = useRef<HTMLDivElement>(null);
+    transcript = useRef<HTMLDivElement>(null);
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
-    if (messages.length) bottom.current?.scrollIntoView({ block: "nearest" });
+    const container = transcript.current;
+    const latest = container?.querySelector<HTMLElement>(
+      ".hr-conversation:last-of-type",
+    );
+    if (messages.length && container && latest)
+      container.scrollTop +=
+        latest.getBoundingClientRect().top -
+        container.getBoundingClientRect().top;
   }, [messages, pending]);
   async function send(text: string) {
     const question = text.trim();
@@ -386,12 +394,12 @@ export function HrAssistant() {
     setInput("");
     setMessages((previous) => [...previous, { id, question }]);
     try {
-      const answer = checkedAnswer(
+      const answer = await checkedAnswer(
         await request<HrAnswer>(
           HR + "/answer",
           "POST",
           { question },
-          AbortSignal.any([current.signal, AbortSignal.timeout(75000)]),
+          AbortSignal.any([current.signal, AbortSignal.timeout(330000)]),
         ),
       );
       if (current.signal.aborted) return;
@@ -464,7 +472,7 @@ export function HrAssistant() {
             <strong>K:LINK 인사 업무 도우미</strong>
             <span className="p-label">실제 서버 요청</span>
           </header>
-          <div className="p-chat-messages" aria-live="polite">
+          <div ref={transcript} className="p-chat-messages" aria-live="polite">
             {!messages.length ? (
               <div className="p-chat-empty">
                 <span className="p-chat-orbit">
@@ -526,6 +534,19 @@ export function HrAssistant() {
                           <Company company={message.answer.company} />
                         </div>
                         <Note>{message.answer.notice}</Note>
+                        {message.answer.validation ===
+                          "FINAL_DETERMINISTIC_REVALIDATION_NOT_NEW_GENERATION" && (
+                          <p className="hr-replay-label">
+                            보존 응답 재생 · 새 모델 호출 아님
+                          </p>
+                        )}
+                        {message.answer.partial_verified_text && (
+                          <p className="hr-withheld">
+                            인용 검사를 통과하지 못한 설명은 제외하고 남은
+                            문단을 표시했습니다. 추가 확인이 필요한 항목도 함께
+                            살펴보세요.
+                          </p>
+                        )}
                         {message.answer.generated_text_withheld && (
                           <p className="hr-withheld">
                             검사에 맞지 않거나 완성되지 않은 생성 문장은
@@ -557,6 +578,10 @@ export function HrAssistant() {
                             </div>
                           </section>
                         ))}
+                        <ConditionCards
+                          answer={message.answer}
+                          openSource={(item) => void openSource(item)}
+                        />
                         {!!message.answer.missing_information.length && (
                           <div className="hr-missing">
                             <h3>추가로 확인해 주세요</h3>
@@ -607,13 +632,13 @@ export function HrAssistant() {
                     </div>
                   ) : (
                     <p className="hr-pending" role="status">
-                      허용 원문과 인용을 확인하고 있어요. 잠시 기다려 주세요…
+                      답변 초안과 원문을 차례로 대조하고 있어요. 몇 분이 걸릴 수
+                      있으며, 이 자동 검토는 사람의 독립 승인이 아닙니다.
                     </p>
                   )}
                 </div>
               ))
             )}
-            <div ref={bottom} />
           </div>
           <form
             className="p-chat-form"

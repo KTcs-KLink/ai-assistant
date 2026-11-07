@@ -1,0 +1,18 @@
+{
+  "status": "PASSED",
+  "mode": "preserved partial response replay screenshot",
+  "case": "KEPCO-HR-01-029",
+  "partialVerifiedText": true,
+  "sourceCards": 1,
+  "paidModelCalls": 0,
+  "viewports": [
+    {
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "width": 390,
+      "document": 390
+    }
+  ]
+}

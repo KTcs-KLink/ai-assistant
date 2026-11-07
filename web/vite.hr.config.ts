@@ -12,11 +12,11 @@ export default mergeConfig(
       strictPort: true,
       proxy: {
         "/api/benefits": {
-          target: "http://127.0.0.1:8826",
+          target: "http://127.0.0.1:8828",
           changeOrigin: true,
-          headers: { origin: "http://127.0.0.1:8826" },
-          timeout: 80000,
-          proxyTimeout: 80000,
+          headers: { origin: "http://127.0.0.1:8828" },
+          timeout: 350000,
+          proxyTimeout: 350000,
         },
       },
     },

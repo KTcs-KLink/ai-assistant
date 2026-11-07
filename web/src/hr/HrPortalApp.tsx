@@ -258,7 +258,7 @@ function HrShell() {
   );
 }
 function HrLogin() {
-  const { state, busy, config, startDemo, refresh, notice, errors } = useHr(),
+  const { state, busy, startDemo, refresh, notice, errors } = useHr(),
     navigate = useNavigate();
   useEffect(() => {
     document.title = "K:LINK · 인사 기능 시작";
@@ -305,12 +305,7 @@ function HrLogin() {
         </p>
         <button
           className="p-button"
-          disabled={
-            busy ||
-            state === "loading" ||
-            !config?.demo_enabled ||
-            state === "offline"
-          }
+          disabled={busy || state === "loading" || state === "offline"}
           onClick={() =>
             void attempt(startDemo()).then((done) => {
               if (done) navigate("/hr");
@@ -357,12 +352,7 @@ function HrLogin() {
             </b>
           </span>
           <span>
-            직원 계정 저장소{" "}
-            <b>
-              {config?.supabase.database_reachable
-                ? "별도 직원 검증 필요"
-                : "연결 확인 필요"}
-            </b>
+            직원 계정 저장소 <b>적재 보류 · 연결 재검증 미실시</b>
           </span>
           <span>
             실제 회사 자격 <b>확정 전</b>

@@ -1,9 +1,16 @@
-// One actual configured-model request through the connected portal. No credentials in output.
+// One BFF request with up to two configured-model generation calls. No cloud-store probe.
 async function verifyHrPortalModel(page) {
   const base = "http://127.0.0.1:8825";
   let modelRequests = 0;
+  let received = null;
+  const publicRequests = [];
+  page.on("request", (r) => {
+    if (new URL(r.url()).pathname === "/api/benefits/config")
+      publicRequests.push("config");
+  });
   page.setDefaultTimeout(20000);
   try {
+    await page.unroute(base + "/api/benefits/hr/answer");
     await page.setViewportSize({ width: 1440, height: 1040 });
     await page.goto(base + "/hr");
     await page.getByRole("heading", { level: 1 }).waitFor();
@@ -23,12 +30,14 @@ async function verifyHrPortalModel(page) {
     await page.locator("body").ariaSnapshot();
     await page
       .getByRole("textbox", { name: "서버 인사 질문", exact: true })
-      .fill("육아휴직 기간은 어떤 조문에서 확인하나요?");
+      .fill(
+        "민원 대응 때문에 점심 휴게시간을 12시가 아닌 시간대로 운영할 수 있나요?",
+      );
     const pending = page.waitForResponse(
       (r) =>
         r.url().endsWith("/api/benefits/hr/answer") &&
         r.request().method() === "POST",
-      { timeout: 80000 },
+      { timeout: 340000 },
     );
     modelRequests++;
     await page
@@ -36,6 +45,7 @@ async function verifyHrPortalModel(page) {
       .click();
     const response = await pending;
     const data = await response.json();
+    received = data;
     if (response.status() !== 200)
       return {
         status: "UNAVAILABLE",
@@ -78,13 +88,36 @@ async function verifyHrPortalModel(page) {
     if (sourceResponse.status() !== 200) throw Error("Source retrieval failed");
     await page.getByText("독립된 사람 승인 전", { exact: true }).waitFor();
     await page.locator(".hr-evidence-panel .hr-original").waitFor();
+    if (data.paragraphs.length && !data.source_conditions?.length)
+      throw Error(
+        "Latest backend did not expose original condition paragraphs",
+      );
+    if (data.partial_verified_text && data.status !== "needs_review")
+      throw Error("Partial text promoted by backend");
+    if (publicRequests.length)
+      throw Error("Cloud-store status was automatically requested");
+    if (data.source_conditions?.length)
+      await page
+        .getByRole("heading", {
+          name: "함께 확인할 조건·예외 원문",
+          exact: true,
+        })
+        .waitFor();
+    await page.evaluate(() => {
+      window.scrollTo(0, 0);
+      const chat = document.querySelector(".p-chat-messages"),
+        cards = document.querySelector(".hr-source-conditions");
+      if (chat && cards)
+        chat.scrollTop +=
+          cards.getBoundingClientRect().top - chat.getBoundingClientRect().top;
+    });
     await page.screenshot({
-      path: "output/playwright/hr-portal-live-answer-desktop.png",
+      path: "output/playwright/hr-quality-portal-live-desktop.png",
       fullPage: true,
     });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.screenshot({
-      path: "output/playwright/hr-portal-live-answer-mobile.png",
+      path: "output/playwright/hr-quality-portal-live-mobile.png",
       fullPage: true,
     });
     await page.setViewportSize({ width: 1440, height: 1040 });
@@ -105,14 +138,23 @@ async function verifyHrPortalModel(page) {
       configuredModelCalled: !!data.model,
       sourceLookupStatus: sourceResponse.status(),
       desktopAndMobileCaptured: true,
+      conditionCards: data.source_conditions?.length ?? 0,
+      conditionCoverage: data.condition_coverage ?? null,
+      conditionReviewRequired: data.condition_review_required ?? [],
+      partialVerifiedText: !!data.partial_verified_text,
+      providerGenerationCalls: data.provider_calls?.length ?? 0,
+      independentReview: data.semantic_review?.independent ?? false,
+      cloudStoreStatusRequests: publicRequests.length,
+      response: received,
       scope:
-        "One actual UI/BFF/configured-model request and original-source display; not independent answer-quality evaluation or KTcs eligibility approval",
+        "One live browser/BFF answer request with up to two configured-model generations and original-source display; not independent answer-quality evaluation or KTcs eligibility approval",
     };
   } catch (error) {
     return {
       status: "FAILED",
       error: error.message,
       actualAnswerRequests: modelRequests,
+      response: received,
     };
   }
 }

@@ -1,0 +1,73 @@
+{
+  "status": "PASSED",
+  "checks": [
+    {
+      "name": "KEPCO-HR-01-001",
+      "mode": "preserved actual response replay via interception",
+      "cards": 10,
+      "fullTextExact": true,
+      "partial": false,
+      "passed": true
+    },
+    {
+      "name": "KEPCO-HR-01-029",
+      "mode": "preserved actual response replay via interception",
+      "cards": 1,
+      "fullTextExact": true,
+      "partial": true,
+      "passed": true
+    },
+    {
+      "name": "KEPCO-HR-08-002",
+      "mode": "preserved actual response replay via interception",
+      "cards": 4,
+      "fullTextExact": true,
+      "partial": false,
+      "passed": true
+    },
+    {
+      "name": "wrong quote hash",
+      "mode": "tampered replay response",
+      "passed": true
+    },
+    {
+      "name": "wrong source offset",
+      "mode": "tampered replay response",
+      "passed": true
+    },
+    {
+      "name": "unsupported all-article coverage",
+      "mode": "tampered replay response",
+      "passed": true
+    },
+    {
+      "name": "Unicode code-point offsets and UTF-8 hashes",
+      "mode": "explicit synthetic TEST source",
+      "passed": true
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "width": 768,
+      "document": 768
+    },
+    {
+      "width": 390,
+      "document": 390
+    },
+    {
+      "width": 360,
+      "document": 360
+    }
+  ],
+  "cloudStatusRequests": 0,
+  "paidModelCalls": 0,
+  "replay": true,
+  "sourceTextUnchanged": true,
+  "errors": [],
+  "scope": "Bounded UI integrity/replay/failure checks, not a new retrieval or answer-quality evaluation"
+}

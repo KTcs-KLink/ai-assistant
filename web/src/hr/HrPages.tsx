@@ -1000,7 +1000,7 @@ const GATE_NAMES = [
   "운영 승인·복구 점검",
 ];
 export function HrReadiness() {
-  const { readiness, config, refresh, busy } = useHr();
+  const { readiness, refresh, busy } = useHr();
   return (
     <>
       <Heading
@@ -1088,11 +1088,7 @@ export function HrReadiness() {
               </div>
               <div>
                 <dt>직원 저장소</dt>
-                <dd>
-                  {config?.supabase.database_reachable
-                    ? "서버 연결 응답 확인 · 실제 직원별 권한 검증 별도"
-                    : "연결 확인 필요 · 실제 직원의 DB 저장 검증 전"}
-                </dd>
+                <dd>Supabase 적재 보류 · 이 화면에서 연결을 재검증하지 않음</dd>
               </div>
               <div>
                 <dt>실제 제출</dt>
@@ -1104,19 +1100,12 @@ export function HrReadiness() {
               </div>
               <div>
                 <dt>질문 기능</dt>
-                <dd>
-                  {config?.llm_configured
-                    ? "서버 모델 설정 확인 · 응답마다 근거 검사"
-                    : "서버 모델 설정 확인 필요"}
-                </dd>
+                <dd>로컬 원문 기반 · 지정 모델로 초안·원문 자동 재검토</dd>
               </div>
             </dl>
             <details className="hr-integrity">
               <summary>연결 진단 정보</summary>
-              <p>직원 저장소 상태: {config?.supabase.status ?? "미확인"}</p>
-              {config?.supabase.error_code && (
-                <p>서버 진단 코드: {config.supabase.error_code}</p>
-              )}
+              <p>Supabase 연결 재조회·스키마 적용·적재를 수행하지 않습니다.</p>
               <p>
                 원문 검색: {readiness.research.method} · 검색 성능 재평가를
                 수행한 것은 아닙니다.

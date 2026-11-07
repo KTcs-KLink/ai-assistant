@@ -149,7 +149,9 @@ export function HrProvider({ children }: { children: ReactNode }) {
           0,
           "지정된 인사 서비스가 아닙니다. 연결 주소를 확인해 주세요.",
         );
-      const config = await request<Configuration>(ROOT + "/config");
+      // Cloud ingestion is on hold. /config probes the external account store,
+      // so local HR use does not request it or imply that storage was rechecked.
+      const config: Configuration | null = null;
       if (id !== generation.current) return;
       try {
         const session = await request<HrSession>(ROOT + "/session");

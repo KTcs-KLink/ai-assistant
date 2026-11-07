@@ -1,0 +1,6 @@
+{
+  "status": "FAILED",
+  "error": "page.waitForResponse: Timeout 340000ms exceeded while waiting for event \"response\"",
+  "actualAnswerRequests": 1,
+  "providerCompletion": "UNKNOWN: development hot reload interrupted the UI observation; do not count as zero model calls or success"
+}

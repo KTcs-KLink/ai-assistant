@@ -135,6 +135,18 @@ export interface EvidenceSource {
 export interface EvidenceResults extends Research {
   results: EvidenceSource[];
 }
+export interface SourceCondition {
+  source_id: string;
+  title: string;
+  section: string;
+  quote: string;
+  start: number;
+  end: number;
+  source_sha256: string;
+  quote_sha256: string;
+  kind: "ORIGINAL_SOURCE_PARAGRAPH_NOT_GENERATED";
+  human_approved: boolean;
+}
 export interface HrAnswer {
   company: string;
   ktcs_applicable: boolean;
@@ -150,6 +162,12 @@ export interface HrAnswer {
   notice: string;
   validation?: string;
   generated_text_withheld?: boolean;
+  source_conditions?: SourceCondition[];
+  condition_coverage?: string;
+  condition_review_required?: string[];
+  partial_verified_text?: boolean;
+  provider_calls?: { phase: string }[];
+  semantic_review?: { independent: boolean; human_approved: boolean };
 }
 export class HrError extends Error {
   constructor(
@@ -233,7 +251,7 @@ export function checkedCatalog(value: Catalog): Catalog {
   }
   return value;
 }
-export function checkedAnswer(value: HrAnswer): HrAnswer {
+export async function checkedAnswer(value: HrAnswer): Promise<HrAnswer> {
   if (
     !["answered", "needs_review"].includes(value.status) ||
     !Array.isArray(value.paragraphs) ||
@@ -241,17 +259,33 @@ export function checkedAnswer(value: HrAnswer): HrAnswer {
     !Array.isArray(value.missing_information)
   )
     throw new HrError(0, "답변 형식을 확인하지 못해 내용을 표시하지 않았어요.");
-  if (value.generated_text_withheld) return { ...value, paragraphs: [] };
+  const result: HrAnswer = {
+    ...value,
+    paragraphs: value.generated_text_withheld ? [] : value.paragraphs,
+    source_conditions: value.source_conditions ?? [],
+    condition_review_required: value.condition_review_required ?? [],
+    partial_verified_text:
+      !value.generated_text_withheld && !!value.partial_verified_text,
+  };
   if (
-    value.paragraphs.length &&
-    value.validation !==
-      "AUTOMATIC_ID_QUOTE_NUMBER_CHECKS_NOT_SEMANTIC_APPROVAL"
+    !Array.isArray(result.source_conditions) ||
+    !Array.isArray(result.condition_review_required) ||
+    result.condition_review_required.some((item) => typeof item !== "string")
+  )
+    throw new HrError(0, "조건 원문 응답을 확인하지 못했어요.");
+  if (
+    result.paragraphs.length &&
+    ![
+      "AUTOMATIC_ID_QUOTE_NUMBER_CHECKS_NOT_SEMANTIC_APPROVAL",
+      "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL",
+      "FINAL_DETERMINISTIC_REVALIDATION_NOT_NEW_GENERATION",
+    ].includes(value.validation ?? "")
   )
     throw new HrError(
       0,
       "인용 검사 결과를 확인하지 못해 답변을 표시하지 않았어요.",
     );
-  for (const paragraph of value.paragraphs) {
+  for (const paragraph of result.paragraphs) {
     if (
       typeof paragraph.text !== "string" ||
       !Array.isArray(paragraph.citations) ||
@@ -273,5 +307,75 @@ export function checkedAnswer(value: HrAnswer): HrAnswer {
         );
     }
   }
-  return value;
+  if (
+    result.source_conditions!.length &&
+    result.condition_coverage !==
+      "CITED_PARAGRAPHS_ONLY_NOT_ALL_REQUIRED_ARTICLES"
+  )
+    throw new HrError(
+      0,
+      "조건 원문의 확인 범위를 알 수 없어 답변을 표시하지 않았어요.",
+    );
+  const hashes = new Map<string, string>();
+  const sha256 = async (text: string) =>
+    Array.from(
+      new Uint8Array(
+        await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)),
+      ),
+    )
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
+  for (const condition of result.source_conditions!) {
+    if (!condition || typeof condition !== "object")
+      throw new HrError(0, "조건 원문 항목을 확인하지 못했어요.");
+    const source = result.sources.find(
+      (item) => item.id === condition.source_id,
+    );
+    const points =
+      source && typeof source.text === "string" ? Array.from(source.text) : [];
+    if (
+      !source ||
+      condition.kind !== "ORIGINAL_SOURCE_PARAGRAPH_NOT_GENERATED" ||
+      condition.title !== source.title ||
+      condition.section !== source.section ||
+      condition.human_approved !== false ||
+      typeof condition.quote !== "string" ||
+      !condition.quote.length ||
+      !Number.isInteger(condition.start) ||
+      !Number.isInteger(condition.end) ||
+      condition.start < 0 ||
+      condition.end <= condition.start ||
+      condition.end > points.length ||
+      points.slice(condition.start, condition.end).join("") !==
+        condition.quote ||
+      source.sha256 !== condition.source_sha256
+    )
+      throw new HrError(
+        0,
+        "조건·예외 원문의 위치나 버전이 일치하지 않아 답변을 표시하지 않았어요.",
+      );
+    let hash = hashes.get(source.id);
+    if (!hash) {
+      hash = await sha256(source.text);
+      hashes.set(source.id, hash);
+    }
+    if (
+      hash !== condition.source_sha256 ||
+      (await sha256(condition.quote)) !== condition.quote_sha256
+    )
+      throw new HrError(
+        0,
+        "조건·예외 원문 해시가 일치하지 않아 답변을 표시하지 않았어요.",
+      );
+  }
+  if (result.partial_verified_text || result.condition_review_required!.length)
+    result.status = "needs_review";
+  if (result.paragraphs.length && !result.source_conditions!.length) {
+    result.status = "needs_review";
+    result.condition_review_required = [
+      ...result.condition_review_required!,
+      "조건·예외 원문 카드가 없어 전체 원문을 직접 확인해야 해요.",
+    ];
+  }
+  return result;
 }
