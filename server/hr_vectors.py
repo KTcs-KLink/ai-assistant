@@ -115,7 +115,10 @@ class VectorIndex:
 
     def score(self,vector):
         scores={}
-        for rid,value in zip(self.ids,self.vectors@vector):scores[rid]=max(scores.get(rid,float('-inf')),float(value))
+        # This is only a few hundred windows. A single C reduction avoids a
+        # large OpenBLAS worker/scratch allocation for every server process.
+        similarities=np.einsum('ij,j->i',self.vectors,vector,optimize=False)
+        for rid,value in zip(self.ids,similarities):scores[rid]=max(scores.get(rid,float('-inf')),float(value))
         return scores
 
     def search(self,question):

@@ -265,7 +265,7 @@ $('question-form').addEventListener(
   action(async () => {
     const b = $('ask')
     b.disabled = true
-    $('answer').replaceChildren(node('p', '허용된 원문을 찾아 답변과 인용을 확인하고 있어요.', 'status'))
+    $('answer').replaceChildren(node('p', '질문 뜻을 확인하고 관련 규정에서 답변 근거를 찾고 있어요.', 'status'))
     try {
       const data = await request(base + '/answer', 'POST', { question: $('question').value })
       $('answer').replaceChildren(
@@ -278,6 +278,9 @@ $('question-form').addEventListener(
           'status',
         ),
       )
+      if (data.understanding?.interpreted_as) {
+        $('answer').append(node('p', '질문을 이렇게 이해했어요: ' + data.understanding.interpreted_as, 'status'))
+      }
       for (const part of data.paragraphs) {
         const block = node('div', undefined, 'answer-part')
         block.append(node('p', part.text))

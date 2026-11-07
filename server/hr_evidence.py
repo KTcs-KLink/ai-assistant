@@ -186,7 +186,9 @@ def lexical_search(question: str, limit: int = 449) -> list[dict]:
     return [{**row, "score": round(score, 5)} for score, row in hits[:max(1, min(limit, 449))]]
 
 
-def search(question: str,limit: int=3) -> list[dict]:
+def search(question: str,limit: int=3,semantic_plan=None) -> list[dict]:
+    if semantic_plan is not None:
+        return semantic_search(question,semantic_plan,limit)
     hits=lexical_search(question,449)
     if os.getenv('KLINK_HR_RETRIEVAL')!='hybrid':return hits[:max(1,min(limit,5))]
     if PRIVATE.search(question) or not HR_TERMS.search(question):return []
@@ -198,6 +200,38 @@ def search(question: str,limit: int=3) -> list[dict]:
     ordered=select_facets(question,sorted(fused,key=lambda rid:(-fused[rid],rid)),rows)
     lookup={r['id']:r for r in rows}
     return [{**lookup[rid],'score':round(fused[rid],7)} for rid in ordered[:max(1,min(limit,5))]]
+
+
+def semantic_search(question,plan,limit=5):
+    """Fuse original and checked intent queries over the same source allowlist.
+
+    The original question stays present. Intent queries do not retrieve a
+    different corpus, read a golden answer, or authorize an employee.
+    """
+    from .hr_intent import Understanding,private_or_invalid
+    if not isinstance(plan,Understanding) or private_or_invalid(question):
+        raise ValueError('검증된 질문 의미 분석이 필요해요.')
+    queries=plan.queries(question)
+    rows=corpus()[0]
+    if not rows:return []
+    scores={r['id']:0. for r in rows}
+    if os.getenv('KLINK_HR_RETRIEVAL')=='hybrid':
+        from . import hr_vectors
+        index=hr_vectors.get_index(rows,local_evidence.corpus_path())
+    else:index=None
+    for i,query in enumerate(queries):
+        lexical=lexical_search(query,449)
+        if index is not None:
+            fused=hr_vectors.fuse([r['id'] for r in lexical],index.search(query))
+            ranking=sorted(fused,key=lambda rid:(-fused[rid],rid))
+        else:ranking=[r['id'] for r in lexical]
+        weight=1.0 if i==0 else 2.0
+        for position,rid in enumerate(ranking[:100],1):scores[rid]+=weight/(10+position)
+    ranking=sorted(scores,key=lambda rid:(-scores[rid],rid))
+    context=question+' '+plan.canonical_query
+    ranking=select_facets(context,ranking,rows)
+    lookup={r['id']:r for r in rows}
+    return [{**lookup[rid],'score':round(scores[rid],7)} for rid in ranking[:max(1,min(limit,5))] if scores[rid]>0]
 
 
 def select_facets(question,ranking,rows):

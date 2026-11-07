@@ -4,6 +4,7 @@ from __future__ import annotations
 from copy import deepcopy
 from datetime import date
 import os
+import unicodedata
 import secrets
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -26,6 +27,7 @@ router = APIRouter(prefix="/api/benefits/hr", tags=["hr-domain"])
 def capabilities():
     return dict(app="KLINK_HR_DOMAIN", version="2026-11-07", quality_version="hr-quality-closeout-20261107",
         retrieval_mode="hybrid" if os.getenv("KLINK_HR_RETRIEVAL") == "hybrid" else "bm25",
+        question_understanding="llm" if os.getenv("KLINK_HR_INTENT_MODE") == "llm" else "off",
         demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False)
 
 
@@ -92,7 +94,7 @@ class Question(StrictModel):
 def answer(payload: Question, session=Depends(current)):
     if session["mode"] != "demo":
         raise HTTPException(409, "직원 질문은 승인된 KTcs 자료와 조직 접근권한 연결 후 제공해요.")
-    if hr_evidence.PRIVATE.search(payload.question):
+    if hr_evidence.PRIVATE.search(unicodedata.normalize('NFKC',payload.question)):
         raise HTTPException(422, "개인정보나 키 없이 일반적인 인사 업무 질문을 입력해 주세요.")
     hr_runtime.limit("answer", str(id(session)), 3, 60)
     with hr_runtime.LOCK:
