@@ -5,10 +5,14 @@
 
 ## 데이터와 목적
 
-기존 `KTCS_RAG_Lab_2026-11-02.zip`에 있는 한국전력 공개 규정 기반 PoC
-18건/1,933청크와 사전 계산된 **BGE-m3-ko 1024차원 정규화 벡터(body/path)**를
+사용자 로컬 실험 `KTCS_RAG_Lab_2026-11-02.zip`에서 인사 분야만 선별한
+`KLINK_local_HR_1722_2026-11-07.zip`에 있는 한국전력 공개 규정 기반 HR PoC
+10건/1,722청크와 사전 계산된 **BGE-m3-ko 1024차원 정규화 벡터(body/path)**를
 재사용합니다. KTcs 현행 인사규정이나 직원 개인정보가 아닙니다.
 원본 자료의 재배포·외부 저장·사용조건 및 저장 지역 승인은 운영 전 확인해야 합니다.
+GitHub `knowledge-mcp`의 원문 파일을 다운로드/적재하지 않습니다.
+전체 실험 ZIP을 지정해도 10개 HR source-ID만 허용 목록으로 필터링하며
+이사회·회계·ESG 등 8개 비인사 source-ID는 DB에 저장하지 않습니다.
 
 원본 모델: `dragonkue/BGE-m3-ko`, revision
 `7074d66aa46562342193ca4feb3d89bf9dad71b4`,
@@ -37,7 +41,7 @@ Python 3.12 권장. 프로젝트 저장소 루트에서:
 ```bash
 python -m pip install -r server/requirements-supabase.txt
 python server/import_lab_to_supabase.py \
-  --zip "/absolute/path/to/KTCS_RAG_Lab_2026-11-02.zip"
+  --zip "/absolute/path/to/KLINK_local_HR_1722_2026-11-07.zip"
 ```
 
 기본 동작은 **읽기 전용 체크**입니다. SHA-256, source/chunk 개수, 모델
@@ -52,8 +56,8 @@ python server/import_lab_to_supabase.py \
 ```
 
 `--apply`는 `KLINK_PG_DSN`이 설정되어야 실행됩니다.
-source_id/chunk_id 기준 재실행 안전 upsert를 사용하며, DB에서 1,933개 청크
-및 18개 source를 확인한 뒤 성공을 출력합니다. 실패 시 롤백합니다.
+source_id/chunk_id 기준 재실행 안전 upsert를 사용하며, DB에서 1,722개 청크
+및 10개 source를 확인한 뒤 성공을 출력합니다. 실패 시 롤백합니다.
 
 SQL Editor에서 점검:
 
@@ -108,7 +112,7 @@ npm ci && npm run dev
 ## 4. 검증 순서
 
 1. `GET /health`에 `supabaseConnected: true`,
-   `indexedDocuments: 18`, `indexedChunks: 1933`인지 확인합니다.
+   `indexedDocuments: 10`, `indexedChunks: 1722`인지 확인합니다.
 2. 데모 계정으로 로그인하고 `GET /api/admin/retrieval-debug?question=...`에서
    실제 출처 `chunkId/document/section/score`를 확인합니다.
 3. 실제 프론트엔드에서 `급여일이 언제야?`,
