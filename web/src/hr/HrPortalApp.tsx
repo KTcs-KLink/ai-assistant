@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   Link,
   NavLink,
@@ -13,8 +13,7 @@ import {
   ArrowRight,
   BookOpen,
   CircleHelp,
-  FileCheck2,
-  Gift,
+  MessageSquareText,
   Home,
   LogOut,
   RefreshCw,
@@ -25,25 +24,26 @@ import {
 } from "lucide-react";
 import { Logo, Note } from "../portal/ui";
 import { HrProvider, useHr } from "./HrContext";
-import {
-  HrDashboard,
-  HrBenefits,
-  HrPreparations,
-  HrProfile,
-  HrReadiness,
-} from "./HrPages";
+import { HrDashboard, HrReadiness } from "./HrPages";
 import { HrLibrary, HrAssistant } from "./HrKnowledge";
 import { HrHome } from "./HrHome";
 import { HrWorkspaceShell } from "./HrWorkspaceShell";
 import { HrWorkspace } from "./HrWorkspace";
 import { HrSaasAssistant } from "./HrSaasAssistant";
+import {
+  HrEmployeeHome,
+  HrEmployeeRequests,
+  HrEmployeeAccount,
+} from "./HrEmployee";
 import { attempt } from "./ui";
 import "../portal/portal.css";
 import "./hr.css";
 
+const HrAdminApp = lazy(() => import("./admin/HrAdminApp"));
+const HrWireframes = lazy(() => import("./HrWireframes"));
+
 const NAV = [
   { path: "", label: "홈", short: "홈", icon: Home },
-  { path: "/benefits", label: "맞춤 혜택", short: "혜택", icon: Gift },
   {
     path: "/assistant",
     label: "AI 업무 도우미",
@@ -52,10 +52,10 @@ const NAV = [
   },
   { path: "/library", label: "규정·양식", short: "규정·양식", icon: BookOpen },
   {
-    path: "/preparations",
-    label: "준비 목록",
-    short: "준비",
-    icon: FileCheck2,
+    path: "/requests",
+    label: "내 문의",
+    short: "내 문의",
+    icon: MessageSquareText,
   },
 ];
 export function HrPortalApp() {
@@ -63,14 +63,47 @@ export function HrPortalApp() {
     <HrProvider>
       <Routes>
         <Route path="login" element={<HrLogin />} />
+        <Route
+          path="wireframes"
+          element={
+            <Suspense
+              fallback={
+                <div className="hr-loading" role="status">
+                  화면 설계를 준비하고 있습니다.
+                </div>
+              }
+            >
+              <HrWireframes />
+            </Suspense>
+          }
+        />
+        <Route
+          path="admin/*"
+          element={
+            <Suspense
+              fallback={
+                <div className="hr-loading" role="status">
+                  관리자 화면을 준비하고 있습니다.
+                </div>
+              }
+            >
+              <HrAdminApp />
+            </Suspense>
+          }
+        />
         <Route element={<HrGate />}>
           <Route element={<HrWorkspaceShell />}>
-            <Route index element={<HrWorkspace />} />
-            <Route path="benefits" element={<HrBenefits />} />
+            <Route index element={<HrEmployeeHome />} />
+            <Route path="requests" element={<HrEmployeeRequests />} />
+            <Route path="workspace-previous" element={<HrWorkspace />} />
+            <Route path="benefits" element={<Navigate replace to="/hr" />} />
             <Route path="assistant" element={<HrSaasAssistant />} />
             <Route path="library" element={<HrLibrary />} />
-            <Route path="preparations" element={<HrPreparations />} />
-            <Route path="profile" element={<HrProfile />} />
+            <Route
+              path="preparations"
+              element={<Navigate replace to="/hr/requests" />}
+            />
+            <Route path="profile" element={<HrEmployeeAccount />} />
             <Route path="status" element={<HrReadiness />} />
             <Route path="*" element={<Navigate replace to="/hr" />} />
           </Route>
@@ -195,7 +228,7 @@ function HrShell() {
             </NavLink>
           ))}
           <NavLink className="p-profile-link" to="/hr/profile">
-            <Settings2 size={16} />내 조건·동의
+            <Settings2 size={16} />내 계정
           </NavLink>
         </div>
       </nav>
@@ -208,10 +241,7 @@ function HrShell() {
               : "직원 세션 연결"}
           </strong>
         </div>
-        <p>
-          혜택은 {session?.mode === "demo" ? "가상 규정" : "제공된 조건"} 기준 ·
-          원문은 한국전력 참고자료 · 회사 SSO·실제 신청은 연결 전
-        </p>
+        <p>원문은 한국전력 참고자료 · 회사 SSO·실제 신청은 연결 전</p>
         <Link to="/hr/status">
           상태 확인
           <CircleHelp size={14} />
@@ -287,19 +317,19 @@ function HrLogin() {
             <em>이어서 시작하세요.</em>
           </h1>
           <p>
-            조건에 맞는 추천부터 원문 확인,
+            AI 질문부터 근거 원문 확인,
             <br />
-            준비 목록과 변경 안내까지 연결했습니다.
+            담당자 문의와 처리 안내까지 연결했습니다.
           </p>
           <div className="p-login-path">
-            <span>추천</span>
+            <span>질문</span>
             <ArrowRight size={18} />
             <span>근거</span>
             <ArrowRight size={18} />
-            <span>준비</span>
+            <span>문의</span>
           </div>
         </div>
-        <a href="http://127.0.0.1:8824/workspace">보존된 디자인 시안 보기 →</a>
+        <a href="http://127.0.0.1:8824/">보존된 디자인 시안 보기 →</a>
       </section>
       <section className="p-login-panel">
         <span className="p-label">인사 서비스 연결</span>
@@ -309,7 +339,7 @@ function HrLogin() {
           회사 적용은 확인하면서.
         </h2>
         <p>
-          서버의 가상 직원·예시 조건으로 시작합니다. 실제 직원 정보는 입력하지
+          한전 공개 참고자료 체험으로 시작합니다. 실제 직원 정보는 입력하지
           마세요.
         </p>
         <button
@@ -331,9 +361,8 @@ function HrLogin() {
           <span>회사 계정·SSO 로그인은 연결 전입니다.</span>
         </div>
         <Note>
-          예시 조건: 정규직 · 2019년 입사 · 만 5세·9세 자녀 · 4인 가구. 가상
-          동의 조건을 서버에서 불러옵니다. 실제 혜택 지급·신청은 진행되지
-          않아요.
+          실제 원문 검색과 지정 모델 답변, 로컬 문의 체험을 제공합니다.
+          가족·자녀·가구 조건을 불러오거나 복지 자격을 추천하지 않습니다.
         </Note>
         {state === "offline" && (
           <div className="hr-login-error" role="alert">

@@ -11,6 +11,18 @@ export default mergeConfig(
       port: 8825,
       strictPort: true,
       proxy: {
+        "/api/benefits/hr/answer": {
+          target: "http://127.0.0.1:8848",
+          changeOrigin: true,
+          timeout: 570000,
+          proxyTimeout: 570000,
+        },
+        "/api/control": {
+          target: "http://127.0.0.1:8848",
+          changeOrigin: true,
+          timeout: 60000,
+          proxyTimeout: 60000,
+        },
         "/api/benefits": {
           target: "http://127.0.0.1:8846",
           changeOrigin: true,

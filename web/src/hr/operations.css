@@ -1,0 +1,42 @@
+.ops-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 550;
+  line-height: 1.4;
+  white-space: nowrap;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #66788c;
+  background: #f0f3f7;
+}
+.ops-badge.succeeded,
+.ops-badge.resolved,
+.ops-badge.reviewed {
+  background: #eaf6f0;
+  color: #347e62;
+}
+.ops-badge.running,
+.ops-badge.in_review,
+.ops-badge.received {
+  background: #edf3fc;
+  color: #456faa;
+}
+.ops-badge.held,
+.ops-badge.awaiting_info {
+  background: #fff4df;
+  color: #9a712f;
+}
+.ops-badge.failed,
+.ops-badge.interrupted {
+  background: #fceeee;
+  color: #ae5c5c;
+}
+.ops-badge.queued,
+.ops-badge.cancelled,
+.ops-badge.neutral {
+  background: #eff2f6;
+  color: #738096;
+}

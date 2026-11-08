@@ -19,7 +19,6 @@ import {
   Readiness,
   ROOT,
   Updates,
-  checkedCatalog,
   request,
 } from "./api";
 
@@ -83,12 +82,8 @@ export function HrProvider({ children }: { children: ReactNode }) {
   const load = useCallback(
     async (session: HrSession, config: Configuration | null, id: number) => {
       const results = await Promise.allSettled([
-        request<Catalog>(HR + "/catalog").then(checkedCatalog),
-        request<EmployeeProfile>(ROOT + "/profile"),
         request<{ forms: OfficialForm[] }>(HR + "/forms"),
-        request<{ plans: Preparation[] }>(HR + "/preparations"),
         request<Readiness>(HR + "/readiness"),
-        request<Updates>(HR + "/updates"),
       ]);
       if (id !== generation.current) return;
       const denied = results.find(
@@ -108,21 +103,14 @@ export function HrProvider({ children }: { children: ReactNode }) {
       setData({
         session,
         config,
-        catalog: value<Catalog>(0),
-        profile: value<EmployeeProfile>(1),
-        forms: value<{ forms: OfficialForm[] }>(2)?.forms ?? null,
-        plans: value<{ plans: Preparation[] }>(3)?.plans ?? null,
-        readiness: value<Readiness>(4),
-        updates: value<Updates>(5),
+        catalog: null,
+        profile: null,
+        forms: value<{ forms: OfficialForm[] }>(0)?.forms ?? null,
+        plans: null,
+        readiness: value<Readiness>(1),
+        updates: null,
       });
-      const names = [
-        "혜택 추천",
-        "내 조건",
-        "공식 양식",
-        "준비 목록",
-        "연결 상태",
-        "변경 안내",
-      ];
+      const names = ["공식 양식", "연결 상태"];
       setErrors(
         results.flatMap((result, index) =>
           result.status === "rejected"
@@ -217,10 +205,9 @@ export function HrProvider({ children }: { children: ReactNode }) {
           ROOT + "/session/demo",
           "POST",
         );
-        await request(ROOT + "/profile/example", "POST");
         await load(session, data.config, id);
         announce(
-          "서버의 예시 직원 조건을 불러왔어요. 실제 회사 계정은 아닙니다.",
+          "한전 참고자료 체험에 접속했습니다. 실제 회사 계정은 아닙니다.",
         );
       }),
     logout: () =>

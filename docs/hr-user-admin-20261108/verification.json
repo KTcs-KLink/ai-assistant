@@ -1,0 +1,519 @@
+{
+  "recorded_at": "2026-11-08T03:36:07+00:00",
+  "branch": "feat/hr-user-admin-20261108",
+  "base_commit": "b167ff80fe249fb2c2f804552675c8b2bc05543f",
+  "delivery": "LOCAL_PREVIEW_NOT_PRODUCTION_DEPLOYMENT",
+  "screen_plan": {
+    "employee": 6,
+    "admin": 8,
+    "total": 14,
+    "url": "http://127.0.0.1:8825/hr/wireframes",
+    "welfare_recommendation": "EXCLUDED_FROM_ACTIVE_EMPLOYEE_FLOW",
+    "pc_mobile_layouts": true
+  },
+  "role_assignment": {
+    "Codex": "UI, local operations APIs, execution and connection checks",
+    "app_code": "scope, roles, source hashes, metering and citation enforcement",
+    "GPT": "existing configured model for question understanding, answer draft and source comparison"
+  },
+  "source_scope_observed": {
+    "documents": 203,
+    "answer_articles": 528,
+    "review_only_units": 3334,
+    "excluded_private_units": 8,
+    "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+    "ktcs_applicability": "UNCONFIRMED",
+    "human_approval": false,
+    "currency": "UNCONFIRMED"
+  },
+  "preservation": {
+    "original_checkout_commit": "d1ee080240efb7c8e9fd8c4cdfb06ffe9983efdc",
+    "original_mock_http_root": 200,
+    "original_mock_port": 8824,
+    "upstream_port": 8846,
+    "new_gateway_port": 8848,
+    "chat_answer_evidence_api_files_unchanged_from_base": true,
+    "new_embeddings": 0,
+    "active_index_changed": false,
+    "supabase": "HOLD",
+    "cloud_deployments": 0,
+    "pull_requests_created": 0
+  },
+  "automated_checks": {
+    "frontend_typecheck_and_production_build": "PASSED",
+    "operations_tests": {
+      "passed": 24,
+      "failed": 0,
+      "provider_responses": "MOCKED_NO_PAID_CALLS",
+      "scope": "permissions, ownership, revision conflict, source provenance, FTS staging, empty staging rejection, job queue, cost and policy contracts"
+    },
+    "browser_console_errors_observed": 0,
+    "search_performance_evaluation": "NOT_RUN",
+    "full_answer_semantic_evaluation": "NOT_RUN",
+    "independent_human_approval": "NOT_PERFORMED"
+  },
+  "live_ui_observations": [
+    {
+      "name": "실제 UI 스테이징 재적재",
+      "jobId": "JOB-fb196dffb2cb",
+      "answerUnits": 21,
+      "reviewUnits": 21,
+      "newEmbeddings": 0,
+      "activeServiceChanged": false,
+      "passed": true
+    },
+    {
+      "name": "실제 UI 공식 원문 재수집",
+      "jobId": "JOB-059372b59a95",
+      "status": "succeeded",
+      "selectedDocuments": 1,
+      "activeServiceChanged": false,
+      "passed": true
+    },
+    {
+      "name": "직원 홈과 기존 528개 조문 연결",
+      "passed": true
+    },
+    {
+      "check": "employee-admin-case-roundtrip",
+      "case_id": "HR-fbbde824acb0",
+      "state": "resolved",
+      "employee_reply_visible": true,
+      "external_message_sent": false
+    },
+    {
+      "check": "actual-chat-answer-and-original",
+      "question": "통상근무자의 휴게시간을 업무 사정으로 바꿀 수 있나요?",
+      "answer_visible": true,
+      "original_visible": true,
+      "cited_source": "HF-bb7639e356502171f5c669832d3e",
+      "original_article": "취업규칙 제20조",
+      "ktcs_applicability": "unconfirmed",
+      "human_approval": false
+    },
+    {
+      "check": "actual-provider-usage",
+      "request_id": "REQ-9f4f8b0f846e",
+      "calls": 3,
+      "input_tokens": 9939,
+      "output_tokens": 2245,
+      "cached_tokens": 0,
+      "cost_usd": "0.002364650",
+      "latency_ms": 27797,
+      "cost_kind": "estimate_not_invoice",
+      "prompt_body_stored": false
+    },
+    {
+      "check": "welfare-excluded",
+      "employee_benefit_links": 0,
+      "account_inputs": 0,
+      "legacy_benefits_redirect": "http://127.0.0.1:8825/hr",
+      "mobile_employee_overflow": false,
+      "mobile_admin_overflow": false,
+      "viewport": 390
+    },
+    {
+      "check": "review-record-saved",
+      "document": "K-170-A01",
+      "state": "in_review",
+      "answer_scope_changed": false,
+      "human_approval": false
+    },
+    {
+      "check": "audit-and-connection-boundaries",
+      "review_and_case_changes_visible": true,
+      "sso": "not_connected",
+      "supabase": "HOLD",
+      "billing_reconciliation": "not_connected",
+      "active_index_activation": "not_connected"
+    },
+    {
+      "check": "service-diagnostic",
+      "upstream_answer_service": "connected",
+      "local_store": "connected",
+      "manifest": "verified",
+      "supabase": "HOLD"
+    },
+    {
+      "check": "cache-write-breakdown",
+      "write_tokens_by_phase": [
+        1128,
+        3452,
+        5350
+      ],
+      "included_in_input": true
+    },
+    {
+      "check": "screen-structure-and-wireframes",
+      "employee_screens": 6,
+      "admin_screens": 8,
+      "total_screens": 14,
+      "pc_and_mobile_switch": true,
+      "wireframe_data": "layout_placeholders_not_live_data",
+      "linked_implemented_routes": true
+    }
+  ],
+  "live_model_requests": [
+    {
+      "id": "REQ-9f4f8b0f846e",
+      "started_at": "2026-11-08T03:28:16+00:00",
+      "day": "2026-11-08",
+      "completed_at": "2026-11-08T03:28:44+00:00",
+      "status": 200,
+      "latency_ms": 27797,
+      "answer_state": "answered",
+      "call_count": 3,
+      "usage_complete": 1,
+      "input_tokens": 9939,
+      "output_tokens": 2245,
+      "cached_tokens": 0,
+      "cost_usd": "0.002364650",
+      "model": "gpt-6-luna",
+      "validation": "AUTOMATIC_SOURCE_COMPARISON_ID_QUOTE_NUMBER_CHECKS_NOT_HUMAN_APPROVAL",
+      "generations": [
+        {
+          "phase": "question_understanding",
+          "model": "gpt-6-luna",
+          "input_tokens": 1131,
+          "cached_tokens": 0,
+          "write_tokens": 1128,
+          "output_tokens": 125,
+          "cost_usd": "0.000203800",
+          "rate_snapshot": {
+            "model": "gpt-6-luna",
+            "input": "0.10",
+            "cached": "0.01",
+            "write": "0.125",
+            "output": "0.50",
+            "reference": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+            "checked_at": "2026-11-08",
+            "tier": "Standard assumption",
+            "revision": 1
+          }
+        },
+        {
+          "phase": "draft",
+          "model": "gpt-6-luna",
+          "input_tokens": 3455,
+          "cached_tokens": 0,
+          "write_tokens": 3452,
+          "output_tokens": 384,
+          "cost_usd": "0.000623800",
+          "rate_snapshot": {
+            "model": "gpt-6-luna",
+            "input": "0.10",
+            "cached": "0.01",
+            "write": "0.125",
+            "output": "0.50",
+            "reference": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+            "checked_at": "2026-11-08",
+            "tier": "Standard assumption",
+            "revision": 1
+          }
+        },
+        {
+          "phase": "source_comparison",
+          "model": "gpt-6-luna",
+          "input_tokens": 5353,
+          "cached_tokens": 0,
+          "write_tokens": 5350,
+          "output_tokens": 1736,
+          "cost_usd": "0.001537050",
+          "rate_snapshot": {
+            "model": "gpt-6-luna",
+            "input": "0.10",
+            "cached": "0.01",
+            "write": "0.125",
+            "output": "0.50",
+            "reference": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+            "checked_at": "2026-11-08",
+            "tier": "Standard assumption",
+            "revision": 1
+          }
+        }
+      ]
+    }
+  ],
+  "live_jobs": [
+    {
+      "id": "JOB-fb196dffb2cb",
+      "kind": "reindex",
+      "state": "succeeded",
+      "progress": 100,
+      "report": {
+        "id": "JOB-fb196dffb2cb",
+        "kind": "reindex",
+        "started_at": "2026-11-08T03:02:43+00:00",
+        "scope": "STAGING_ONLY",
+        "active_service_changed": false,
+        "supabase_ingestion": "HOLD",
+        "new_embeddings": 0,
+        "human_approved": false,
+        "ktcs_applicable": false,
+        "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+        "documents": [
+          {
+            "id": "K-170-A01",
+            "title": "상임임원 복무규정_260930",
+            "source_verified": true,
+            "original_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+            "answer_count": 21,
+            "review_count": 21
+          }
+        ],
+        "answer_units": 21,
+        "review_units": 21,
+        "index_type": "SEPARATE_ANSWER_AND_REVIEW_FTS5_NOT_ACTIVE_VECTOR_INDEX",
+        "completed_at": "2026-11-08T03:02:43+00:00",
+        "status": "succeeded",
+        "index_sha256": "e44b5337f848ab3debae749f96eced9d9ba2bdd35128434830ae0c0dfa51f816"
+      }
+    },
+    {
+      "id": "JOB-059372b59a95",
+      "kind": "recollect",
+      "state": "succeeded",
+      "progress": 100,
+      "report": {
+        "id": "JOB-059372b59a95",
+        "kind": "recollect",
+        "started_at": "2026-11-08T03:04:38+00:00",
+        "scope": "STAGING_ONLY",
+        "active_service_changed": false,
+        "supabase_ingestion": "HOLD",
+        "new_embeddings": 0,
+        "human_approved": false,
+        "ktcs_applicable": false,
+        "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+        "documents": [
+          {
+            "id": "K-170-A01",
+            "title": "상임임원 복무규정_260930",
+            "source_verified": true,
+            "original_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+            "answer_count": 21,
+            "review_count": 21,
+            "downloaded_bytes": 247457,
+            "downloaded_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+            "same_as_preserved": true,
+            "next_step": "새 파일은 격리 보관 · 파싱·검토·승인 후 반영 가능"
+          }
+        ],
+        "answer_units": 21,
+        "review_units": 21,
+        "completed_at": "2026-11-08T03:04:39+00:00",
+        "status": "succeeded"
+      }
+    }
+  ],
+  "live_test_case_states": [
+    {
+      "id": "HR-fbbde824acb0",
+      "state": "resolved",
+      "revision": 2,
+      "created_at": "2026-11-08T03:10:30+00:00",
+      "updated_at": "2026-11-08T03:27:32+00:00"
+    }
+  ],
+  "live_test_review_states": [
+    {
+      "id": "K-170-A01",
+      "state": "in_review",
+      "revision": 1,
+      "updated_at": "2026-11-08T03:31:23+00:00"
+    }
+  ],
+  "boundaries": {
+    "sso": "NOT_CONNECTED",
+    "company_hr_application_and_approval": "NOT_CONNECTED",
+    "organization_user_provisioning": "NOT_CONNECTED",
+    "active_vector_replacement": "NOT_CONNECTED",
+    "new_file_parse_embedding_and_activation": "NOT_AUTOMATIC",
+    "recollection": "REGISTERED_OFFICIAL_ATTACHMENT_URLS_ONLY",
+    "cost": "PROVIDER_USAGE_TIMES_VERSIONED_RATE_ESTIMATE_NOT_INVOICE",
+    "usage_scope": "ONLY_NEW_GATEWAY_REQUESTS",
+    "prompts_answers_profiles_keys_cookies_in_usage_db": false
+  },
+  "screenshots": [
+    {
+      "file": "screen-map.jpg",
+      "size": [
+        1264,
+        1536
+      ],
+      "format": "JPEG",
+      "bytes": 79016,
+      "sha256": "1574aa57d1843a66880a8e3aa8e98cd23378f7890db17368a49e056291e67b7b"
+    },
+    {
+      "file": "wireframe-employee.jpg",
+      "size": [
+        1264,
+        1567
+      ],
+      "format": "JPEG",
+      "bytes": 87351,
+      "sha256": "3dae445833124c9a50dedcfd0ff033009ae4d55d49930e0e048513f2d5c0f436"
+    },
+    {
+      "file": "wireframe-admin.jpg",
+      "size": [
+        1264,
+        1778
+      ],
+      "format": "JPEG",
+      "bytes": 101769,
+      "sha256": "ffb8e06c35185f0af0291eb2c87dde5d2e489baece437543d831ee191c6ba524"
+    },
+    {
+      "file": "wireframe-mobile.jpg",
+      "size": [
+        1264,
+        1947
+      ],
+      "format": "JPEG",
+      "bytes": 124570,
+      "sha256": "3576de0225bacca2d814dd9c29309e671054e5c9240cb456e49b0731c2603770"
+    },
+    {
+      "file": "employee-home-final.jpg",
+      "size": [
+        1264,
+        1073
+      ],
+      "format": "JPEG",
+      "bytes": 75852,
+      "sha256": "433f7e9193652fcfeab563ba4a8b53f7f136b4cc703fea274849d477a1f4e06d"
+    },
+    {
+      "file": "employee-mobile.jpg",
+      "size": [
+        375,
+        1544
+      ],
+      "format": "JPEG",
+      "bytes": 49456,
+      "sha256": "7fda0d16aa7efa560f09a123f6afba0bf2ff3a2e1a95e511583a6a9320edb07f"
+    },
+    {
+      "file": "admin-overview-final.jpg",
+      "size": [
+        1264,
+        1256
+      ],
+      "format": "JPEG",
+      "bytes": 84699,
+      "sha256": "5f7d86d6eaee81325fd2c9e5db5a45b3d2164cf317ba9ad842b28221a75e0c72"
+    },
+    {
+      "file": "admin-usage.jpg",
+      "size": [
+        1264,
+        1138
+      ],
+      "format": "JPEG",
+      "bytes": 78356,
+      "sha256": "2e0edbe453f4a05ce1f4d414c1f5a1b9b21ebbe5ed3178c9a5cd872e99d9a82c"
+    },
+    {
+      "file": "admin-call-detail.jpg",
+      "size": [
+        1280,
+        720
+      ],
+      "format": "JPEG",
+      "bytes": 35305,
+      "sha256": "2963ba999ff9ee5501cb8ab7798a577e36d4267cbc2d21d024ee7950a1122b1b"
+    },
+    {
+      "file": "actual-answer-original.jpg",
+      "size": [
+        1280,
+        720
+      ],
+      "format": "JPEG",
+      "bytes": 82692,
+      "sha256": "a36ce1de7a8fdc81551b9f18ea4bc04d319149ee312277a64090102e35eca305"
+    },
+    {
+      "file": "employee-case-result.jpg",
+      "size": [
+        1280,
+        720
+      ],
+      "format": "JPEG",
+      "bytes": 37166,
+      "sha256": "348f166a4ce618420942c493446e38973cb0e51fe9c178b043edbd2afb425b57"
+    },
+    {
+      "file": "admin-cases.jpg",
+      "size": [
+        1265,
+        712
+      ],
+      "format": "JPEG",
+      "bytes": 46444,
+      "sha256": "66110ebe72df86c45d53d6b87399f96b3c0898d3ba42b71901bfe258a8980a6c"
+    },
+    {
+      "file": "admin-review-record.jpg",
+      "size": [
+        1265,
+        712
+      ],
+      "format": "JPEG",
+      "bytes": 48280,
+      "sha256": "586ea8c6fd257a7fce71741d6c3f3e9570ea7f9f87903a4869baa8f5f1d34fad"
+    },
+    {
+      "file": "admin-settings.jpg",
+      "size": [
+        1264,
+        1774
+      ],
+      "format": "JPEG",
+      "bytes": 106202,
+      "sha256": "d5576b3009130be951d91aabeebaf3b65e7670c230922709750ddc0bd8e19c51"
+    },
+    {
+      "file": "admin-audit.jpg",
+      "size": [
+        1265,
+        712
+      ],
+      "format": "JPEG",
+      "bytes": 48266,
+      "sha256": "eba1a67711db8096baf8aba15fa4a33c00b14b5df32347f4f77fff1950890153"
+    },
+    {
+      "file": "admin-mobile.jpg",
+      "size": [
+        375,
+        811
+      ],
+      "format": "JPEG",
+      "bytes": 18566,
+      "sha256": "80663412e9f96eec384d3bd1679dd800a214786c8f220ac3d9ab3251b44d03d7"
+    },
+    {
+      "file": "staging-result.jpg",
+      "size": [
+        750,
+        764
+      ],
+      "format": "JPEG",
+      "bytes": 21545,
+      "sha256": "ad67495469d86e124b0b3fc403bfc3b3594cb7e1c047d3dd47d695334efe361d"
+    },
+    {
+      "file": "jobs.jpg",
+      "size": [
+        735,
+        749
+      ],
+      "format": "JPEG",
+      "bytes": 34129,
+      "sha256": "b21271684608d1055b7a306a605383d70690ec062fdd5549e907b54bd913a648"
+    }
+  ]
+}

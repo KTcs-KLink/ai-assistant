@@ -15,14 +15,12 @@ import {
 } from "react-router-dom";
 import {
   ArrowRight,
-  Bell,
   BookOpen,
   ChevronRight,
-  FileCheck2,
-  Gift,
   LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquareText,
   RefreshCw,
   Search,
   Settings2,
@@ -38,7 +36,7 @@ const WORK_NAV = [
   { path: "", label: "업무 현황", icon: LayoutDashboard },
   { path: "/assistant", label: "AI 업무 도우미", icon: Sparkles },
   { path: "/library", label: "규정·양식", icon: BookOpen },
-  { path: "/preparations", label: "내 준비 업무", icon: FileCheck2 },
+  { path: "/requests", label: "내 문의", icon: MessageSquareText },
 ];
 
 export function WorkspaceDialog({
@@ -89,34 +87,19 @@ export function WorkspaceDialog({
 }
 
 export function HrWorkspaceShell() {
-  const {
-    session,
-    plans,
-    catalog,
-    readiness,
-    updates,
-    busy,
-    reminders,
-    logout,
-    notice,
-    announce,
-    errors,
-    refresh,
-  } = useHr();
+  const { session, busy, logout, notice, announce, errors, refresh } = useHr();
   const location = useLocation(),
     navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false),
     [menuOpen, setMenuOpen] = useState(false),
-    [updatesOpen, setUpdatesOpen] = useState(false),
     [searchQuery, setSearchQuery] = useState(""),
     [searchMode, setSearchMode] = useState<"sources" | "question">("sources"),
     [refreshing, setRefreshing] = useState(false);
   const pageName =
     [
       ...WORK_NAV,
-      { path: "/profile", label: "내 조건·동의" },
+      { path: "/profile", label: "내 계정" },
       { path: "/status", label: "연결·적용 상태" },
-      { path: "/benefits", label: "맞춤 혜택" },
     ].find(
       (item) =>
         location.pathname === "/hr" + item.path ||
@@ -137,7 +120,6 @@ export function HrWorkspaceShell() {
       ) {
         event.preventDefault();
         setMenuOpen(false);
-        setUpdatesOpen(false);
         setSearchOpen(true);
       }
     }
@@ -180,7 +162,6 @@ export function HrWorkspaceShell() {
     >
       <Icon size={18} />
       <span>{label}</span>
-      {path === "/preparations" && !!plans?.length && <b>{plans.length}</b>}
     </NavLink>
   ));
   return (
@@ -208,19 +189,19 @@ export function HrWorkspaceShell() {
         <nav className="ws-nav" aria-label="인사 포털 메뉴">
           {workLinks}
         </nav>
-        <span className="ws-nav-label">서비스</span>
+        <span className="ws-nav-label">계정·설정</span>
         <nav className="ws-nav" aria-label="인사 서비스 메뉴">
-          <NavLink to="/hr/benefits">
-            <Gift size={18} />
-            <span>맞춤 혜택</span>
-            {catalog?.synthetic && <em>예시</em>}
-          </NavLink>
           <NavLink to="/hr/profile">
             <Settings2 size={18} />
-            <span>내 조건·동의</span>
+            <span>내 계정</span>
           </NavLink>
         </nav>
         <div className="ws-sidebar-bottom">
+          <Link to="/hr/admin">
+            <Settings2 size={17} />
+            <span>관리자 콘솔</span>
+            <ChevronRight size={14} />
+          </Link>
           <Link to="/hr/status">
             <ShieldCheck size={17} />
             <span>연결·적용 상태</span>
@@ -275,17 +256,10 @@ export function HrWorkspaceShell() {
                 className={refreshing ? "ws-spinning" : ""}
               />
             </button>
-            <button
-              title="변경 안내 설정"
-              aria-label="변경 안내 설정"
-              onClick={() => setUpdatesOpen(true)}
-            >
-              <Bell size={18} />
-            </button>
             <Link
               className="ws-user"
               to="/hr/profile"
-              aria-label="내 조건·동의 관리"
+              aria-label="내 계정 관리"
             >
               <span>K</span>
               <strong>
@@ -348,12 +322,12 @@ export function HrWorkspaceShell() {
         <WorkspaceDialog title="업무 메뉴" close={() => setMenuOpen(false)}>
           <nav className="ws-mobile-menu" aria-label="인사 모바일 메뉴">
             {workLinks}
-            <Link to="/hr/benefits" onClick={() => setMenuOpen(false)}>
-              <Gift size={18} />
-              맞춤 혜택{catalog?.synthetic && <em>예시</em>}
+            <Link to="/hr/admin" onClick={() => setMenuOpen(false)}>
+              <Settings2 size={18} />
+              관리자 콘솔 <em>체험</em>
             </Link>
             <Link to="/hr/profile" onClick={() => setMenuOpen(false)}>
-              <Settings2 size={18} />내 조건·동의
+              <Settings2 size={18} />내 계정
             </Link>
             <Link to="/hr/status" onClick={() => setMenuOpen(false)}>
               <ShieldCheck size={18} />
@@ -424,69 +398,6 @@ export function HrWorkspaceShell() {
               </button>
             </footer>
           </form>
-        </WorkspaceDialog>
-      )}
-      {updatesOpen && (
-        <WorkspaceDialog
-          title="변경 안내 설정"
-          close={() => setUpdatesOpen(false)}
-        >
-          <div className="ws-updates-settings">
-            {updates ? (
-              <>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={updates.enabled}
-                    disabled={busy}
-                    onChange={(event) =>
-                      void attempt(reminders(event.target.checked))
-                    }
-                  />
-                  <span>
-                    <strong>이 화면에서 변경·마감 안내 받기</strong>
-                    <small>
-                      원할 때 켜고 끌 수 있어요. 메일·문자는 발송하지 않습니다.
-                    </small>
-                  </span>
-                </label>
-                {updates.enabled && (
-                  <div className="ws-settings-updates">
-                    {updates.updates.length ? (
-                      updates.updates.map((item, index) => (
-                        <Link
-                          key={item.benefit_id + index}
-                          to={
-                            "/hr/benefits?benefit=" +
-                            encodeURIComponent(item.benefit_id)
-                          }
-                          onClick={() => setUpdatesOpen(false)}
-                        >
-                          {updates.synthetic && (
-                            <span className="ws-badge warning">예시 일정</span>
-                          )}
-                          <p>{item.message}</p>
-                          <ChevronRight size={15} />
-                        </Link>
-                      ))
-                    ) : (
-                      <p>현재 표시할 변경 안내가 없습니다.</p>
-                    )}
-                  </div>
-                )}
-              </>
-            ) : (
-              <p>변경 안내를 불러오지 못했어요.</p>
-            )}
-            <Link to="/hr/status" onClick={() => setUpdatesOpen(false)}>
-              서비스 연결 범위 확인
-              <ArrowRight size={14} />
-            </Link>
-            <small>
-              회사 승인 규정 {readiness?.approved_policy_count ?? "미확인"}건 ·
-              공식 양식 {readiness?.official_form_count ?? "미확인"}건
-            </small>
-          </div>
         </WorkspaceDialog>
       )}
     </div>

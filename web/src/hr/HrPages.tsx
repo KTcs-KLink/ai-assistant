@@ -1025,7 +1025,7 @@ export function HrReadiness() {
         <div>
           <span className="hr-dot live" />
           <strong>인사 기능 연결됨</strong>
-          <p>서버 추천·조건 저장·준비 목록·원문 조회</p>
+          <p>실제 원문 검색·AI 답변·규정·양식 연결 상태 확인</p>
         </div>
         <div>
           <span className="hr-dot" />

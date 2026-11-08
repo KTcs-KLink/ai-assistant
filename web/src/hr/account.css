@@ -1,0 +1,86 @@
+.emp-account-page {
+  max-width: 1380px;
+  margin: auto;
+  color: #526c8c;
+  font-size: 13px;
+}
+.emp-account-fields {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 19px 18px;
+  margin: 0;
+  padding: 27px;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.emp-account-fields dt {
+  color: #9aabc0;
+}
+.emp-account-fields dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #7089a9;
+}
+.emp-account-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 27px;
+  border-top: 1px solid #e8eef5;
+  color: #829cbd;
+  font-size: 11px;
+  text-decoration: none;
+}
+.emp-account-notes {
+  padding: 7px 26px 15px;
+}
+.emp-account-notes > p {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 19px 0;
+  border-bottom: 1px solid #edf1f7;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #9eafc5;
+}
+.emp-account-notes > p:last-child {
+  border-bottom: 0;
+}
+.emp-account-notes strong {
+  font-weight: 550;
+  font-size: 12px;
+  color: #7c96b7;
+}
+.emp-account-page .emp-panel > header > svg {
+  color: #a0b2cb;
+}
+.emp-account-page .emp-intro h1 {
+  color: #36577f;
+}
+.emp-account-page .emp-panel {
+  overflow: hidden;
+}
+@media (max-width: 600px) {
+  .emp-account-fields {
+    grid-template-columns: 75px minmax(0, 1fr);
+    padding: 21px;
+    font-size: 11px;
+    gap: 17px 12px;
+  }
+  .emp-account-link {
+    padding: 16px 21px;
+    font-size: 10px;
+  }
+  .emp-account-notes {
+    padding: 3px 21px 12px;
+  }
+  .emp-account-notes > p {
+    font-size: 10px;
+  }
+  .emp-account-notes strong {
+    font-size: 11px;
+  }
+}
