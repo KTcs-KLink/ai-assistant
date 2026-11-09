@@ -45,6 +45,11 @@ import { Badge, Empty, Loading, PageTitle, QueryError, Stat } from "./ui";
 export function AdminOverview() {
   const session = useAdmin(),
     query = useControl<Overview>("/api/control/admin/overview");
+  const counts = useControl<{ alerts: number; pending_approvals: number }>(
+    "/api/control/workflow-counts?admin=true",
+    true,
+    30000,
+  );
   const [diagnostic, setDiagnostic] = useState<{
       database: boolean;
       corpus: boolean;
@@ -96,17 +101,58 @@ export function AdminOverview() {
         </button>
       </PageTitle>
       <QueryError error={query.error} retry={query.refresh} />
-      <div className="wf-home-strip">
-        <Activity size={20} />
-        <div>
-          <strong>자동화 운영을 한 곳에서 관리하세요</strong>
-          <p>점검 요청 승인, 규정 파일 변경 감지, 문의 배정과 비용·품질 알림</p>
-        </div>
+      <div className="ops-work-priorities" aria-label="운영 처리할 업무">
         {session.permissions.includes("approvals") && (
-          <Link to="/hr/admin/approvals">통합 승인함 →</Link>
+          <Link to="/hr/admin/approvals">
+            <BookCheck size={19} />
+            <span>
+              <strong>통합 승인함</strong>
+              <small>검토·결정이 필요한 요청</small>
+            </span>
+            <b>{counts.error ? "—" : count(counts.data?.pending_approvals)}</b>
+            <ArrowRight size={16} />
+          </Link>
         )}
-        <Link to="/hr/admin/alerts">운영 알림 →</Link>
-        <Link to="/hr/admin/automation">자동화 설정 →</Link>
+        <Link to="/hr/admin/alerts">
+          <Activity size={19} />
+          <span>
+            <strong>운영 알림</strong>
+            <small>비용·품질·자료 운영 확인</small>
+          </span>
+          <b>{counts.error ? "—" : count(counts.data?.alerts)}</b>
+          <ArrowRight size={16} />
+        </Link>
+        {session.permissions.includes("cases") && (
+          <Link to="/hr/admin/cases">
+            <Timer size={19} />
+            <span>
+              <strong>진행 중 문의</strong>
+              <small>담당자·처리 기한 확인</small>
+            </span>
+            <b>{data ? count(open) : "—"}</b>
+            <ArrowRight size={16} />
+          </Link>
+        )}
+        {!session.permissions.includes("cases") &&
+          session.permissions.includes("jobs") && (
+            <Link to="/hr/admin/jobs">
+              <Boxes size={19} />
+              <span>
+              <strong>최근 진행 작업</strong>
+              <small>최근 5건 중 대기·실행 작업</small>
+              </span>
+              <b>
+                {data
+                  ? count(
+                      data.jobs.filter((j) =>
+                        ["queued", "running"].includes(j.state),
+                      ).length,
+                    )
+                  : "—"}
+              </b>
+              <ArrowRight size={16} />
+            </Link>
+          )}
       </div>
       {error && (
         <p className="ops-error" role="alert">

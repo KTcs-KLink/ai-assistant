@@ -29,9 +29,26 @@ const SCREENS = [
   { path: "/hr", label: "직원 · 업무 홈", group: "직원 화면" },
   { path: "/hr/assistant", label: "직원 · AI 도우미", group: "직원 화면" },
   { path: "/hr/library", label: "직원 · 규정·양식", group: "직원 화면" },
+  { path: "/hr/inbox", label: "직원 · 내 할 일", group: "직원 화면" },
   { path: "/hr/requests", label: "직원 · 내 문의", group: "직원 화면" },
   { path: "/hr/profile", label: "직원 · 내 계정", group: "직원 화면" },
+  { path: "/hr/status", label: "직원 · 연결·적용 상태", group: "직원 화면" },
   { path: "/hr/admin", label: "관리자 · 운영 현황", group: "관리자 화면" },
+  {
+    path: "/hr/admin/approvals",
+    label: "관리자 · 통합 승인함",
+    group: "관리자 화면",
+  },
+  {
+    path: "/hr/admin/automation",
+    label: "관리자 · 자동화 운영",
+    group: "관리자 화면",
+  },
+  {
+    path: "/hr/admin/alerts",
+    label: "관리자 · 운영 알림",
+    group: "관리자 화면",
+  },
   {
     path: "/hr/admin/sources",
     label: "관리자 · 원문·데이터",
@@ -48,15 +65,31 @@ const SCREENS = [
     group: "관리자 화면",
   },
   {
+    path: "/hr/admin/reviews",
+    label: "관리자 · 원문 검토",
+    group: "관리자 화면",
+  },
+  {
+    path: "/hr/admin/cases",
+    label: "관리자 · 직원 문의",
+    group: "관리자 화면",
+  },
+  {
+    path: "/hr/admin/audit",
+    label: "관리자 · 변경 이력",
+    group: "관리자 화면",
+  },
+  {
     path: "/hr/admin/settings",
     label: "관리자 · 예산·권한",
     group: "관리자 화면",
   },
 ] as const;
 const SWATCHES = [
+  { name: "KT 액션 레드", hex: "#D91F2B" },
   { name: "테라코타", hex: "#A65035" },
   { name: "세이지", hex: "#3D6255" },
-  { name: "차콜", hex: "#44423D" },
+  { name: "KT 블랙", hex: "#000000" },
   { name: "딥 블루", hex: "#365D85" },
 ];
 
@@ -108,7 +141,7 @@ export default function HrDesignStudio() {
       normalizeAppearance({
         ...old,
         preset:
-          old.preset === "baseline" && !value.preset ? "paper" : old.preset,
+          old.preset === "baseline" && !value.preset ? "workspace" : old.preset,
         ...value,
       }),
     );
@@ -134,7 +167,7 @@ export default function HrDesignStudio() {
           {
             product: "KLINK",
             kind: "appearance",
-            version: 1,
+            version: 3,
             settings: shownRef.current,
           },
           null,
@@ -328,7 +361,10 @@ export default function HrDesignStudio() {
                     patch({
                       preset: preset.id,
                       accent: preset.accent,
-                      heading: preset.id === "baseline" ? "sans" : "serif",
+                      heading:
+                        preset.id === "baseline" || preset.id === "workspace"
+                          ? "sans"
+                          : "serif",
                     })
                   }
                   aria-pressed={draft.preset === preset.id && !compare}
@@ -390,6 +426,9 @@ export default function HrDesignStudio() {
           </section>
           <section>
             <div className="ds-section-label">글자</div>
+            <p className="ds-help">
+              KT 컬러와 Pretendard Variable을 기본으로 사용합니다.
+            </p>
             <label className="ds-range-label" htmlFor="design-font">
               <span>글자 크기</span>
               <output>{Math.round(draft.fontScale * 100)}%</output>

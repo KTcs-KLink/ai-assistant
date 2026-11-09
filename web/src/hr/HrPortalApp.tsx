@@ -330,16 +330,14 @@ function HrLogin() {
         <div>
           <span className="p-kicker">YOUR WORK, CONNECTED</span>
           <h1>
-            익숙한 새 화면에서.
+            필요한 답부터,
             <br />
-            인사 업무를
-            <br />
-            <em>이어서 시작하세요.</em>
+            <em>다음 업무까지.</em>
           </h1>
           <p>
-            AI 질문부터 근거 원문 확인,
+            규정 검색과 업무 요청을
             <br />
-            담당자 문의와 처리 안내까지 연결했습니다.
+            연결해주는 인사 업무 공간입니다.
           </p>
           <div className="p-login-path">
             <span>질문</span>
@@ -354,9 +352,9 @@ function HrLogin() {
       <section className="p-login-panel">
         <span className="p-label">인사 서비스 연결</span>
         <h2>
-          기능은 연결하고,
+          오늘의 업무를
           <br />
-          회사 적용은 확인하면서.
+          시작하세요.
         </h2>
         <p>
           한전 공개 참고자료 체험으로 시작합니다. 실제 직원 정보는 입력하지
@@ -381,8 +379,8 @@ function HrLogin() {
           <span>회사 계정·SSO 로그인은 연결 전입니다.</span>
         </div>
         <Note>
-          실제 원문 검색과 지정 모델 답변, 로컬 문의 체험을 제공합니다.
-          가족·자녀·가구 조건을 불러오거나 복지 자격을 추천하지 않습니다.
+          한전 공개 참고자료의 원문 검색·AI 답변과 로컬 문의·승인 기록을
+          제공합니다.
         </Note>
         {state === "offline" && (
           <div className="hr-login-error" role="alert">

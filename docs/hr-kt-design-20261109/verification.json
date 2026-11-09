@@ -1,0 +1,572 @@
+{
+  "date": "2026-11-09",
+  "scope": "Local KT color redesign of employee and administrator HR SaaS screens",
+  "baseline_commit": "36c7372",
+  "branch": "feat/hr-saas-design-system-20261109",
+  "benchmarks": [
+    {
+      "source": "KTcs official CI",
+      "url": "https://www.ktcs.co.kr/CI.do",
+      "used_for": "red, black, neutral gray color direction"
+    },
+    {
+      "source": "KT group brand identity",
+      "url": "https://corp.kt.com/html/intro/design/design.html",
+      "used_for": "red-centered brand direction"
+    },
+    {
+      "source": "Linear redesign",
+      "url": "https://linear.app/now/how-we-redesigned-the-linear-ui",
+      "used_for": "navigation, hierarchy, density"
+    },
+    {
+      "source": "Ramp expense management",
+      "url": "https://ramp.com/expense-management",
+      "used_for": "review and action organization"
+    }
+  ],
+  "palette": {
+    "official_ktcs_ci_red": "#ED2024",
+    "derived_action_red": "#D91F2B",
+    "canvas": "#F6F6F7",
+    "surface": "#FFFFFF",
+    "ink": "#19191B",
+    "summary_card": "#202023",
+    "semantic_status_colors": "Success, review, error, and in-progress colors remain distinct"
+  },
+  "font": {
+    "name": "Pretendard Variable 1.3.9",
+    "self_hosted": true,
+    "bytes": 2057688,
+    "sha256": "9599f12fd42fc0bce1cd50b47a0c022e108d7aa64dd0d1bb0ed44f3282d900b4",
+    "license": "SIL OFL, included at web/public/fonts/pretendard/OFL.txt",
+    "family_alias": "Klink Sans",
+    "official_KT_Flow_font_used": false
+  },
+  "appearance_storage": "klink:hr:appearance:v3; older preference keys preserved",
+  "changes": [
+    "Unified employee/admin/login/studio typography, controls, cards, tables, dialogs, and responsive chrome",
+    "Home AI entry plus actual account activity summary",
+    "Administrator real workflow counts and consistent priority cards",
+    "18-screen studio picker with KT default, older preset comparison, and live font/density controls",
+    "Korean labels for workflow audit actions"
+  ],
+  "browser_checks": [
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "통합 승인함",
+        "처리할 요청"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 통합 승인함",
+      "width": 1265,
+      "label": "admin-approvals-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/approvals"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "가상 직원님, 안녕하세요.",
+        "어떤 업무를 확인할까요?",
+        "나의 업무",
+        "내 문의",
+        "자주 찾는 규정"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 업무 현황",
+      "width": 1265,
+      "label": "employee-home-desktop",
+      "url": "http://127.0.0.1:8825/hr"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "운영 알림",
+        "알림 센터",
+        "답변 검토 요청"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 운영 알림",
+      "width": 1265,
+      "label": "admin-alerts-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/alerts"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "AI 업무 도우미",
+        "어떤 인사 업무를 도와드릴까요?"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · AI 업무 도우미",
+      "width": 1280,
+      "label": "assistant-empty-desktop",
+      "url": "http://127.0.0.1:8825/hr/assistant"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "원문·데이터"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 원문·데이터",
+      "width": 1265,
+      "label": "admin-sources-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/sources"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "토큰·비용",
+        "사용량 추이",
+        "이번 달 예산",
+        "요청별 호출 기록 "
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 토큰·비용",
+      "width": 1265,
+      "label": "admin-usage-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/usage"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "예산·권한·연결",
+        "예산·서비스 정책",
+        "모델별 계산 단가",
+        "연결 상태",
+        "역할별 권한"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 예산·권한·연결",
+      "width": 1265,
+      "label": "admin-settings-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/settings"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "자동화 운영",
+        "공식 파일 변경 점검",
+        "점검 이력"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 자동화 운영",
+      "width": 1265,
+      "label": "admin-automation-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/automation"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "AI 업무 도우미",
+        "근거 자료"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · AI 업무 도우미",
+      "width": 1280,
+      "label": "assistant-answer-source-desktop",
+      "url": "http://127.0.0.1:8825/hr/assistant"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "자동화 운영",
+        "문의 분류별 배정 규칙",
+        "배정 담당자"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 자동화 운영",
+      "width": 1265,
+      "label": "admin-routing-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/automation?tab=routing"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "자동화 운영",
+        "비용·품질 알림 기준"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 자동화 운영",
+      "width": 1265,
+      "label": "admin-alert-rules-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/automation?tab=policy"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "수집·재적재 작업"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 수집·재적재 작업",
+      "width": 1265,
+      "label": "admin-jobs-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/jobs"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "원문 검토"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 원문 검토",
+      "width": 1265,
+      "label": "admin-reviews-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/reviews"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "직원 문의"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 직원 문의",
+      "width": 1265,
+      "label": "admin-cases-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/cases"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "변경 이력"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 변경 이력",
+      "width": 1265,
+      "label": "admin-audit-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin/audit"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "더 편안한 업무 공간.",
+        "디자인 조절"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 디자인 스튜디오",
+      "width": 1265,
+      "label": "design-studio-kt-desktop",
+      "url": "http://127.0.0.1:8825/hr/design"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "내 할 일",
+        "내 승인 요청",
+        "처리 안내"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 내 할 일",
+      "width": 1265,
+      "label": "employee-inbox-desktop",
+      "url": "http://127.0.0.1:8825/hr/inbox"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "내 문의"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 내 문의",
+      "width": 1280,
+      "label": "employee-requests-desktop",
+      "url": "http://127.0.0.1:8825/hr/requests"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "내 계정",
+        "접속 정보",
+        "정보 보관 안내"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 내 계정",
+      "width": 1265,
+      "label": "employee-profile-desktop",
+      "url": "http://127.0.0.1:8825/hr/profile"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "연결된 기능과 확인할 일을 구분해요.",
+        "규정과 자격 조건",
+        "직원 계정·본인 정보 보호",
+        "회사 승인 원문·답변",
+        "공식 양식·실제 신청",
+        "변경·마감·전달",
+        "운영 승인·복구 점검",
+        "현재 자료·계정의 범위"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 연결·적용 상태",
+      "width": 1265,
+      "label": "employee-status-desktop",
+      "url": "http://127.0.0.1:8825/hr/status"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "원문과 공식 양식의 상태를 확인해요.",
+        "필요한 인사 업무를 검색해 보세요"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 규정·양식",
+      "width": 1265,
+      "label": "employee-library-desktop",
+      "url": "http://127.0.0.1:8825/hr/library"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "원문과 공식 양식의 상태를 확인해요."
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 규정·양식",
+      "width": 375,
+      "label": "employee-forms-mobile",
+      "url": "http://127.0.0.1:8825/hr/library?tab=forms"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "가상 직원님, 안녕하세요.",
+        "어떤 업무를 확인할까요?",
+        "나의 업무",
+        "내 문의",
+        "자주 찾는 규정"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK · 업무 현황",
+      "width": 375,
+      "label": "employee-home-mobile",
+      "url": "http://127.0.0.1:8825/hr"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "운영 현황",
+        "데이터 운영",
+        "운영 연결",
+        "최근 데이터 작업",
+        "인사 서비스"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 운영 현황",
+      "width": 390,
+      "label": "admin-overview-mobile",
+      "url": "http://127.0.0.1:8825/hr/admin"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "원문·데이터"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 원문·데이터",
+      "width": 375,
+      "label": "admin-sources-mobile",
+      "url": "http://127.0.0.1:8825/hr/admin/sources"
+    },
+    {
+      "accent": "#D91F2B",
+      "canvas": "#f6f6f7",
+      "fontFamily": "\"Klink Sans\", -apple-system, BlinkMacSystemFont, \"Malgun Gothic\", sans-serif",
+      "fontReady": true,
+      "headings": [
+        "운영 현황",
+        "데이터 운영",
+        "운영 연결",
+        "최근 데이터 작업",
+        "인사 서비스"
+      ],
+      "loading": false,
+      "overflow": false,
+      "preset": "workspace",
+      "title": "K:LINK 관리자 · 운영 현황",
+      "width": 1265,
+      "label": "admin-overview-desktop",
+      "url": "http://127.0.0.1:8825/hr/admin"
+    }
+  ],
+  "browser_check_count": 26,
+  "mobile_menu_verification": {
+    "employee": "Menu opened and navigated to home/admin",
+    "admin": "Sidebar opened at x=0, width=236 and navigated to sources",
+    "page_overflow": false
+  },
+  "runtime_console_errors_on_new_admin_and_assistant_tabs": [],
+  "real_question_check": {
+    "question": "업무 사정으로 휴게시간을 바꿀 수 있나요?",
+    "request": {
+      "id": "REQ-4d5f515c81b7",
+      "started_at": "2026-11-09T10:16:32+00:00",
+      "completed_at": "2026-11-09T10:17:01+00:00",
+      "status": 200,
+      "latency_ms": 29046,
+      "answer_state": "needs_review",
+      "call_count": 3,
+      "usage_complete": 1,
+      "input_tokens": 8318,
+      "output_tokens": 1876,
+      "cost_usd": "0.001320990",
+      "model": "gpt-6-luna"
+    },
+    "raw_source_ui_verified": true,
+    "source_id": "HF-bb7639e356502171f5c669832d3e",
+    "source_version": "K-137-A01:9900d4bc8b30116835377992e6dc41eb45aa6e4bf677c6fad0fa20dd3c99921b",
+    "source_evidence": "source-ui-proof.txt",
+    "boundary": "UI/API/source linkage check only; no retrieval benchmark, semantic answer evaluation, or human approval"
+  },
+  "preservation": {
+    "backend_and_corpus_changed": false,
+    "embedding_run_performed": false,
+    "generation_model_changed": false,
+    "rag_request_and_source_components_unchanged": true,
+    "original_portal_styles_and_archived_components_unchanged": true,
+    "original_8824_prototype_preserved": true,
+    "supabase_accessed_or_written": false,
+    "benefit_recommendation_added": false,
+    "company_SSO_and_official_forms": "Still explicitly marked unconnected",
+    "KTcs_applicability_and_human_approval": "Still explicitly unconfirmed"
+  },
+  "validation": {
+    "production_build": "npm run build passed (TypeScript and Vite)",
+    "git_diff_check": "passed",
+    "backend_contract_tests": "Not rerun for CSS/UI-only changes; no new backend changes",
+    "accessibility": "Readability, native labels, focus styling, and responsive samples checked; not a full accessibility certification"
+  },
+  "delivery": {
+    "deployment": "Local only, no production deployment or PR",
+    "employee": "http://127.0.0.1:8825/hr",
+    "admin": "http://127.0.0.1:8825/hr/admin",
+    "assistant": "http://127.0.0.1:8825/hr/assistant",
+    "studio": "http://127.0.0.1:8825/hr/design"
+  }
+}

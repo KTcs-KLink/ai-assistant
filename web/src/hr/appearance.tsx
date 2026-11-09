@@ -1,26 +1,36 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import "./appearance.css";
+import "./saas-design.css";
 
 export type Appearance = {
-  preset: "paper" | "stone" | "baseline";
+  preset: "workspace" | "paper" | "stone" | "baseline";
   accent: string;
   fontScale: number;
   density: "comfortable" | "compact";
   radius: number;
   heading: "serif" | "sans";
 };
-export const APPEARANCE_KEY = "klink:hr:appearance:v1";
+// Preserve earlier preferences; the KT color system has its own defaults.
+export const APPEARANCE_KEY = "klink:hr:appearance:v3";
 export const APPEARANCE_EVENT = "klink:appearance-saved";
 export const DEFAULT_APPEARANCE: Appearance = {
-  preset: "paper",
-  accent: "#A65035",
+  preset: "workspace",
+  accent: "#D91F2B",
   fontScale: 1,
   density: "comfortable",
   radius: 12,
-  heading: "serif",
+  heading: "sans",
 };
 export const PRESETS = [
+  {
+    id: "workspace",
+    name: "KT 워크스페이스",
+    description: "KT 레드 · 블랙 · 화이트",
+    canvas: "#F6F6F7",
+    side: "#FFFFFF",
+    accent: "#D91F2B",
+  },
   {
     id: "paper",
     name: "페이퍼",
@@ -54,9 +64,11 @@ export function normalizeAppearance(value: unknown): Appearance {
       : {};
   return {
     preset:
-      data.preset === "baseline" || data.preset === "stone"
+      data.preset === "baseline" ||
+      data.preset === "stone" ||
+      data.preset === "paper"
         ? data.preset
-        : "paper",
+        : "workspace",
     accent:
       typeof data.accent === "string" && /^#[a-f\d]{6}$/i.test(data.accent)
         ? data.accent
@@ -70,7 +82,7 @@ export function normalizeAppearance(value: unknown): Appearance {
       typeof data.radius === "number" && Number.isFinite(data.radius)
         ? Math.min(20, Math.max(4, data.radius))
         : 12,
-    heading: data.heading === "sans" ? "sans" : "serif",
+    heading: data.heading === "serif" ? "serif" : "sans",
   };
 }
 
@@ -114,7 +126,13 @@ export function appearanceStyle(value: Appearance): CSSProperties {
   const accent = luminance(value.accent);
   const whiteContrast = 1.05 / (accent + 0.05);
   const darkContrast = (accent + 0.05) / 0.05;
-  const paper = luminance(value.preset === "stone" ? "#F5F6F3" : "#F8F6F0");
+  const paper = luminance(
+    value.preset === "workspace"
+      ? "#F6F6F7"
+      : value.preset === "stone"
+        ? "#F5F6F3"
+        : "#F8F6F0",
+  );
   const linkContrast =
     (Math.max(paper, accent) + 0.05) / (Math.min(paper, accent) + 0.05);
   return {
@@ -122,13 +140,20 @@ export function appearanceStyle(value: Appearance): CSSProperties {
     "--design-accent-text":
       whiteContrast >= darkContrast ? "#ffffff" : "#111111",
     "--design-accent-ink": linkContrast >= 4.5 ? value.accent : "#302D27",
-    "--design-font": `${14 * value.fontScale}px`,
-    "--design-gap": value.density === "compact" ? "18px" : "28px",
+    "--design-font": `${(value.preset === "workspace" ? 15 : 14) * value.fontScale}px`,
+    "--design-gap":
+      value.preset === "workspace"
+        ? value.density === "compact"
+          ? "16px"
+          : "24px"
+        : value.density === "compact"
+          ? "18px"
+          : "28px",
     "--design-radius": `${value.radius}px`,
     "--design-heading":
       value.heading === "serif"
         ? '"Palatino Linotype", "Book Antiqua", Batang, serif'
-        : 'Pretendard, "Malgun Gothic", sans-serif',
+        : '"Klink Sans", Pretendard, "Malgun Gothic", sans-serif',
   } as CSSProperties;
 }
 

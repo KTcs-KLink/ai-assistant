@@ -1,0 +1,42 @@
+Browser tab: 3, Title: "K:LINK · AI 업무 도우미", URL: "http://127.0.0.1:8825/hr/assistant".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~				35 checkbox Description: 근거 자료, Value: 1
++			120 container 근거 자료 패널
++				121 container
++					122 heading 근거 자료, Value: 2
++						123 text 근거 자료
++					124 button 근거 자료 닫기
++				125 container
++					126 button 목록으로
++					127 heading 취업규칙, Value: 3
++						128 text 취업규칙
++					129 text 취업규칙 > 제2장 복무 > 제2절 근무시간 및 휴게시간 > 제20조 휴게시간 <개정 2008.12.23> 한국전력 참고자료 한국전력 공개 대체자료입니다. 실제 KTcs 규정·자격에 적용할 수 있는지 확인되지 않았어요.
++					130 heading 서버에서 조회한 원문, Value: 3
++						131 text 서버에서 조회한 원문
++					132 text 제20조(휴게시간 <개정 2008.12.23>)
+① 통상근무자의 휴게시간은 낮 12시부터 오후 1시까지를 원칙으로 한다. 다만, 업무사정에 따라 휴게시간을 달리 정하여 운영할 수 있다. <신설 2019.12.3>
+② 특수근무자의 휴게시간은 업무사정에 따라 달리 정하여 운영할 수 있다. <신설 2019.12.3>
+
++					133 definition list
++						134 container 출처 ID
++							135 text 출처 ID
++						136 text HF-bb7639e356502171f5c669832d3e
++						137 container 버전
++							138 text 버전
++						139 text K-137-A01:9900d4bc8b30116835377992e6dc41eb45aa6e4bf677c6fad0fa20dd3c99921b
++						140 container 적용 대상
++							141 text 적용 대상
++						142 text 공사 직원(통상근무자·특수근무자)
++						143 container 사람 승인
++							144 text 사람 승인
++						145 text 독립된 사람 승인 전
++						146 container 현행성
++							147 text 현행성
++						148 text 미확인
++						149 container KTcs 적용
++							150 text KTcs 적용
++						151 text 미확인
++					152 button (collapsed) 원문 식별 정보, Secondary Actions: Expand
++						153 text 원문 식별 정보
++					154 text 한국전력 공개 참고자료입니다. KTcs 적용·현행성·사람 승인은 별도 확인이 필요합니다.
+The focused UI element is 35 checkbox Description: 근거 자료, Value: 1

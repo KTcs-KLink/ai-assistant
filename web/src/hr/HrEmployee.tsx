@@ -7,7 +7,6 @@ import {
   ChevronRight,
   CircleHelp,
   ClipboardList,
-  FileCheck2,
   Inbox,
   MessageSquareText,
   Plus,
@@ -32,6 +31,7 @@ import {
 import "./employee.css";
 import "./account.css";
 import "./operations.css";
+import type { EmployeeInbox } from "./workflows";
 
 export function EmployeeCaseAccess({
   children,
@@ -105,7 +105,15 @@ export function HrEmployeeHome() {
     <div className="emp-home">
       <div className="emp-intro">
         <div>
-          <p className="emp-eyebrow">MY WORKSPACE</p>
+          <p className="emp-eyebrow">
+            {new Intl.DateTimeFormat("ko-KR", {
+              timeZone: "Asia/Seoul",
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+            }).format(new Date())}{" "}
+            · MY WORKSPACE
+          </p>
           <h1>{session?.name ?? "직원"}님, 안녕하세요.</h1>
           <p>필요한 규정을 찾고, 확인할 업무를 이어서 처리하세요.</p>
         </div>
@@ -113,62 +121,65 @@ export function HrEmployeeHome() {
           직원 화면 <i /> 예시 계정
         </span>
       </div>
-      <section className="emp-ai-start">
-        <div className="emp-ai-heading">
-          <span>
-            <Sparkles size={20} />
-          </span>
-          <div>
-            <h2>업무의 시작은, 필요한 답부터.</h2>
-            <p>연결된 한전 원문을 검색하고 답변의 근거까지 확인합니다.</p>
+      <div className="emp-home-primary">
+        <section className="emp-ai-start">
+          <div className="emp-ai-heading">
+            <span>
+              <Sparkles size={20} />
+            </span>
+            <div>
+              <h2>어떤 업무를 확인할까요?</h2>
+              <p>인사 규정을 검색하고, 답변의 원문까지 함께 확인하세요.</p>
+            </div>
+            <span className="emp-live">원문 연결</span>
           </div>
-          <span className="emp-live">원문 연결</span>
-        </div>
-        <form onSubmit={ask}>
-          <label className="p-sr-only" htmlFor="emp-ai-query">
-            AI에게 물어볼 질문
-          </label>
-          <input
-            id="emp-ai-query"
-            value={question}
-            maxLength={500}
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="예: 휴가 신청과 허가는 어떤 절차로 진행하나요?"
-          />
-          <button disabled={question.trim().length < 2}>
-            <ArrowRight size={20} />
-            <span className="p-sr-only">AI 질문 이어 쓰기</span>
-          </button>
-        </form>
-        <div className="emp-question-links">
-          {[
-            "병가 증빙은 언제 필요한가요?",
-            "정기 급여 지급일은 언제인가요?",
-            "휴게시간을 바꿀 수 있나요?",
-          ].map((text) => (
-            <button
-              key={text}
-              onClick={() =>
-                navigate("/hr/assistant", { state: { draftQuestion: text } })
-              }
-            >
-              {text}
-              <ChevronRight size={12} />
+          <form onSubmit={ask}>
+            <label className="p-sr-only" htmlFor="emp-ai-query">
+              AI에게 물어볼 질문
+            </label>
+            <input
+              id="emp-ai-query"
+              value={question}
+              maxLength={500}
+              onChange={(event) => setQuestion(event.target.value)}
+              placeholder="예: 휴가 신청과 허가는 어떤 절차로 진행하나요?"
+            />
+            <button disabled={question.trim().length < 2}>
+              <ArrowRight size={20} />
+              <span className="p-sr-only">AI 질문 이어 쓰기</span>
             </button>
-          ))}
-        </div>
-        <footer>
-          <ShieldCheck size={12} />
-          한전 참고자료 {count(readiness?.research.source_count)}조문 · KTcs
-          적용은 별도 확인이 필요합니다.
-        </footer>
-      </section>
+          </form>
+          <div className="emp-question-links">
+            {[
+              "병가 증빙은 언제 필요한가요?",
+              "정기 급여 지급일은 언제인가요?",
+              "휴게시간을 바꿀 수 있나요?",
+            ].map((text) => (
+              <button
+                key={text}
+                onClick={() =>
+                  navigate("/hr/assistant", { state: { draftQuestion: text } })
+                }
+              >
+                {text}
+                <ChevronRight size={12} />
+              </button>
+            ))}
+          </div>
+          <footer>
+            <ShieldCheck size={12} />
+            한전 참고자료 {count(readiness?.research.source_count)}조문 · KTcs
+            적용은 별도 확인이 필요합니다.
+          </footer>
+        </section>
+        <EmployeeActivity />
+      </div>
       <nav className="emp-shortcuts" aria-label="직원 업무 바로가기">
-        <Link to="/hr/requests?new=1">
-          <MessageSquareText />
+        <Link to="/hr/inbox">
+          <ClipboardList />
           <div>
-            <strong>담당자에게 문의</strong>
-            <span>궁금한 업무를 등록하고 진행 확인</span>
+            <strong>내 할 일 확인</strong>
+            <span>승인 진행·보완 요청·처리 안내</span>
           </div>
           <ChevronRight size={17} />
         </Link>
@@ -180,25 +191,15 @@ export function HrEmployeeHome() {
           </div>
           <ChevronRight size={17} />
         </Link>
-        <Link to="/hr/library?tab=forms">
-          <FileCheck2 />
+        <Link to="/hr/requests?new=1">
+          <MessageSquareText />
           <div>
-            <strong>공식 양식 확인</strong>
-            <span>회사 양식의 연결 상태와 안내 확인</span>
+            <strong>담당자에게 문의</strong>
+            <span>문의 접수부터 담당자 배정까지</span>
           </div>
           <ChevronRight size={17} />
         </Link>
       </nav>
-      <div className="wf-home-strip">
-        <Inbox size={20} />
-        <div>
-          <strong>내 할 일에서 다음 업무를 이어가세요</strong>
-          <p>
-            원문 점검 승인, 보완 요청과 문의 처리 안내를 확인할 수 있습니다.
-          </p>
-        </div>
-        <Link to="/hr/inbox">내 할 일 열기 →</Link>
-      </div>
       <div className="emp-home-grid">
         <section className="emp-panel">
           <header>
@@ -265,6 +266,66 @@ export function HrEmployeeHome() {
         </Link>
       </div>
     </div>
+  );
+}
+
+function EmployeeActivity() {
+  const session = useControl<OpsSession>("/api/control/session");
+  const enabled = !!session.data && !session.error;
+  const inbox = useControl<EmployeeInbox>("/api/control/inbox", enabled, 30000);
+  const cases = useControl<{ items: CaseRecord[] }>(
+    "/api/control/cases",
+    enabled,
+    30000,
+  );
+  const unread =
+    inbox.data && !inbox.error
+      ? inbox.data.notifications.filter((n) => !n.read_at).length
+      : undefined;
+  const approvals =
+    inbox.data && !inbox.error
+      ? inbox.data.approvals.filter((a) =>
+          ["pending", "needs_info"].includes(a.state),
+        ).length
+      : undefined;
+  const opened =
+    cases.data && !cases.error
+      ? cases.data.items.filter(
+          (c) => !["resolved", "cancelled"].includes(c.state),
+        ).length
+      : undefined;
+  return (
+    <aside className="emp-activity" aria-label="나의 업무 요약">
+      <header>
+        <h2>나의 업무</h2>
+        <span>로컬 기록</span>
+      </header>
+      <div className="emp-activity-grid">
+        <div>
+          <span>새 처리 안내</span>
+          <strong>{count(unread)}</strong>
+        </div>
+        <div>
+          <span>진행 중 승인</span>
+          <strong>{count(approvals)}</strong>
+        </div>
+        <div>
+          <span>진행 중 문의</span>
+          <strong>{count(opened)}</strong>
+        </div>
+      </div>
+      <p>
+        {!enabled
+          ? "업무 체험에 연결하면 내 요청과 처리 안내를 확인할 수 있습니다."
+          : inbox.error || cases.error
+            ? "업무 기록을 불러오지 못했습니다. 내 할 일에서 연결을 확인해 주세요."
+            : "현재 접속한 체험 계정의 업무 기록입니다."}
+      </p>
+      <Link to="/hr/inbox">
+        내 할 일로 이동
+        <ArrowRight size={16} />
+      </Link>
+    </aside>
   );
 }
 

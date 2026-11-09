@@ -298,6 +298,21 @@ const AUDIT_NAMES: Record<string, string> = {
   policy_saved: "예산·서비스 정책 변경",
   rate_saved_future_requests_only: "모델 계산 단가 변경",
   diagnostics_run: "서비스 진단 실행",
+  approval_requested: "원문 점검 승인 요청",
+  approval_decided: "승인 요청 검토·처리",
+  approval_cancel: "승인 요청 취소",
+  approval_resubmit: "보완 설명 다시 제출",
+  automation_configured: "자동화 운영 설정 변경",
+  source_check_completed: "공식 파일 변경 점검 완료",
+  source_candidate_downloaded: "변경 후보 원문 내려받기",
+  routing_agent_created: "문의 배정 담당자 등록",
+  routing_agent_updated: "배정 담당자 설정 변경",
+  case_routed: "문의 자동 배정",
+  case_assignment_changed: "문의 담당자 재배정",
+  alert_acknowledged: "운영 알림 확인 시작",
+  alert_open: "운영 알림 미확인으로 변경",
+  answer_feedback_created: "직원의 답변 검토 요청",
+  answer_feedback_reviewed: "답변 검토 결과 기록",
 };
 export function AdminAudit() {
   const query = useControl<{ items: AuditRecord[] }>(
@@ -306,7 +321,7 @@ export function AdminAudit() {
     [q, setQ] = useState(""),
     [detail, setDetail] = useState<AuditRecord | null>(null),
     items = (query.data?.items ?? []).filter((item) =>
-      (AUDIT_NAMES[item.action] + item.actor + item.target).includes(q),
+      ((AUDIT_NAMES[item.action] ?? item.action) + item.actor + item.target).includes(q),
     );
   return (
     <>
