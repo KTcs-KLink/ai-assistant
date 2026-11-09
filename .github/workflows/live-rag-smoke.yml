@@ -14,6 +14,7 @@ on:
       - feat/hr-reclassification-20261108
       - feat/domain-workflow-classification-20261109
       - fix/five-domain-scope-20261109
+      - feat/table-body-link-review-20261109
   workflow_dispatch:
 
 permissions:
