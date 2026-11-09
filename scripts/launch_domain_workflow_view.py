@@ -11,15 +11,16 @@ from urllib.request import urlopen
 import webbrowser
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT.parent/'outputs/klink_domain_workflow_20261109'
-APP_ID = 'klink-domain-workflow-view-20261109'
+OUT = ROOT.parent/'outputs/klink_five_domain_scope_20261109'
+APP_ID = 'klink-five-domain-scope-20261109'
 
 
 def marker(origin):
     try:
         with urlopen(origin+'/view-manifest.json', timeout=2) as response:
             value = json.load(response)
-        return value.get('app_id') == APP_ID and value.get('source_units') == 10205
+        return (value.get('app_id') == APP_ID and value.get('source_units') == 10205
+                and value.get('domain_count') == 5 and value.get('workflow_count') == 34)
     except (OSError, ValueError):
         return False
 
