@@ -28,6 +28,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Palette,
   MessageSquareText,
   Settings2,
   ShieldCheck,
@@ -386,6 +387,10 @@ function AdminShell({ refreshSession }: { refreshSession: () => void }) {
         </div>
         <nav aria-label="관리자 메뉴">{links}</nav>
         <div className="ops-sidebar-bottom">
+          <Link to="/hr/design">
+            <Palette size={15} />
+            디자인 스튜디오
+          </Link>
           <Link to="/hr">
             <ArrowLeft size={15} />
             직원 화면으로

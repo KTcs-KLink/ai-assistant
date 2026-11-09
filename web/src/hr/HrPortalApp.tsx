@@ -30,6 +30,7 @@ import { HrHome } from "./HrHome";
 import { HrWorkspaceShell } from "./HrWorkspaceShell";
 import { HrWorkspace } from "./HrWorkspace";
 import { HrSaasAssistant } from "./HrSaasAssistant";
+import { HrAppearance } from "./appearance";
 import {
   HrEmployeeHome,
   HrEmployeeRequests,
@@ -41,6 +42,7 @@ import "./hr.css";
 
 const HrAdminApp = lazy(() => import("./admin/HrAdminApp"));
 const HrWireframes = lazy(() => import("./HrWireframes"));
+const HrDesignStudio = lazy(() => import("./HrDesignStudio"));
 
 const NAV = [
   { path: "", label: "홈", short: "홈", icon: Home },
@@ -60,61 +62,77 @@ const NAV = [
 ];
 export function HrPortalApp() {
   return (
-    <HrProvider>
-      <Routes>
-        <Route path="login" element={<HrLogin />} />
-        <Route
-          path="wireframes"
-          element={
-            <Suspense
-              fallback={
-                <div className="hr-loading" role="status">
-                  화면 설계를 준비하고 있습니다.
-                </div>
-              }
-            >
-              <HrWireframes />
-            </Suspense>
-          }
-        />
-        <Route
-          path="admin/*"
-          element={
-            <Suspense
-              fallback={
-                <div className="hr-loading" role="status">
-                  관리자 화면을 준비하고 있습니다.
-                </div>
-              }
-            >
-              <HrAdminApp />
-            </Suspense>
-          }
-        />
-        <Route element={<HrGate />}>
-          <Route element={<HrWorkspaceShell />}>
-            <Route index element={<HrEmployeeHome />} />
-            <Route path="requests" element={<HrEmployeeRequests />} />
-            <Route path="workspace-previous" element={<HrWorkspace />} />
-            <Route path="benefits" element={<Navigate replace to="/hr" />} />
-            <Route path="assistant" element={<HrSaasAssistant />} />
-            <Route path="library" element={<HrLibrary />} />
-            <Route
-              path="preparations"
-              element={<Navigate replace to="/hr/requests" />}
-            />
-            <Route path="profile" element={<HrEmployeeAccount />} />
-            <Route path="status" element={<HrReadiness />} />
-            <Route path="*" element={<Navigate replace to="/hr" />} />
+    <HrAppearance>
+      <HrProvider>
+        <Routes>
+          <Route path="login" element={<HrLogin />} />
+          <Route
+            path="design"
+            element={
+              <Suspense
+                fallback={
+                  <div className="hr-loading" role="status">
+                    디자인 화면을 준비하고 있습니다.
+                  </div>
+                }
+              >
+                <HrDesignStudio />
+              </Suspense>
+            }
+          />
+          <Route
+            path="wireframes"
+            element={
+              <Suspense
+                fallback={
+                  <div className="hr-loading" role="status">
+                    화면 설계를 준비하고 있습니다.
+                  </div>
+                }
+              >
+                <HrWireframes />
+              </Suspense>
+            }
+          />
+          <Route
+            path="admin/*"
+            element={
+              <Suspense
+                fallback={
+                  <div className="hr-loading" role="status">
+                    관리자 화면을 준비하고 있습니다.
+                  </div>
+                }
+              >
+                <HrAdminApp />
+              </Suspense>
+            }
+          />
+          <Route element={<HrGate />}>
+            <Route element={<HrWorkspaceShell />}>
+              <Route index element={<HrEmployeeHome />} />
+              <Route path="requests" element={<HrEmployeeRequests />} />
+              <Route path="workspace-previous" element={<HrWorkspace />} />
+              <Route path="benefits" element={<Navigate replace to="/hr" />} />
+              <Route path="assistant" element={<HrSaasAssistant />} />
+              <Route path="library" element={<HrLibrary />} />
+              <Route
+                path="preparations"
+                element={<Navigate replace to="/hr/requests" />}
+              />
+              <Route path="profile" element={<HrEmployeeAccount />} />
+              <Route path="status" element={<HrReadiness />} />
+              <Route path="*" element={<Navigate replace to="/hr" />} />
+            </Route>
+            <Route element={<HrShell />}>
+              <Route path="assistant-previous" element={<HrAssistant />} />
+              <Route path="home-benchmark" element={<HrHome />} />
+              <Route path="home-previous" element={<HrDashboard />} />
+            </Route>
           </Route>
-          <Route element={<HrShell />}>
-            <Route path="assistant-previous" element={<HrAssistant />} />
-            <Route path="home-benchmark" element={<HrHome />} />
-            <Route path="home-previous" element={<HrDashboard />} />
-          </Route>
-        </Route>
-      </Routes>
-    </HrProvider>
+        </Routes>
+      </HrProvider>
+    </HrAppearance>
   );
 }
 function HrGate() {

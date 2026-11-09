@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-11-09T06:53:19+00:00",
+  "base_commit": "371abf54aa51e68acfe7082cc60530b70e328493",
+  "delivery": "LOCAL_ONLY",
+  "frontend_build": "PASSED",
+  "observed_ui": {
+    "live_accent_and_font_preview": true,
+    "draft_preserved_during_style_change": true,
+    "baseline_compare": true,
+    "automation_diagram_employee_role": true,
+    "automation_diagram_operator_role": true
+  },
+  "not_completed_due_to_browser_timeout": [
+    "navigation_then_style_control",
+    "saved_appearance_after_reopen",
+    "full_mobile_layout_check"
+  ],
+  "new_ai_question_submissions_by_agent": 0,
+  "new_embeddings": 0,
+  "backend_operations_tests_rerun": false,
+  "source_retrieval_evaluation": "NOT_RUN",
+  "independent_human_approval": false,
+  "new_workflow_automations": "DESIGN_ONLY_NOT_ACTIVATED",
+  "supabase": "HOLD",
+  "official_benchmark_services": 18,
+  "automation_proposals": 12,
+  "feature_backlog_items": 28,
+  "diagram_structure_valid": true,
+  "diagram_external_api_calls": false,
+  "screenshots": [
+    {
+      "file": "studio-paper-observed.jpg",
+      "sha256": "3194c595bccdac6fe2cc7b6d543cf6aae72dc16b4d4d1311f72707dfed2f86c0"
+    },
+    {
+      "file": "studio-baseline-observed.jpg",
+      "sha256": "bd360a4f472b256f2f5b7154679cc2eb189e2da5c8d3ac5fd512d13e596d8cc1"
+    },
+    {
+      "file": "automation-admin-plan.jpg",
+      "sha256": "bbcab034489672f7accc9e22c7521de1a26a860209085bd41e69bf00fd369a30"
+    }
+  ]
+}
