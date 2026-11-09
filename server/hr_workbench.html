@@ -39,7 +39,10 @@
       <div id="answer" aria-live="polite"></div>
       <details><summary>추가 검토가 필요한 원문 검색</summary>
         <p class="muted">원본 파일·문자 위치가 일치해도 표 구조·인사 적용 범위 확인이 남은 자료입니다. 이 결과는 답변 생성 근거로 사용하지 않습니다.</p>
-        <form id="review-form" class="row"><input id="review-question" aria-label="추가 검토 원문 검색어" maxlength="500" value="인사 근무"><button>추가 검토 원문 찾기</button></form>
+        <form id="review-form" class="row"><input id="review-question" aria-label="추가 검토 원문 검색어" maxlength="500" value="인사 근무">
+          <select id="review-category" aria-label="검토 자료 분류" disabled><option value="hr_candidates">인사 관련 후보</option><option value="hr">인사로 분류된 자료</option><option value="non_hr">분리된 인사 외 자료</option><option value="mixed">인사·타업무 혼합</option><option value="needs_review">판단 보류</option><option value="all">전체 검토 자료</option></select>
+          <button>추가 검토 원문 찾기</button></form>
+        <p id="review-domain-status" class="muted">자료 분류 연결 상태 확인 중</p>
         <div id="review-results" aria-live="polite"></div>
       </details>
     </section>

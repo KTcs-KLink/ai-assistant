@@ -155,10 +155,10 @@ def lexical_search(question: str, limit: int | None = None) -> list[dict]:
     return _lexical_search(question, corpus(), limit)
 
 
-def review_search(question: str, limit: int=5) -> list[dict]:
+def review_search(question: str, limit: int=5, category='hr_candidates') -> list[dict]:
     """Source-only review search; never used as an answer evidence provider."""
     from . import hr_review_index
-    return hr_review_index.search(question,limit)
+    return hr_review_index.search(question,limit,category)
 
 
 def _lexical_search(question, data, limit):

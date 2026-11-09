@@ -11,6 +11,7 @@ on:
       - feat/hr-quality-closeout-20261107
       - feat/hr-semantic-intents-20261107
       - feat/hr-source-expansion-20261107
+      - feat/hr-reclassification-20261108
   workflow_dispatch:
 
 permissions:

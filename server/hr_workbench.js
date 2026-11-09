@@ -189,6 +189,11 @@ async function refreshReadiness() {
   }
   $('corpus-status').textContent =
     `한국전력 인사 답변용 원문 ${data.research.source_count}개 · 추가 검토 원문 ${data.research.review_only_count || 0}개 · 실제 KTcs 자료 아님`
+  const domains = data.research.domain_review
+  $('review-category').disabled = !domains?.available
+  $('review-domain-status').textContent = domains?.available
+    ? `기본 인사 검토 후보 ${domains.default_windows}개 검색 조각 · 인사 외 ${domains.non_hr_windows}개 별도 분리. 혼합·판단 보류는 후보로 보존하며, 분류만으로 답변 사용을 승인하지 않습니다.`
+    : '기존 검토 범위입니다. 재분류 검색 연결 전에는 자료 분류 필터를 제공하지 않습니다.'
 }
 async function refreshUpdates() {
   const data = await request(base + '/updates')
@@ -325,12 +330,14 @@ $('reminders').addEventListener(
 $('refresh-updates').addEventListener('click', action(refreshUpdates))
 $('review-form').addEventListener('submit', action(async () => {
   $('review-results').replaceChildren(node('p', '추가 검토 원문을 찾고 있어요.'))
-  const data = await request(base + '/review-evidence?q=' + encodeURIComponent($('review-question').value))
+  const category = $('review-category').disabled ? 'hr_candidates' : $('review-category').value
+  const data = await request(base + '/review-evidence?q=' + encodeURIComponent($('review-question').value) + '&category=' + encodeURIComponent(category))
   $('review-results').replaceChildren(node('p', data.notice, 'notice'))
   if (!data.results.length) $('review-results').append(node('p', '일치하는 추가 검토 원문이 없어요.'))
   for (const item of data.results) {
     const article = node('article', undefined, 'card')
     article.append(node('p', '추가 검토 필요 · 답변 생성에 사용하지 않음', 'tag'))
+    if (item.domain_label) article.append(node('p', '자동 분류: ' + ({HR:'인사 관련',NON_HR:'인사 외 업무',MIXED:'인사·다른 업무 혼합',REVIEW_REQUIRED:'판단 보류'}[item.domain_label] || '판단 보류'), 'tag'))
     const reasonLabels = {
       HR_SCOPE_REVIEW_REQUIRED: '인사 업무 범위 확인 필요', EXISTING_ANSWER_GATE_HELD: '답변용 원문 검토 미완료',
       INCOMPLETE_ARTICLE_OR_FORM: '조문 전체·표·서식 확인 필요', LAYOUT_REVIEW_REQUIRED: '표·글리프·배치 확인 필요',

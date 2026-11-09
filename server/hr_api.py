@@ -6,6 +6,7 @@ from datetime import date
 import os
 import unicodedata
 import secrets
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
@@ -29,6 +30,7 @@ def capabilities():
         retrieval_mode="hybrid" if os.getenv("KLINK_HR_RETRIEVAL") == "hybrid" else "bm25",
         question_understanding="llm" if os.getenv("KLINK_HR_INTENT_MODE") == "llm" else "off",
         source_scope="expanded" if hr_source_scope.expanded() else "baseline",
+        review_domains='reclassified' if os.getenv('KLINK_HR_REVIEW_DOMAINS')=='reclassified' else 'baseline',
         demo_scope="KEPCO_REFERENCE_AND_SYNTHETIC_BENEFITS", production_ready=False)
 
 
@@ -88,7 +90,7 @@ def source(source_id: str, session=Depends(current)):
 
 
 @router.get("/review-evidence")
-def review_evidence(q: str, session=Depends(current)):
+def review_evidence(q: str, category: Literal['hr_candidates','hr','non_hr','mixed','needs_review','all']='hr_candidates',session=Depends(current)):
     if session['mode'] != 'demo':
         raise HTTPException(403, '추가 검토 원문은 한전 공개자료 체험에서만 확인해요.')
     if not 2 <= len(q.strip()) <= 500 or hr_evidence.PRIVATE.search(unicodedata.normalize('NFKC',q)):
@@ -96,8 +98,9 @@ def review_evidence(q: str, session=Depends(current)):
     try:
         return dict(company='KEPCO', ktcs_applicable=False, human_approved=False,
             answer_eligible=False, used_for_generation=False, method='source_only_fts5_bm25',
+            domain_filter=category,domain_separation_enabled=os.getenv('KLINK_HR_REVIEW_DOMAINS')=='reclassified',
             notice='파일·문자 위치 대조만 통과한 추가 검토 원문입니다. 업무 범위·표 구조·적용 대상 확인이 남아 답변 근거로 사용하지 않습니다.',
-            results=hr_evidence.review_search(q))
+            results=hr_evidence.review_search(q,category=category))
     except (OSError,ValueError,KeyError):
         raise HTTPException(503, '추가 검토 원문의 검증 기록을 확인하지 못했어요.') from None
 
@@ -272,6 +275,12 @@ def readiness(session=Depends(current)):
         research = hr_evidence.summary()
     except (OSError, ValueError, KeyError):
         research = dict(source_count=0, company="KEPCO", ktcs_applicable=False)
+    if os.getenv('KLINK_HR_REVIEW_DOMAINS')=='reclassified':
+        try:
+            from . import hr_review_domains
+            research['domain_review']=hr_review_domains.counts()
+        except (OSError,ValueError):
+            research['domain_review']=dict(available=False,classification_human_approved=False)
     gates = [dict(priority=1, ready=approved>0 and registry_valid, code="APPROVED_KTCS_RULES", message="승인된 현행 KTcs 규정과 조건·예외 검토가 필요해요."),
         dict(priority=2, ready=False, code="LIVE_EMPLOYEE_AUTH_RLS", message="실제 직원 계정·본인 저장·사용자 간 RLS 검증이 필요해요."),
         dict(priority=3, ready=False, code="KTCS_APPROVED_KNOWLEDGE", message="한국전력 참고 원문과 실제 KTcs 승인 원문을 구분해야 해요."),
