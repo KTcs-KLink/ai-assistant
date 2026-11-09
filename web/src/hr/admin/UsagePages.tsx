@@ -27,7 +27,7 @@ import {
   type Usage,
   type UsageRequest,
 } from "../operations";
-import { useAdmin } from "./HrAdminApp";
+import { useAdmin } from "./context";
 import { Badge, Empty, Loading, PageTitle, QueryError, Stat } from "./ui";
 
 export function AdminUsage() {

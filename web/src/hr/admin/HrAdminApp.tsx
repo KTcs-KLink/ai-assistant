@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Link,
   NavLink,
@@ -16,6 +10,8 @@ import {
 } from "react-router-dom";
 import {
   Activity,
+  Bell,
+  ClipboardCheck,
   ArrowLeft,
   ArrowRight,
   BookCheck,
@@ -42,6 +38,7 @@ import {
   type OpsSession,
 } from "../operations";
 import { WorkspaceDialog } from "../HrWorkspaceShell";
+import { AdminContext, useAdmin } from "./context";
 import {
   AdminOverview,
   AdminSources,
@@ -50,6 +47,11 @@ import {
 } from "./DataPages";
 import { AdminUsage, AdminSettings } from "./UsagePages";
 import { AdminCases, AdminAudit } from "./OperationsPages";
+import {
+  AdminAlerts,
+  AdminApprovals,
+  AdminAutomation,
+} from "./AutomationPages";
 import "./admin.css";
 import "../operations.css";
 
@@ -58,6 +60,27 @@ const NAV = [
     path: "",
     label: "운영 현황",
     icon: LayoutDashboard,
+    permission: "health",
+    group: "WORKSPACE",
+  },
+  {
+    path: "/approvals",
+    label: "통합 승인함",
+    icon: ClipboardCheck,
+    permission: "approvals",
+    group: "WORKSPACE",
+  },
+  {
+    path: "/alerts",
+    label: "운영 알림",
+    icon: Bell,
+    permission: "health",
+    group: "WORKSPACE",
+  },
+  {
+    path: "/automation",
+    label: "자동화 운영",
+    icon: Activity,
     permission: "health",
     group: "WORKSPACE",
   },
@@ -111,12 +134,6 @@ const NAV = [
     group: "OPERATIONS",
   },
 ];
-const AdminContext = createContext<OpsSession | null>(null);
-export function useAdmin() {
-  const value = useContext(AdminContext);
-  if (!value) throw new Error("관리자 접속이 필요합니다.");
-  return value;
-}
 export function AdminGate({
   permission,
   children,
@@ -237,6 +254,16 @@ export default function HrAdminApp() {
         <Route element={<AdminShell refreshSession={session.refresh} />}>
           <Route index element={<AdminOverview />} />
           <Route
+            path="approvals"
+            element={
+              <AdminGate permission="approvals">
+                <AdminApprovals />
+              </AdminGate>
+            }
+          />
+          <Route path="alerts" element={<AdminAlerts />} />
+          <Route path="automation" element={<AdminAutomation />} />
+          <Route
             path="sources"
             element={
               <AdminGate permission="sources">
@@ -294,6 +321,11 @@ export default function HrAdminApp() {
 function AdminShell({ refreshSession }: { refreshSession: () => void }) {
   const session = useAdmin(),
     location = useLocation();
+  const counts = useControl<{ alerts: number; pending_approvals: number }>(
+    "/api/control/workflow-counts?admin=true",
+    true,
+    30000,
+  );
   const [menu, setMenu] = useState(false),
     [roleOpen, setRoleOpen] = useState(false),
     [role, setRole] = useState(session.role),
@@ -348,6 +380,12 @@ function AdminShell({ refreshSession }: { refreshSession: () => void }) {
         <NavLink to={"/hr/admin" + item.path} end={!item.path}>
           <item.icon size={17} />
           <span>{item.label}</span>
+          {item.path === "/alerts" && !!counts.data?.alerts && (
+            <b className="wf-nav-count">{counts.data.alerts}</b>
+          )}
+          {item.path === "/approvals" && !!counts.data?.pending_approvals && (
+            <b className="wf-nav-count">{counts.data.pending_approvals}</b>
+          )}
           {item.path === "/usage" && <i className="ops-nav-live" />}
         </NavLink>
       </div>

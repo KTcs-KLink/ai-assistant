@@ -30,6 +30,7 @@ import { HrHome } from "./HrHome";
 import { HrWorkspaceShell } from "./HrWorkspaceShell";
 import { HrWorkspace } from "./HrWorkspace";
 import { HrSaasAssistant } from "./HrSaasAssistant";
+import { HrEmployeeInbox } from "./HrWorkflows";
 import { HrAppearance } from "./appearance";
 import {
   HrEmployeeHome,
@@ -112,6 +113,7 @@ export function HrPortalApp() {
             <Route element={<HrWorkspaceShell />}>
               <Route index element={<HrEmployeeHome />} />
               <Route path="requests" element={<HrEmployeeRequests />} />
+              <Route path="inbox" element={<HrEmployeeInbox />} />
               <Route path="workspace-previous" element={<HrWorkspace />} />
               <Route path="benefits" element={<Navigate replace to="/hr" />} />
               <Route path="assistant" element={<HrSaasAssistant />} />

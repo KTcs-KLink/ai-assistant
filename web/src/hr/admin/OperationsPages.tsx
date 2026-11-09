@@ -9,6 +9,7 @@ import {
   Send,
 } from "lucide-react";
 import { WorkspaceDialog } from "../HrWorkspaceShell";
+import { CaseAssignment } from "../HrWorkflows";
 import {
   CASE_STATES,
   control,
@@ -130,7 +131,12 @@ export function AdminCases() {
                         </span>
                       </button>
                     </td>
-                    <td>{row.category}</td>
+                    <td>
+                      {row.category}
+                      <small className="wf-muted" style={{ display: "block" }}>
+                        {row.team} · {row.agent_name ?? "배정 대기"}
+                      </small>
+                    </td>
                     <td>
                       <Badge state={row.state}>{CASE_STATES[row.state]}</Badge>
                     </td>
@@ -220,6 +226,7 @@ function CaseEditor({
         </div>
         <h3>{row.title}</h3>
         <blockquote>{row.body}</blockquote>
+        <CaseAssignment row={row} saved={saved} />
         <p className="ops-muted">
           접수 {dateTime(row.created_at)} · 마지막 변경{" "}
           {dateTime(row.updated_at)}

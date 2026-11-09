@@ -280,6 +280,7 @@ export async function request<T>(
   method = "GET",
   body?: unknown,
   signal?: AbortSignal,
+  onResponse?: (response: Response) => void,
 ): Promise<T> {
   if (!path.startsWith(ROOT + "/"))
     throw new HrError(0, "허용된 인사 기능 주소가 아닙니다.");
@@ -308,6 +309,7 @@ export async function request<T>(
       );
     if (!data || typeof data !== "object")
       throw new HrError(0, "인사 서비스 응답을 확인하지 못했어요.");
+    onResponse?.(response);
     return data as T;
   } catch (error) {
     if (

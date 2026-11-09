@@ -17,16 +17,16 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from . import corpus, meter, store
+from . import automation, automation_api, corpus, meter, store
 
 UPSTREAM = "http://127.0.0.1:8846"
 ORIGINS = {"http://127.0.0.1:8825", "http://localhost:8825", "http://127.0.0.1:8848", "http://testserver"}
 ROLES = {
     "employee": {"cases_own"},
-    "hr_admin": {"cases", "reviews", "sources", "health"},
-    "data_admin": {"sources", "jobs", "reviews", "health"},
+    "hr_admin": {"cases", "reviews", "sources", "health", "approvals"},
+    "data_admin": {"sources", "jobs", "reviews", "health", "approvals"},
     "analyst": {"usage", "audit", "health"},
-    "owner": {"cases", "reviews", "sources", "jobs", "usage", "settings", "audit", "health"},
+    "owner": {"cases", "reviews", "sources", "jobs", "usage", "settings", "audit", "health", "approvals"},
 }
 PRIVATE = re.compile(r"(?:sk-[A-Za-z0-9_-]{12,}|\b\d{6}[- ]?[1-4]\d{6}\b|(?:010|011)[- ]?\d{3,4}[- ]?\d{4}|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|(?:api[_ -]?key|access[_ -]?token|password)\s*[:=])", re.I)
 RUNNER = ThreadPoolExecutor(max_workers=1, thread_name_prefix="klink-local-ops")
@@ -35,7 +35,13 @@ RUNNER = ThreadPoolExecutor(max_workers=1, thread_name_prefix="klink-local-ops")
 @asynccontextmanager
 async def lifespan(app):
     store.init()
-    yield
+    automation.init()
+    stop, thread = automation.start_scheduler(lambda *args: RUNNER.submit(*args))
+    try:
+        yield
+    finally:
+        stop.set()
+        thread.join(timeout=1)
 
 
 app = FastAPI(title="KLINK Local Operations", docs_url=None, redoc_url=None, lifespan=lifespan)
@@ -100,7 +106,7 @@ def safe_text(text):
 
 @app.get("/api/control/health")
 def health():
-    return dict(app="KLINK_LOCAL_OPERATIONS", version="2026-11-08", mode="LOCAL_DEMO", upstream=UPSTREAM,
+    return dict(app="KLINK_LOCAL_OPERATIONS", version="2026-11-09", mode="LOCAL_DEMO", upstream=UPSTREAM,
                 supabase_ingestion="HOLD", production_ready=False)
 
 
@@ -114,14 +120,24 @@ def start_demo(payload: Demo, response: Response):
             raise HTTPException(429, "활성 체험 접속 수 한도에 도달했습니다.")
         c.execute("INSERT INTO sessions VALUES(?,?,?,?,?)", (store.hash_token(token), payload.role, actor, time.time(), time.time()+28800))
         store.audit(c, actor, "demo_session_started", detail=dict(role=payload.role, production_authorized=False))
-    response.set_cookie("klink_ops_employee" if payload.role == "employee" else "klink_ops_admin", token,
-                        httponly=True, samesite="strict", max_age=28800, path="/api/control")
+    cookie = "klink_ops_employee" if payload.role == "employee" else "klink_ops_admin"
+    if payload.role == "employee":
+        response.delete_cookie(cookie, path="/api/control")
+    response.set_cookie(cookie, token, httponly=True, samesite="strict", max_age=28800,
+                        path="/api" if payload.role == "employee" else "/api/control")
     return public(dict(role=payload.role, actor=actor))
 
 
 @app.get("/api/control/session")
-def me(request: Request, admin: bool = False):
-    return public(session_for(request, admin))
+def me(request: Request, response: Response, admin: bool = False):
+    session = session_for(request, admin)
+    if not admin:
+        # Move legacy cookies without extending the session's server-side expiry.
+        token = request.cookies.get("klink_ops_employee", "")
+        response.delete_cookie("klink_ops_employee", path="/api/control")
+        response.set_cookie("klink_ops_employee", token, httponly=True, samesite="strict",
+                            max_age=max(0, int(session["expires"]-time.time())), path="/api")
+    return public(session)
 
 
 @app.delete("/api/control/session", status_code=204)
@@ -130,6 +146,8 @@ def logout(request: Request, response: Response, admin: bool = False):
     with store.connect() as c:
         c.execute("DELETE FROM sessions WHERE id=?", (store.hash_token(request.cookies.get(cookie, "")),))
     response.delete_cookie(cookie, path="/api/control")
+    if not admin:
+        response.delete_cookie(cookie, path="/api")
 
 
 class CaseIn(Strict):
@@ -141,7 +159,7 @@ class CaseIn(Strict):
 @app.get("/api/control/cases")
 def own_cases(request: Request):
     s = session_for(request)
-    return dict(items=store.rows("SELECT id,title,category,body,state,reply,created_at,updated_at,revision FROM cases WHERE owner=? ORDER BY created_at DESC", (s["id"],)), mode="LOCAL_DEMO", actual_hr_submission=False)
+    return dict(items=case_rows(s["id"]), mode="LOCAL_DEMO", actual_hr_submission=False)
 
 
 @app.post("/api/control/cases", status_code=201)
@@ -150,11 +168,14 @@ def create_case(payload: CaseIn, request: Request):
     title, body = safe_text(payload.title), safe_text(payload.body)
     case_id = store.uid("HR")
     with store.connect() as c:
+        c.execute("BEGIN IMMEDIATE")
         if c.execute("SELECT count(*) FROM cases WHERE owner=?", (s["id"],)).fetchone()[0] >= 100:
             raise HTTPException(429, "체험 문의 한도에 도달했습니다.")
         c.execute("INSERT INTO cases(id,owner,title,category,body,state,created_at,updated_at) VALUES(?,?,?,?,?,'received',?,?)",
                   (case_id, s["id"], title, payload.category, body, store.now(), store.now()))
         store.audit(c, s["actor"], "case_created", case_id, dict(category=payload.category))
+        automation.route_case(c, case_id)
+    automation.reconcile()
     return dict(id=case_id, state="received", actual_hr_submission=False)
 
 
@@ -169,12 +190,20 @@ def cancel_case(case_id: str, request: Request):
             raise HTTPException(409, "이미 종료된 문의입니다.")
         c.execute("UPDATE cases SET state='cancelled',revision=revision+1,updated_at=? WHERE id=?", (store.now(), case_id))
         store.audit(c, s["actor"], "case_cancelled", case_id)
+    automation.reconcile()
     return dict(id=case_id, state="cancelled")
 
 
 @app.get("/api/control/admin/cases")
 def cases(s=Depends(permission("cases"))):
-    return dict(items=store.rows("SELECT id,title,category,body,state,reply,created_at,updated_at,revision FROM cases ORDER BY updated_at DESC LIMIT 300"), mode="LOCAL_DEMO", actual_hr_submission=False)
+    return dict(items=case_rows(), mode="LOCAL_DEMO", actual_hr_submission=False)
+
+
+def case_rows(owner=None):
+    return store.rows("""SELECT k.id,k.title,k.category,k.body,k.state,k.reply,k.created_at,k.updated_at,k.revision,
+        k.team,k.agent_id,k.assignment_reason,k.due_at,k.routing_locked,a.name AS agent_name
+        FROM cases k LEFT JOIN agents a ON a.id=k.agent_id""" +
+        (" WHERE k.owner=?" if owner else "") + " ORDER BY k.updated_at DESC LIMIT 300", (owner,) if owner else ())
 
 
 class CaseUpdate(Strict):
@@ -189,11 +218,15 @@ def update_case(case_id: str, payload: CaseUpdate, s=Depends(permission("cases")
     if payload.state in {"awaiting_info", "resolved"} and len(reply) < 5:
         raise HTTPException(422, "처리 안내를 다섯 글자 이상 작성해 주세요.")
     with store.connect() as c:
+        c.execute("BEGIN IMMEDIATE")
         changed = c.execute("UPDATE cases SET state=?,reply=?,updated_at=?,revision=revision+1 WHERE id=? AND revision=? AND state!='cancelled'",
                             (payload.state, reply, store.now(), case_id, payload.revision)).rowcount
         if not changed:
             raise HTTPException(409, "문의 상태가 변경됐습니다. 다시 불러온 뒤 처리해 주세요.")
         store.audit(c, s["actor"], "case_updated", case_id, dict(state=payload.state, actual_hr_submission=False))
+        row = c.execute("SELECT owner,title FROM cases WHERE id=?", (case_id,)).fetchone()
+        automation.notify(c, row["owner"], f"case:{case_id}:{payload.revision+1}", "문의 처리 안내", row["title"] + " · " + reply, "/hr/requests")
+    automation.reconcile()
     return dict(id=case_id, state=payload.state)
 
 
@@ -231,23 +264,10 @@ class JobIn(Strict):
 
 
 def queue_job(payload, s, retry_of=None):
-    try:
-        _, documents_to_process = corpus.selected(payload.documents)
-    except (ValueError, OSError, KeyError):
-        raise HTTPException(422, "검증된 원문 목록에서 1~5개 문서를 선택해 주세요.") from None
-    if payload.kind == "reindex" and not any(d["answer_count"] or d["review_count"] for d in documents_to_process):
-        raise HTTPException(422, "검색 구간이 있는 문서를 선택해 주세요. 원본만 보존된 문서는 분할·검토가 먼저 필요합니다.")
-    job_id = store.uid("JOB")
-    documents = json.dumps(sorted(payload.documents))
     with store.connect() as c:
-        if c.execute("SELECT count(*) FROM jobs WHERE state IN ('queued','running')").fetchone()[0] >= 5:
-            raise HTTPException(429, "진행 중인 작업이 많습니다. 완료 후 다시 요청해 주세요.")
-        if c.execute("SELECT id FROM jobs WHERE state IN ('queued','running') AND kind=? AND documents=?", (payload.kind, documents)).fetchone():
-            raise HTTPException(409, "같은 문서의 작업이 이미 대기 또는 실행 중입니다.")
-        c.execute("INSERT INTO jobs(id,kind,state,documents,created_at,updated_at,message,retry_of) VALUES(?,?,'queued',?,?,?,'작업 대기 중',?)",
-                  (job_id, payload.kind, documents, store.now(), store.now(), retry_of))
-        store.audit(c, s["actor"], "job_queued", job_id, dict(kind=payload.kind, documents=payload.documents, staging_only=True))
-    RUNNER.submit(corpus.run_job, job_id, payload.kind, payload.documents)
+        c.execute("BEGIN IMMEDIATE")
+        job_id = automation.enqueue(c, payload.kind, payload.documents, s["actor"], retry_of)
+    RUNNER.submit(automation.run_job, job_id, payload.kind, payload.documents)
     return dict(id=job_id, state="queued", active_service_changed=False)
 
 
@@ -332,6 +352,7 @@ def usage_detail(request_id: str, s=Depends(permission("usage"))):
     rows = store.rows("SELECT * FROM requests WHERE id=?", (request_id,))
     if not rows:
         raise HTTPException(404, "집계된 요청을 찾을 수 없습니다.")
+    rows[0].pop("owner_session", None)
     return dict(request=rows[0], generations=store.rows("SELECT phase,model,input_tokens,output_tokens,cached_tokens,write_tokens,cost_usd,rate_snapshot FROM generations WHERE request_id=? ORDER BY id", (request_id,)),
                 questions_stored=False, answers_stored=False, cost_is_invoice=False)
 
@@ -441,7 +462,8 @@ class Question(Strict):
 @app.post("/api/benefits/hr/answer")
 async def metered_answer(payload: Question, request: Request):
     safe_text(payload.question)
-    cookie = request.headers.get("cookie", "")
+    cookie = "; ".join(part.strip() for part in request.headers.get("cookie", "").split(";")
+                       if part.strip() and part.strip().split("=", 1)[0] not in {"klink_ops_employee", "klink_ops_admin"})
     headers = {"cookie": cookie, "origin": UPSTREAM}
     async with httpx.AsyncClient(timeout=540, trust_env=False) as client:
         try:
@@ -450,7 +472,11 @@ async def metered_answer(payload: Question, request: Request):
                 raise HTTPException(401, "한전 참고자료 체험 접속을 다시 시작해 주세요.")
         except httpx.HTTPError:
             raise HTTPException(503, "기존 인사 서비스 연결을 확인해 주세요.") from None
-        request_id, blocked = meter.start_request()
+        try:
+            owner = session_for(request)["id"]
+        except HTTPException:
+            owner = None
+        request_id, blocked = meter.start_request(owner)
         if blocked:
             raise HTTPException(*blocked)
         started = time.monotonic()
@@ -458,7 +484,12 @@ async def metered_answer(payload: Question, request: Request):
             upstream = await client.post(UPSTREAM + "/api/benefits/hr/answer", json=payload.model_dump(), headers=headers)
             body = upstream.json()
             meter.finish(request_id, upstream.status_code, round((time.monotonic()-started)*1000), body)
+            automation.refresh_safely()
             return JSONResponse(body, status_code=upstream.status_code, headers={"X-Klink-Meter-Id": request_id})
         except (httpx.HTTPError, ValueError):
             meter.finish(request_id, 502, round((time.monotonic()-started)*1000))
+            automation.refresh_safely()
             raise HTTPException(502, "답변 연결이 완료되지 않았습니다. 이미 시작한 모델 처리의 사용량은 미확인으로 남겼습니다.") from None
+
+
+app.include_router(automation_api.create_router(permission, session_for, safe_text, lambda *args: RUNNER.submit(*args)))

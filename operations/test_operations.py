@@ -66,8 +66,8 @@ def test_unauthenticated_and_csrf(client):
 
 def test_cookie_and_employee_admin_separation(client):
     response = login(client, "employee")
-    cookie = response.headers["set-cookie"]
-    assert "HttpOnly" in cookie and "SameSite=strict" in cookie and "Path=/api/control" in cookie
+    cookie = next(v for v in response.headers.get_list("set-cookie") if "HttpOnly" in v)
+    assert "SameSite=strict" in cookie and "Path=/api;" in cookie
     assert client.get("/api/control/admin/cases").status_code == 401
     assert client.get("/api/control/cases").status_code == 200
     login(client, "owner")
@@ -105,7 +105,7 @@ def test_case_owner_isolation_and_admin_roundtrip(client):
     body = dict(state="resolved", reply="규정·양식 화면에서 공식 연결 상태를 확인해 주세요.", revision=row["revision"])
     assert client.patch(f"/api/control/admin/cases/{case_id}", json=body).status_code == 200
     assert client.patch(f"/api/control/admin/cases/{case_id}", json=body).status_code == 409
-    client.cookies.set("klink_ops_employee", saved_cookie, domain="testserver.local", path="/api/control")
+    client.cookies.set("klink_ops_employee", saved_cookie, domain="testserver.local", path="/api")
     result = client.get("/api/control/cases").json()["items"][0]
     assert result["state"] == "resolved" and result["reply"] == body["reply"]
     assert "owner" not in result

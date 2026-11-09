@@ -35,6 +35,8 @@ import {
   validateAssistantSource,
 } from "./AssistantEvidence";
 import "./assistant.css";
+import { AnswerFeedback } from "./HrWorkflows";
+import { ensureEmployeeSession } from "./workflows";
 
 interface ChatMessage {
   id: string;
@@ -43,6 +45,7 @@ interface ChatMessage {
   error?: string;
   interrupted?: boolean;
   started: number;
+  requestId?: string;
 }
 const PROMPTS = [
   { topic: "휴가·증빙", question: "병가 때 진단서는 언제 제출해야 하나요?" },
@@ -169,19 +172,25 @@ export function HrSaasAssistant() {
       { id, question, started: Date.now() },
     ]);
     try {
+      await ensureEmployeeSession(current.signal);
+      current.signal.throwIfAborted();
+      let requestId = "";
       const answer = await checkedAnswer(
         await request<HrAnswer>(
           HR + "/answer",
           "POST",
           { question },
           AbortSignal.any([current.signal, AbortSignal.timeout(540000)]),
+          (response) => {
+            requestId = response.headers.get("X-Klink-Meter-Id") ?? "";
+          },
         ),
         question,
       );
       if (current.signal.aborted) return;
       setMessages((previous) =>
         previous.map((message) =>
-          message.id === id ? { ...message, answer } : message,
+          message.id === id ? { ...message, answer, requestId } : message,
         ),
       );
       setActiveId(id);
@@ -442,19 +451,24 @@ export function HrSaasAssistant() {
                       {message.answer && <span>원문 기반 참고 안내</span>}
                     </div>
                     {message.answer ? (
-                      <AssistantAnswer
-                        answer={message.answer}
-                        onSource={(item) => void openSource(item, message.id)}
-                        onCopy={() => void copy(message)}
-                        copied={copiedId === message.id}
-                        onReview={(query) => {
-                          setActiveId(message.id);
-                          resetSource();
-                          setReviewQuery(query);
-                          setSourceMode("review");
-                          setPanelOpen(true);
-                        }}
-                      />
+                      <>
+                        <AssistantAnswer
+                          answer={message.answer}
+                          onSource={(item) => void openSource(item, message.id)}
+                          onCopy={() => void copy(message)}
+                          copied={copiedId === message.id}
+                          onReview={(query) => {
+                            setActiveId(message.id);
+                            resetSource();
+                            setReviewQuery(query);
+                            setSourceMode("review");
+                            setPanelOpen(true);
+                          }}
+                        />
+                        {message.requestId && (
+                          <AnswerFeedback requestId={message.requestId} />
+                        )}
+                      </>
                     ) : message.error ? (
                       <div className="sa-response-error" role="alert">
                         <strong>답변을 확인하지 못했어요</strong>

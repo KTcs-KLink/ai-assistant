@@ -39,7 +39,7 @@ import {
   type SourceCatalog,
   type SourceDocument,
 } from "../operations";
-import { useAdmin } from "./HrAdminApp";
+import { useAdmin } from "./context";
 import { Badge, Empty, Loading, PageTitle, QueryError, Stat } from "./ui";
 
 export function AdminOverview() {
@@ -96,6 +96,18 @@ export function AdminOverview() {
         </button>
       </PageTitle>
       <QueryError error={query.error} retry={query.refresh} />
+      <div className="wf-home-strip">
+        <Activity size={20} />
+        <div>
+          <strong>자동화 운영을 한 곳에서 관리하세요</strong>
+          <p>점검 요청 승인, 규정 파일 변경 감지, 문의 배정과 비용·품질 알림</p>
+        </div>
+        {session.permissions.includes("approvals") && (
+          <Link to="/hr/admin/approvals">통합 승인함 →</Link>
+        )}
+        <Link to="/hr/admin/alerts">운영 알림 →</Link>
+        <Link to="/hr/admin/automation">자동화 설정 →</Link>
+      </div>
       {error && (
         <p className="ops-error" role="alert">
           {error}

@@ -33,7 +33,7 @@ import "./employee.css";
 import "./account.css";
 import "./operations.css";
 
-function EmployeeCaseAccess({
+export function EmployeeCaseAccess({
   children,
 }: {
   children: (refresh: () => void) => ReactNode;
@@ -189,6 +189,16 @@ export function HrEmployeeHome() {
           <ChevronRight size={17} />
         </Link>
       </nav>
+      <div className="wf-home-strip">
+        <Inbox size={20} />
+        <div>
+          <strong>내 할 일에서 다음 업무를 이어가세요</strong>
+          <p>
+            원문 점검 승인, 보완 요청과 문의 처리 안내를 확인할 수 있습니다.
+          </p>
+        </div>
+        <Link to="/hr/inbox">내 할 일 열기 →</Link>
+      </div>
       <div className="emp-home-grid">
         <section className="emp-panel">
           <header>
@@ -623,6 +633,18 @@ function CaseList({ compact = false }: { compact?: boolean }) {
             </div>
             <h3>{selected.title}</h3>
             <p className="emp-case-body">{selected.body}</p>
+            <section className="emp-case-reply">
+              <strong>
+                {selected.team || "담당 팀 확인 중"} ·{" "}
+                {selected.agent_name || "담당자 배정 대기"}
+              </strong>
+              <p>{selected.assignment_reason}</p>
+              <small>
+                처리 목표{" "}
+                {selected.due_at ? dateTime(selected.due_at) : "미설정"} · 로컬
+                운영 기준
+              </small>
+            </section>
             <div className="emp-timeline">
               <span>
                 <Check size={13} />

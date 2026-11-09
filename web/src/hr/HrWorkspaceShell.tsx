@@ -17,6 +17,7 @@ import {
   ArrowRight,
   BookOpen,
   ChevronRight,
+  ClipboardCheck,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -30,12 +31,14 @@ import {
 } from "lucide-react";
 import { useHr } from "./HrContext";
 import { attempt } from "./ui";
+import { useControl } from "./operations";
 import "./workspace.css";
 
 const WORK_NAV = [
   { path: "", label: "업무 현황", icon: LayoutDashboard },
   { path: "/assistant", label: "AI 업무 도우미", icon: Sparkles },
   { path: "/library", label: "규정·양식", icon: BookOpen },
+  { path: "/inbox", label: "내 할 일", icon: ClipboardCheck },
   { path: "/requests", label: "내 문의", icon: MessageSquareText },
 ];
 
@@ -90,6 +93,12 @@ export function HrWorkspaceShell() {
   const { session, busy, logout, notice, announce, errors, refresh } = useHr();
   const location = useLocation(),
     navigate = useNavigate();
+  const counts = useControl<{ todo: number }>(
+    "/api/control/workflow-counts",
+    true,
+    30000,
+  );
+  const todoCount = counts.error ? 0 : (counts.data?.todo ?? 0);
   const [searchOpen, setSearchOpen] = useState(false),
     [menuOpen, setMenuOpen] = useState(false),
     [searchQuery, setSearchQuery] = useState(""),
@@ -162,6 +171,9 @@ export function HrWorkspaceShell() {
     >
       <Icon size={18} />
       <span>{label}</span>
+      {path === "/inbox" && todoCount > 0 && (
+        <b className="wf-nav-count">{todoCount}</b>
+      )}
     </NavLink>
   ));
   return (

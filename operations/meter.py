@@ -27,7 +27,7 @@ def price(usage, rate):
     return format(amount.quantize(Decimal("0.000000001")), "f")
 
 
-def start_request():
+def start_request(owner_session=None):
     policy = store.setting("policy")
     day = str(local_day())
     request_id = store.uid("REQ")
@@ -45,7 +45,7 @@ def start_request():
                 return None, (429, "미집계 비용이 있어 예산 차단 정책에 따라 새 AI 요청을 보류했습니다.")
             if sum((Decimal(r[0]) for r in monthly), Decimal(0)) >= Decimal(policy["monthly_budget_usd"]):
                 return None, (429, "이번 달 집계 비용이 설정한 한도에 도달했습니다. 원문 검색을 이용해 주세요.")
-        c.execute("INSERT INTO requests(id,started_at,day) VALUES(?,?,?)", (request_id, store.now(), day))
+        c.execute("INSERT INTO requests(id,started_at,day,owner_session) VALUES(?,?,?,?)", (request_id, store.now(), day, owner_session))
     return request_id, None
 
 
@@ -57,7 +57,15 @@ def finish(request_id, status, elapsed_ms, receipt=None):
     total_cost = Decimal(0)
     cost_known = complete
     with store.connect() as c:
+        c.execute("BEGIN IMMEDIATE")
+        current = c.execute("SELECT completed_at FROM requests WHERE id=?", (request_id,)).fetchone()
+        if not current or current[0] is not None:
+            return
         for call in calls or []:
+            if not isinstance(call, dict):
+                complete = False
+                cost_known = False
+                continue
             model = call.get("model") or receipt.get("model") or "unreported"
             usage = call.get("usage")
             valid = isinstance(usage, dict) and all(type(usage.get(k)) is int and usage[k] >= 0 for k in ["input_tokens", "output_tokens"])
@@ -91,6 +99,8 @@ def summary(days=7):
     first = today - timedelta(days=days - 1)
     requests = store.rows("SELECT * FROM requests WHERE day>=? ORDER BY started_at DESC", (str(first),))
     monthly = store.rows("SELECT * FROM requests WHERE day>=?", (str(today.replace(day=1)),))
+    for row in requests + monthly:
+        row.pop("owner_session", None)
     def aggregate(rows):
         measured = [r for r in rows if r["usage_complete"]]
         priced = [r for r in rows if r["cost_usd"] is not None]

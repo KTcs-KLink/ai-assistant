@@ -1,0 +1,254 @@
+{
+  "recorded_at": "2026-11-09T07:44:50+00:00",
+  "local_only": true,
+  "branch": "feat/hr-automation-workflows-20261109",
+  "design_baseline_commit": "b6faa16517873adb35e54bd2eef505ae60a9d7f3",
+  "urls": {
+    "employee": "http://127.0.0.1:8825/hr/inbox",
+    "approvals": "http://127.0.0.1:8825/hr/admin/approvals",
+    "automation": "http://127.0.0.1:8825/hr/admin/automation",
+    "alerts": "http://127.0.0.1:8825/hr/admin/alerts",
+    "preserved_mock": "http://127.0.0.1:8824/"
+  },
+  "preserved": {
+    "checked_paths": [
+      "web/src/portal",
+      "web/src/App.tsx",
+      "web/src/hr/HrWireframes.tsx",
+      "web/src/hr/HrDesignStudio.tsx",
+      "web/src/hr/appearance.tsx",
+      "web/src/hr/appearance.css",
+      "web/src/hr/HrKnowledge.tsx",
+      "web/src/hr/HrContext.tsx",
+      "operations/corpus.py",
+      "server"
+    ],
+    "unchanged_against_baseline": true,
+    "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+    "live_source_scope": "expanded",
+    "document_count": 203,
+    "answer_units": 528,
+    "review_units": 3334,
+    "excluded_units": 8,
+    "active_source_promotions": 0,
+    "new_embeddings": 0,
+    "original_8846_service_restarted": false
+  },
+  "automation_settings": {
+    "revision": 3,
+    "watch_enabled": true,
+    "watch_documents": [
+      "K-170-A01"
+    ],
+    "watch_interval_minutes": 1440,
+    "cost_warning_percent": 80,
+    "slow_seconds": 60,
+    "routing": [
+      {
+        "category": "규정 문의",
+        "team": "인사 운영",
+        "sla_hours": 24
+      },
+      {
+        "category": "양식 문의",
+        "team": "양식 지원",
+        "sla_hours": 24
+      },
+      {
+        "category": "AI 답변 확인",
+        "team": "AI 품질",
+        "sla_hours": 24
+      },
+      {
+        "category": "서비스 이용",
+        "team": "서비스 지원",
+        "sla_hours": 24
+      }
+    ]
+  },
+  "operational_health": {
+    "app": "KLINK_LOCAL_OPERATIONS",
+    "version": "2026-11-09",
+    "mode": "LOCAL_DEMO",
+    "upstream": "http://127.0.0.1:8846",
+    "supabase_ingestion": "HOLD",
+    "production_ready": false
+  },
+  "live_evidence": {
+    "approval": {
+      "id": "APR-eba0f1a76a4c",
+      "state": "approved",
+      "job_id": "JOB-088033cc0a7f",
+      "revision": 2
+    },
+    "case": {
+      "id": "HR-7464941694be",
+      "state": "resolved",
+      "team": "인사 운영",
+      "assigned_alias": "검증용 인사 운영",
+      "routing_locked": 0
+    },
+    "official_file_checks": [
+      {
+        "document_id": "K-170-A01",
+        "title": "상임임원 복무규정_260930",
+        "baseline_sha": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+        "last_sha": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+        "checked_at": "2026-11-09T07:29:32+00:00",
+        "job_id": "JOB-e8d6a922ece8",
+        "changed": 0
+      }
+    ],
+    "source_jobs": [
+      {
+        "id": "JOB-088033cc0a7f",
+        "kind": "verify",
+        "state": "succeeded",
+        "report": {
+          "id": "JOB-088033cc0a7f",
+          "kind": "verify",
+          "started_at": "2026-11-09T07:30:22+00:00",
+          "scope": "STAGING_ONLY",
+          "active_service_changed": false,
+          "supabase_ingestion": "HOLD",
+          "new_embeddings": 0,
+          "human_approved": false,
+          "ktcs_applicable": false,
+          "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+          "documents": [
+            {
+              "id": "K-170-A01",
+              "title": "상임임원 복무규정_260930",
+              "source_verified": true,
+              "original_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+              "answer_count": 21,
+              "review_count": 21
+            }
+          ],
+          "answer_units": 21,
+          "review_units": 21,
+          "completed_at": "2026-11-09T07:30:22+00:00",
+          "status": "succeeded"
+        }
+      },
+      {
+        "id": "JOB-e8d6a922ece8",
+        "kind": "recollect",
+        "state": "succeeded",
+        "report": {
+          "id": "JOB-e8d6a922ece8",
+          "kind": "recollect",
+          "started_at": "2026-11-09T07:29:31+00:00",
+          "scope": "STAGING_ONLY",
+          "active_service_changed": false,
+          "supabase_ingestion": "HOLD",
+          "new_embeddings": 0,
+          "human_approved": false,
+          "ktcs_applicable": false,
+          "manifest_sha256": "12855f512460820948318914271662dbb453b24afb6ce57e81bf5427d0d440ab",
+          "documents": [
+            {
+              "id": "K-170-A01",
+              "title": "상임임원 복무규정_260930",
+              "source_verified": true,
+              "original_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+              "answer_count": 21,
+              "review_count": 21,
+              "downloaded_bytes": 247457,
+              "downloaded_sha256": "f040e6ad17e40d9b27af84a74dbd3bf60f12c409a5812da0c766609f0c67703d",
+              "same_as_preserved": true,
+              "next_step": "새 파일은 격리 보관 · 파싱·검토·승인 후 반영 가능"
+            }
+          ],
+          "answer_units": 21,
+          "review_units": 21,
+          "completed_at": "2026-11-09T07:29:32+00:00",
+          "status": "succeeded"
+        }
+      }
+    ],
+    "actual_model_request": {
+      "id": "REQ-2955e6bc2851",
+      "status": 200,
+      "latency_ms": 30140,
+      "answer_state": "answered",
+      "call_count": 3,
+      "usage_complete": 1,
+      "input_tokens": 12452,
+      "output_tokens": 1652,
+      "cached_tokens": 0,
+      "cost_usd": "0.002382275",
+      "model": "gpt-6-luna",
+      "provider_phases": [
+        {
+          "phase": "question_understanding",
+          "model": "gpt-6-luna"
+        },
+        {
+          "phase": "draft",
+          "model": "gpt-6-luna"
+        },
+        {
+          "phase": "source_comparison",
+          "model": "gpt-6-luna"
+        }
+      ],
+      "cost_is_invoice": false
+    },
+    "feedback": [
+      {
+        "id": "FDB-e209953ff0e0",
+        "request_id": "REQ-2955e6bc2851",
+        "reason": "조건·예외 확인",
+        "state": "resolved",
+        "revision": 2
+      }
+    ],
+    "fixtures_written_into_live_data": false,
+    "test_alias_active": 0
+  },
+  "validation": {
+    "operations_tests": {
+      "passed": 42,
+      "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest operations/test_operations.py operations/test_automation.py -q",
+      "kind": "Local isolated contract and source integrity checks"
+    },
+    "frontend_build": "passed; npm run build",
+    "browser_flows": [
+      "Employee request -> admin approval -> successful real verify job",
+      "Official recollection -> matching SHA256 -> no changed candidate",
+      "Automatic team/least-load assignment -> resolved case -> employee notice",
+      "Real question -> answer -> original article -> feedback -> alert acknowledgment -> review notice",
+      "Automation settings saved again after initial configuration"
+    ],
+    "browser_viewport_width": 1265,
+    "admin_horizontal_overflow": false,
+    "breakpoint_tests_run": false,
+    "full_retrieval_evaluation_run": false,
+    "semantic_accuracy_evaluation_run": false,
+    "human_policy_approval": false
+  },
+  "roles": {
+    "implementation": "Codex/code",
+    "assignment": "Deterministic category and load rules; no added GPT call",
+    "answer": "Existing designated model and upstream retrieval retained"
+  },
+  "boundaries": [
+    "Local demo identities and routing aliases; company SSO and production authorization unconnected",
+    "Approvals execute local source checks or accept a quarantined file for review; no HR eligibility/payment/leave approval",
+    "File SHA changes identify candidates, not confirmed policy text or effective-date changes",
+    "Watcher currently monitors one selected official document daily while local service is running; at most five selected documents",
+    "Changed file/version and duplicate/stale/tamper paths were tested using isolated fixtures; live file was unchanged",
+    "Cost is reported usage times a versioned assumed rate, not a provider billing total; unknown cost is not zero",
+    "Quality signals use latency/errors and employee feedback, not an automated semantic-accuracy score",
+    "Quality delay/error reconciliation covers the month's latest 1000 completed requests; monthly costs cover completed monthly records",
+    "No Supabase writes, no OpenSearch cluster migration, no production deployment or PR",
+    "Welfare recommendations excluded from the active employee/admin workflows"
+  ],
+  "screenshots": [
+    "employee-inbox.png",
+    "admin-approvals.png",
+    "regulation-watch.png",
+    "answer-original-evidence.png"
+  ]
+}

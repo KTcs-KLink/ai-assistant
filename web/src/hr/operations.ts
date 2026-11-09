@@ -99,6 +99,12 @@ export interface CaseRecord {
   created_at: string;
   updated_at: string;
   revision: number;
+  team: string;
+  agent_id: string | null;
+  agent_name: string | null;
+  assignment_reason: string;
+  due_at: string | null;
+  routing_locked: number;
 }
 export interface SourceDocument {
   id: string;
