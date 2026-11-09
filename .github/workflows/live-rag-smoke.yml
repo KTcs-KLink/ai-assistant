@@ -12,6 +12,7 @@ on:
       - feat/hr-semantic-intents-20261107
       - feat/hr-source-expansion-20261107
       - feat/hr-reclassification-20261108
+      - feat/domain-workflow-classification-20261109
   workflow_dispatch:
 
 permissions:
