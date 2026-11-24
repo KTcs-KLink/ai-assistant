@@ -1,0 +1,1248 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#143d38"><meta name="description" content="K-LINK, 규정 확인부터 서류 제출까지 함께하는 사내 업무 어시스턴트"><title>K-LINK 인사 포털</title><style>:root{--ink:#202e2b;--muted:#5b6862;--line:#e4e9e4;--bg:#f6f8f5;--green:#246251;--dark:#163c35;--pale:#edf4ed;--orange:#ba6a38;--shadow:0 5px 20px #203d3011}*{box-sizing:border-box}body{margin:0;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;letter-spacing:-.35px;word-break:keep-all}button,input,textarea,select{font:inherit}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{border:0;background:none;color:inherit}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,a:focus-visible{outline:3px solid #d9a64d;outline-offset:3px}input:focus,textarea:focus,select:focus{outline:2px solid #62a48a;outline-offset:1px}a{color:inherit}svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}h1,h2,h3,h4,p{margin:0}h1{font-size:30px;line-height:1.5;letter-spacing:-1.3px;font-weight:700}h2{font-size:18px;letter-spacing:-.6px}h3{font-size:16px}p{line-height:1.8}.muted{color:var(--muted)}.small{font-size:13px}.tiny{font-size:13px}.flex{display:flex;align-items:center;gap:10px}.between{display:flex;align-items:center;justify-content:space-between;gap:12px}.stack{display:flex;flex-direction:column;gap:18px}.spacer{flex:1}.sidebar{width:230px;background:var(--dark);position:fixed;inset:0 auto 0 0;padding:33px 21px;display:flex;flex-direction:column;color:#dce8e1;z-index:20}.brand{font-size:27px;font-weight:800;letter-spacing:1px;gap:10px;color:white}.brand-mark{display:grid;grid-template-columns:repeat(2,8px);gap:3px;transform:rotate(-12deg)}.brand-mark i{height:12px;border-radius:2px;background:#bed3a8}.brand-mark i:nth-child(2){background:#789f87}.brand-mark i:nth-child(3){background:#789f87}.brand-caption{font-size:13px;letter-spacing:0;color:#9fb7ac;margin:10px 0 45px 4px}.nav-label{font-size:13px;color:#a9c1b5;letter-spacing:0;margin:0 14px 13px}.nav-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 14px;margin-bottom:7px;border-radius:8px;color:#b9cec3;text-align:left;font-size:14px}.nav-btn.active{background:#31574a;color:#fff;font-weight:600}.nav-btn:hover{background:#2b5146}.nav-count{background:#b9d29f;color:#244436;padding:2px 7px;border-radius:5px;margin-left:auto;font-size:13px}.nav-divider{height:1px;background:#ffffff12;margin:25px 12px}.side-help{padding:17px 14px;background:#ffffff06;border:1px solid #ffffff12;border-radius:9px;margin-top:auto;font-size:13px;line-height:1.8;color:#abc4b5}.side-help svg{color:#bcd39b;margin-bottom:8px}.side-foot{font-size:12px;color:#80a091;padding:21px 10px 0;letter-spacing:.4px}.shell{margin-left:230px}.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);padding:0 40px;display:flex;align-items:center;gap:17px}.breadcrumb{font-size:13px;color:#6f7d74}.topbar .tag{font-size:12px}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#e8eee2;color:#4a664a;font-weight:700;font-size:13px}.profile-name{font-size:13px;font-weight:600}.profile-team{font-size:12px;color:var(--muted);margin-top:2px}.icon-btn{width:34px;height:34px;display:grid;place-items:center;border-radius:7px}.icon-btn:hover{background:var(--pale)}.notification{position:relative}.notification:after{content:'';width:5px;height:5px;background:#bf8758;border:2px solid #fff;border-radius:50%;position:absolute;top:5px;right:5px}.content{max-width:1450px;margin:auto;padding:35px 40px 22px}.intro{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.eyebrow{font-size:13px;font-weight:600;color:#5b6862;letter-spacing:1.7px;margin-bottom:8px}.intro p{color:#5b6862;font-size:13px;margin-top:8px}.date-pill{border:1px solid #dee5da;padding:8px 13px;border-radius:6px;font-size:13px;color:#6b796d;background:#fff}.card{background:white;border:1px solid var(--line);border-radius:12px}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px;gap:12px}.section-head h2{display:flex;align-items:center;gap:9px}.count{font-size:13px;color:var(--green);background:#e8f1e6;border-radius:5px;padding:2px 7px}.text-btn{display:inline-flex;align-items:center;gap:5px;color:#778175;font-size:13px;padding:5px 0}.text-btn:hover{color:var(--green)}.text-btn svg{width:14px;height:14px}.home-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:25px}.task-card{padding:25px 26px;border-color:#e2e6da;position:relative;overflow:hidden}.task-top{display:flex;align-items:center;gap:7px;margin-bottom:15px}.tag{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:13px;border-radius:4px;padding:4px 7px;background:#f1f3ef;color:#74816e}.tag.orange{background:#f9ede2;color:#aa683b}.tag.green{background:#eaf3e8;color:#4f7c43}.tag.blue{background:#eaf0f7;color:#50749a}.tag.red{background:#f9ecea;color:#b16459}.tag.purple{background:#eeecf7;color:#7b6b9a}.task-card h3{font-size:19px;margin-bottom:8px;letter-spacing:-.7px}.task-card p{font-size:13px;color:#7b8278}.task-bottom{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:23px}.btn{display:inline-flex;justify-content:center;align-items:center;gap:7px;border-radius:6px;padding:10px 16px;font-size:13px;font-weight:500;line-height:1.5;white-space:nowrap;background:white;border:1px solid #dce3d9}.btn:hover{background:#f2f6ef;border-color:#b7cbb7}.btn.primary{background:var(--green);border-color:var(--green);color:white}.btn.primary:hover{background:#194d3e}.btn.soft{background:#edf3e8;border-color:#edf3e8;color:#446a39}.btn svg{width:15px;height:15px}.cite-mark{display:inline;padding:0 2px;margin:0 1px;font-size:12px;font-weight:700;color:#246251;vertical-align:super;line-height:1}.cite-mark:hover{text-decoration:underline}.reference{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:600;color:#246251;text-align:left;line-height:1.7}.reference svg{width:15px;height:15px}.task-illustration{position:absolute;right:30px;top:36px;width:77px;height:77px;border-radius:50%;background:#f2f5e9;transform:rotate(-8deg);display:grid;place-items:center}.task-illustration svg{width:38px;height:38px;color:#8ba06e;stroke-width:1.1}.quick-section{margin-top:26px}.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.quick-card{border:1px solid var(--line);background:#fff;padding:20px 6px 17px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:11px;font-size:13px;transition:transform .15s,box-shadow .15s}.quick-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#a8bea2}.quick-icon{height:40px;width:40px;display:grid;place-items:center;border-radius:12px;background:#edf2e8;color:#6e8955}.quick-card:nth-child(2) .quick-icon{background:#eaf1f5;color:#7294a6}.quick-card:nth-child(3) .quick-icon{background:#f5efe5;color:#aa8f63}.quick-card:nth-child(4) .quick-icon{background:#f0edf6;color:#9c8aad}.summary-card{padding:24px;height:100%}.summary-card h2{font-size:16px}.summary-numbers{display:flex;justify-content:space-around;border-bottom:1px solid var(--line);padding:24px 0 22px;margin-bottom:9px}.summary-number{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:13px;color:#889080;min-width:65px}.summary-number strong{font-size:30px;font-weight:600;color:#334a39;line-height:1.3}.summary-number:nth-child(3) strong{color:#b16b51}.summary-number+.summary-number{border-left:1px solid #eff1ed}.mini-row{display:flex;gap:10px;align-items:center;padding:16px 0;border-bottom:1px solid #f0f2ee;text-align:left;width:100%;font-size:13px}.mini-row:last-child{border:0}.mini-row svg{color:#9aab94;width:17px}.mini-row .tag{margin-left:auto;font-size:12px}.mini-row small{display:block;font-size:12px;color:#929b8c;margin-top:4px}.recommendations{margin-top:29px}.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.rec-card{padding:20px 21px;transition:border-color .15s;position:relative}.rec-card:hover{border-color:#a4baa0}.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}.rec-card h3{font-size:14px;margin-bottom:7px}.rec-card p{font-size:13px;color:#869080}.rec-meta{display:flex;gap:8px;font-size:12px;color:#869080;margin-top:14px}.rec-reason{margin-top:17px;padding-top:13px;border-top:1px solid #ecf0e7;font-size:12px;color:#779064;display:flex;gap:6px;align-items:center}.rec-reason svg{width:12px;height:12px}.ask-bar{display:flex;align-items:center;background:#fff;border:1px solid #dbe3d4;border-radius:10px;margin-top:28px;padding:14px 17px;gap:14px;box-shadow:0 3px 10px #24402005}.ask-bar>svg{color:#71905d}.ask-bar input{flex:1;width:0;border:0;background:none;font-size:13px;padding:5px}.ask-bar input:focus{outline:none}.send-btn{width:31px;height:31px;border-radius:6px;background:#2e6350;color:white;display:grid;place-items:center}.send-btn svg{width:15px;height:15px}.footer{display:flex;align-items:center;justify-content:space-between;margin-top:17px;color:#98a18f;font-size:12px;gap:10px}.footer button{font-size:12px;color:#859378;text-decoration:underline}.hero-note{font-size:13px;color:#8a9482;margin:3px 0 20px}.page-title{margin-bottom:23px}.page-title p{color:var(--muted);font-size:13px;margin-top:7px}.page-title h1{font-size:27px}.toolbar{display:flex;align-items:center;gap:9px;margin-bottom:18px;flex-wrap:wrap}.tabs{display:flex;gap:20px;border-bottom:1px solid var(--line);margin-bottom:22px}.tab{padding:12px 2px;color:#7f8979;font-size:13px}.tab.active{border-bottom:2px solid var(--green);color:var(--green);font-weight:600}.search-field,select{border:1px solid #dfe5dc;background:white;border-radius:6px;padding:9px 11px;font-size:13px;color:#62715e}.search-field{min-width:240px}.table-wrap{overflow:auto}.data-table{border-collapse:collapse;width:100%;font-size:13px}.data-table th{text-align:left;background:#f7f9f5;color:#889180;font-weight:500;font-size:13px;padding:14px 18px;border-bottom:1px solid var(--line);white-space:nowrap}.data-table td{padding:17px 18px;border-bottom:1px solid #edf0e9;line-height:1.8}.data-table tr:last-child td{border-bottom:0}.data-table .btn{padding:6px 10px;font-size:12px}.notice{padding:13px 16px;background:#eef3e9;border:1px solid #dfe8d7;border-radius:7px;font-size:13px;color:#627a52;display:flex;gap:10px;align-items:flex-start;line-height:1.9}.notice.warn{background:#fcf4e9;color:#a4773d;border-color:#efdfc4}.notice svg{width:16px;height:16px;margin-top:3px}.draft-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.draft-card{padding:22px}.draft-card h3{margin:14px 0 7px}.draft-card p{font-size:13px;color:var(--muted);min-height:43px}.draft-card .btn{margin-top:20px}.wizard-head{display:flex;align-items:center;gap:18px;margin-bottom:20px}.wizard-head h1{font-size:24px}.steps{display:flex;align-items:center;gap:10px;font-size:13px;color:#8a9680;margin:19px 0}.step{display:flex;align-items:center;gap:6px}.step b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#e4eade;font-size:12px}.step.active{color:var(--green);font-weight:600}.step.active b{background:var(--green);color:white}.step-line{width:25px;height:1px;background:#dce5d3}.workspace{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start}.assistant-panel{padding:21px;position:sticky;top:16px;min-width:0}.assistant-heading{border-bottom:1px solid #edf0e8;padding-bottom:16px}.assistant-heading .assistant-icon{background:#e7efdf;color:#6d8e58;width:30px;height:30px;border-radius:9px;display:grid;place-items:center}.assistant-heading h3{font-size:13px}.assistant-heading p{font-size:12px;color:#8b9780;margin-top:3px}.bubble{background:#f4f7ef;border-radius:0 10px 10px 10px;padding:16px;margin:20px 0 13px;font-size:13px;line-height:1.9}.bubble strong{color:#2f6142}.bubble.user{background:#e9f1e7;margin-left:35px;border-radius:10px 0 10px 10px}.field-label{display:block;font-size:13px;color:#7f8d76;margin:15px 0 7px}.field{width:100%;border:1px solid #dce4d6;background:#fff;border-radius:6px;padding:11px;font-size:13px;color:var(--ink)}textarea.field{min-height:95px;resize:vertical}.field-error{color:#b15d4e;font-size:13px;margin-top:8px}.full{width:100%}.assistant-panel .btn{margin-top:12px}.progress-label{display:flex;justify-content:space-between;font-size:12px;color:#839077;margin:24px 0 8px}.progress{height:5px;background:#edf1e6;border-radius:3px;overflow:hidden}.progress>i{display:block;height:100%;background:#83a66c;transition:width .3s}.privacy{font-size:12px;line-height:1.8;color:#91a083;margin-top:17px;display:flex;gap:6px}.privacy svg{height:13px;width:13px}.paper-region{min-width:0;background:#eaf0e6;border:1px solid #dce4d7;border-radius:10px;overflow:hidden}.paper-toolbar{padding:14px 19px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#73826b;background:#f1f5ed;border-bottom:1px solid #dde5d6;gap:10px}.legend{display:flex;gap:11px;font-size:12px}.legend span{display:flex;gap:4px;align-items:center}.dot{width:6px;height:6px;border-radius:2px;background:#e7eee2}.dot.filled{background:#b7d3a5}.dot.empty{background:#ecd3a8}.paper-scroll{padding:25px;overflow:auto;max-height:720px}.paper{background:#fff;box-shadow:0 3px 14px #213d2112;padding:36px 30px;color:#303b2c;min-width:360px;min-height:570px}.paper-number{font-size:12px;color:#8c9585;margin-bottom:25px}.paper h2{text-align:center;font-family:serif;font-weight:700;font-size:24px;letter-spacing:4px;margin-bottom:30px}.paper-table{border-collapse:collapse;width:100%;font-size:13px}.paper-table th{border:1px solid #a4ada0;background:#f5f6f2;width:27%;padding:12px 9px;font-weight:500}.paper-table td{border:1px solid #a4ada0;padding:0;position:relative;min-height:40px;word-break:break-word}.paper-cell{padding:12px 10px;width:100%;text-align:left;font-size:13px;min-height:42px;white-space:pre-wrap;line-height:1.7}.paper-cell.auto{background:#edf1e9;color:#657a57}.paper-cell.filled{background:#f1f8ed;color:#315c22}.paper-cell.empty{background:#fffaf0;color:#b19a71}.paper-cell:hover{box-shadow:inset 0 0 0 2px #96b582}.cell-label{font-size:11px;opacity:.7;float:right;padding-left:4px}.paper-note{font-size:12px;line-height:2;margin:25px 0;text-align:center}.paper-sign{text-align:right;font-size:13px;line-height:2.5;margin:25px 0}.paper-source{border-top:1px solid #dce2d6;padding-top:12px;font-size:12px;color:#4f5c55;line-height:1.9}.form-table th{width:auto;text-align:center}.paper h3{font-size:14px;font-weight:600;margin:18px 0 8px}.paper-text{font-size:13px;line-height:2;margin:20px 0 6px;text-align:center}.paper-date{text-align:center;font-size:13px;margin:14px 0}.paper-to{text-align:right;font-size:14px;font-weight:600;margin:6px 0 18px}.paper-attach{padding:10px;font-size:13px}.paper-attach-note{font-size:12px;margin:10px 0 18px}.period{display:flex;align-items:center;gap:4px}.period .paper-cell{flex:1}.period.cert .paper-cell:first-child{flex:2.2}.fill-box{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.paper-footer{padding:14px 18px;border-top:1px solid #dce4d5;display:flex;align-items:center;gap:8px;justify-content:flex-end}.qa-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:22px}.qa-chat{padding:25px;min-height:560px;display:flex;flex-direction:column}.qa-chat .ask-bar{margin-top:auto;box-shadow:none}.qa-message{margin:20px 0 30px}.qa-message h3{margin-bottom:11px;font-size:19px;line-height:1.8}.qa-message p{font-size:13px;color:#788573}.qa-actions{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}.qa-query{padding:12px 17px;background:#edf3e7;align-self:flex-end;max-width:90%;border-radius:10px 0 10px 10px;font-size:13px;line-height:1.8;margin:12px 0 10px}.source-panel{padding:24px}.source-panel h3{font-size:16px;margin:15px 0 10px}.source-panel .quote{font-size:13px;line-height:2.1;padding:16px;background:#f4f7ef;border-radius:7px;margin:20px 0}.source-panel mark{background:#e1edc6;color:#48613a;padding:2px}.source-panel dl{font-size:13px;display:grid;grid-template-columns:70px 1fr;gap:12px}.source-panel dt{color:#8b9780}.source-panel dd{margin:0;color:#64745a}.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.suggestions button{border:1px solid #e1e7d9;border-radius:6px;padding:8px 11px;font-size:13px;color:#76856b}.empty-state{text-align:center;padding:65px 20px;color:#85917a;display:flex;align-items:center;flex-direction:column}.empty-state>svg{width:42px;height:42px;stroke-width:1.1;margin-bottom:18px}.empty-state h3{color:#4f6348;margin-bottom:10px}.empty-state p{font-size:13px}.empty-state .btn{margin-top:20px}.skeleton{height:90px;background:linear-gradient(90deg,#eff3ea,#f8faf4,#eff3ea);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;margin:15px 0}.spinner{width:20px;height:20px;border:2px solid #dce6d5;border-top-color:#4f7840;border-radius:50%;animation:spin 1s linear infinite;display:inline-block}.loading-wrap{padding:45px;text-align:center;color:#819374;font-size:13px}.loading-wrap p{margin-top:15px}@keyframes shimmer{to{background-position:-200% 0}}@keyframes spin{to{transform:rotate(360deg)}}.modal-overlay{position:fixed;inset:0;background:#142b2566;backdrop-filter:blur(3px);z-index:60;display:flex;align-items:center;justify-content:center;padding:25px}.modal{background:#fff;border-radius:14px;box-shadow:0 20px 100px #102b2930;max-width:620px;width:100%;max-height:90vh;overflow:auto;padding:28px}.modal.wide{max-width:800px}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:21px}.modal-head h2{font-size:20px}.modal .paper{border:1px solid var(--line);box-shadow:none}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}.setting-row{padding:16px 0;border-bottom:1px solid var(--line);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}.setting-row p{font-size:12px;color:#88977c;margin-top:3px}#toast{position:fixed;bottom:27px;left:calc(50% + 115px);transform:translateX(-50%) translateY(100px);background:#224d3f;color:#fff;border-radius:8px;padding:13px 20px;font-size:13px;box-shadow:0 6px 30px #183a3722;z-index:100;transition:transform .2s;max-width:85vw;text-align:center}#toast.visible{transform:translateX(-50%) translateY(0)}.mobile-menu{display:none}.form-cost{padding:10px 0;text-align:right;color:#5d754e;font-size:13px}.admin-note{margin-bottom:20px}.source-list{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.source-list .card{padding:24px}.source-list h3{margin:12px 0}.source-list p{font-size:13px;color:#89927f}.source-list .btn{margin-top:20px}.history-reason{background:#fcf1ed;color:#a57460;font-size:13px;line-height:1.8;padding:9px 12px;border-radius:5px;margin-top:8px}.attachment{border:1px dashed #bbcdb0;border-radius:7px;padding:16px;font-size:13px;color:#748c61;display:block;line-height:1.8}.attachment input{width:100%;margin-top:12px;font-size:12px}.detail-grid{display:grid;grid-template-columns:100px 1fr;font-size:13px;gap:13px;margin-top:20px}.detail-grid dt{color:#8a957f}.detail-grid dd{margin:0}.course-detail{padding:20px;background:#f3f6ed;border-radius:8px;font-size:13px;line-height:2}.mode-select{font-size:12px;padding:6px 8px;color:#7c8a71}.plain-title{font-size:13px;margin-bottom:8px;color:#829474}.disclaimer{font-size:12px;color:#839276;line-height:1.8;margin-top:12px}.back-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#8a987f;margin-bottom:15px}.back-link svg{width:13px}.review-check{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.9;margin-top:15px}.review-check input{margin-top:5px}.saved-label{color:#88997c;font-size:12px}.current-field{outline:2px solid #8fae78;outline-offset:-2px}
+@media(min-width:1500px){.content{padding-top:45px}.home-grid{gap:30px}.task-card{padding:30px}.rec-card{padding:25px}.summary-card{padding:28px}.rec-grid{gap:20px}.quick-card{padding-top:24px;padding-bottom:22px}}
+@media(max-width:1180px){.sidebar{width:190px;padding:28px 14px}.shell{margin-left:190px}.content{padding:28px}.topbar{padding:0 28px}.home-grid{gap:18px;grid-template-columns:1.5fr 1fr}.task-illustration{display:none}.workspace{grid-template-columns:295px minmax(0,1fr);gap:14px}.paper-scroll{padding:16px}.paper{padding:26px 20px}.legend{gap:6px}#toast{left:calc(50% + 95px)}}
+@media(max-width:950px){.home-grid{grid-template-columns:1fr}.summary-card{display:none}.rec-grid{gap:10px}.rec-card{padding:16px}.workspace{grid-template-columns:1fr}.assistant-panel{position:static}.paper-scroll{max-height:none}.qa-layout{grid-template-columns:1fr}.draft-grid{grid-template-columns:1fr 1fr}.profile-team{display:none}.task-illustration{display:grid}.topbar{gap:10px}}
+@media(max-width:700px){.sidebar{transform:translateX(-100%);transition:transform .2s;width:230px}.sidebar.open{transform:translateX(0);box-shadow:0 0 0 100vmax #0b281c55}.shell{margin-left:0}.topbar{height:62px;padding:0 17px;gap:7px}.mobile-menu{display:grid}.breadcrumb{font-size:13px}.profile-name{display:none}.topbar .tag{display:none}.content{padding:25px 19px}.intro h1{font-size:25px}.intro{align-items:start}.intro p{font-size:13px}.date-pill{display:none}.eyebrow{font-size:12px}.home-grid{gap:0}.task-card{padding:21px}.task-card h3{font-size:16px}.task-illustration{display:none}.task-bottom{flex-wrap:wrap;gap:17px}.quick-grid{gap:7px}.quick-card{font-size:12px;padding:16px 2px}.quick-icon{width:34px;height:34px}.rec-grid{grid-template-columns:1fr}.rec-card{padding:18px}.rec-top{margin-bottom:11px}.rec-reason{margin-top:11px}.section-head h2{font-size:16px}.footer{align-items:flex-start;line-height:1.8}.footer>span{max-width:65%}.ask-bar{padding:11px}.ask-bar input{font-size:13px}.draft-grid,.source-list{grid-template-columns:1fr}.page-title h1{font-size:24px}.paper-scroll{padding:10px}.paper{min-width:300px;padding:25px 18px}.paper h2{font-size:20px;letter-spacing:2px}.paper-toolbar{flex-wrap:wrap;padding:12px}.paper-footer{flex-wrap:wrap;padding:12px}.wizard-head{flex-wrap:wrap}.wizard-head h1{font-size:21px}.modal{padding:20px}.modal-overlay{padding:12px}.qa-chat{padding:19px;min-height:480px}.qa-message h3{font-size:17px}.summary-card{display:block;margin-top:23px}.summary-numbers{padding:16px 0}.summary-card .mini-row{padding:12px 0}.summary-card .mini-row:nth-last-child(1){display:none}#toast{left:50%}.search-field{min-width:150px;width:100%}.paper-table th{font-size:12px}.paper-cell{font-size:12px}.mode-select{max-width:100px}.steps{gap:5px;font-size:12px}.step-line{width:12px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{body{background:white}.sidebar,.topbar,.assistant-panel,.paper-toolbar,.paper-footer,.footer,.wizard-head,.steps,.notice,#toast,.modal-head,.modal-actions{display:none!important}.shell{margin:0}.content{padding:0}.workspace{display:block}.paper-region{border:0;background:white}.paper-scroll{padding:0;overflow:visible;max-height:none}.paper{box-shadow:none;min-width:0}.modal-overlay{position:static;display:block;padding:0;background:white}.modal{max-width:none;max-height:none;padding:0}.modal-overlay~*{display:none}.paper-cell{background:white!important}.cell-label{display:none}}
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:16px}.login-card{width:100%;max-width:380px;background:white;border:1px solid var(--line);border-radius:16px;padding:32px 28px;box-shadow:var(--shadow)}.login-card label{display:block;margin:12px 0 6px;font-weight:600}.login-card input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}.login-card input:focus{outline:2px solid var(--green);outline-offset:1px}.login-card .brand{color:var(--dark);padding:0;font-size:18px;font-weight:800}.login-card button[type="submit"]{margin-top:16px}.login-error{min-height:20px;color:#b3412f;font-size:13px;margin:12px 0}.approval-line{display:flex;align-items:center;gap:5px;font-size:12px;color:#97a293;white-space:nowrap}.approval-line i{width:10px;height:1px;background:#cfd8cb}.approval-line span{padding:3px 8px;border-radius:999px;background:#f1f3ef}.approval-line .done{background:#e4f1df;color:#2f6a3c}.approval-line .current{background:#e3eefc;color:#2758a6;font-weight:600}.approval-line .rejected{background:#fbe6e3;color:#b3412f;font-weight:600}.profile-card{padding:22px 24px;margin-bottom:26px}.profile-head{display:flex;align-items:center;gap:16px}.profile-avatar{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#e8eee2;color:#3f5f3f;font-weight:700;font-size:16px;flex:none}.profile-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 20px;margin:20px 0 0;padding:16px 0 0;border-top:1px solid var(--line)}.profile-info dt{font-size:12px;color:#7f8979}.profile-info dd{margin:3px 0 0;font-size:14px;font-weight:600}.profile-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:18px}.profile-stat{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:12px 14px;border-radius:12px;background:#f5f8f3;text-align:left}.profile-stat:hover{background:#edf4ed}.profile-stat strong{font-size:20px}.profile-stat span{font-size:12px;color:#6f7d74}@media(max-width:700px){.profile-head{flex-wrap:wrap}}
+.ehr-hero,.ehr-panel{padding:20px;margin-bottom:16px;min-width:0}
+.ehr-hero{border-top:4px solid #28634f}
+.ehr-identity{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.ehr-identity h2{margin:0;font-size:24px;letter-spacing:-.04em}
+.ehr-identity p{margin:3px 0 0;color:#52655e}
+.ehr-identity .btn{margin-left:auto}
+.ehr-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.ehr-metric{padding:13px 16px;text-align:left;color:inherit}
+button.ehr-metric:hover,button.ehr-metric:focus-visible{border-color:#8eae9e;background:#f5faf7}
+.ehr-metric span,.ehr-todo small{display:block;color:#53675d;font-size:12px}
+.ehr-metric strong{display:block;margin-top:3px;font-size:17px;overflow-wrap:anywhere}
+.ehr-home-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px}
+.ehr-todo{display:flex;align-items:center;justify-content:space-between;gap:9px;border-bottom:1px solid #e2e9e3;padding:11px 0}
+.ehr-todo:last-child{border:0}
+.ehr-links{display:flex;flex-wrap:wrap;gap:8px}
+.ehr-nav-divider{margin-top:16px}
+.ehr-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr));gap:12px;margin:14px 0}
+.ehr-review h3 small{font-size:11px;color:#53675d;font-weight:500}
+.ehr-fields label,.ehr-review label{display:grid;gap:5px;font-weight:600}
+.ehr-fields input,.ehr-review input{width:100%;min-width:0;padding:9px}
+.ehr-panel th,.ehr-panel td{white-space:normal;overflow-wrap:anywhere}
+.ehr-review{display:grid;align-items:start;gap:10px;border-top:1px solid #dde8e0;padding:12px 0}
+.ehr-review h3,.ehr-review p,.ehr-panel td p{margin:0}
+@media(max-width:820px){.ehr-home-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.ehr-metrics{gap:6px}.ehr-metric{padding:8px}.ehr-metric strong{font-size:14px}.ehr-hero,.ehr-panel{padding:14px}.ehr-identity .btn{margin-left:0}}
+
+
+.hr-card-identity{display:flex;align-items:center;gap:16px;padding:15px 18px;margin-bottom:16px}
+.hr-card-identity strong{font-size:18px}
+.hr-card-identity p{margin:3px 0 0;color:var(--muted)}
+.hr-photo{display:inline-grid;position:relative;place-items:center;flex:none;width:66px;height:82px;
+  overflow:hidden;border:1px solid #d6e1d9;border-radius:8px;background:#f3f7f4;color:#708079}
+.hr-photo-empty{display:grid;place-items:center}
+.hr-photo-empty svg{width:29px;height:29px}
+.hr-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hr-print-heading{display:flex;align-items:center;gap:12pt}
+@media print{#hr-print-sheet .hr-photo{width:38pt;height:49pt;border-color:#bbb}}
+.hr-page-heading{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px}
+#hr-print-sheet{display:none}
+@media print{
+  body.printing-hr-card{background:white;color:#111}
+  body.printing-hr-card > :not(#hr-print-sheet){display:none!important}
+  body.printing-hr-card > #hr-print-sheet{display:block!important;font-size:10pt;color:#111}
+  #hr-print-sheet header{border-bottom:2px solid #555;margin-bottom:12pt;padding-bottom:6pt}
+  #hr-print-sheet header h1{font-size:22pt;margin:2pt 0}
+  #hr-print-sheet header p{margin:0}
+  #hr-print-sheet section > h2{font-size:13pt;margin:12pt 0 5pt;break-after:avoid}
+  #hr-print-sheet .card{box-shadow:none;border:0;padding:0!important}
+  #hr-print-sheet .profile-info{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #hr-print-sheet .table-wrap{overflow:visible}
+  #hr-print-sheet table{min-width:0;table-layout:auto;width:100%;font-size:9pt}
+  #hr-print-sheet th,#hr-print-sheet td{padding:4pt;white-space:normal;overflow-wrap:anywhere;border:1px solid #ddd}
+  #hr-print-sheet tr{break-inside:avoid}
+  #hr-print-sheet .empty-state{padding:5pt;text-align:left}
+  #hr-print-sheet .empty-state svg{display:none}
+}
+
+.personal-details{padding:clamp(16px,2.5vw,28px);min-width:0}
+.personal-group + .personal-group{border-top:1px solid var(--line);margin-top:20px;padding-top:18px}
+.personal-group h3{font-size:15px;margin:0 0 12px}
+.personal-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 24px;margin:0}
+.personal-fields > div{min-width:0}
+.personal-fields dt{font-size:12px;color:var(--muted)}
+.personal-fields dd{margin:3px 0 0;line-height:1.55;font-size:14px;font-weight:600;white-space:normal;word-break:normal;overflow-wrap:anywhere}
+.personal-contact{grid-template-columns:repeat(2,minmax(0,1fr))}
+.personal-wide{grid-column:1/-1}
+@media screen and (max-width:800px){.personal-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.personal-contact{grid-template-columns:1fr}}
+@media screen and (max-width:480px){.personal-fields{grid-template-columns:1fr;gap:12px}}
+@media print{.personal-group{break-inside:avoid}.personal-fields{gap:4pt 12pt}.personal-group + .personal-group{margin-top:8pt;padding-top:6pt}}
+.hr-service{max-width:920px;margin-inline:auto}
+.hr-service-back{display:inline-flex;color:var(--muted);font-size:13px;margin:0 0 14px;text-decoration:none;background:none;border:0;cursor:pointer}
+.hr-service .page-title{margin-bottom:22px}
+.hr-service-form{padding:24px clamp(16px,3vw,32px);margin-bottom:30px}
+.hr-service-form .service-row{display:grid;grid-template-columns:minmax(90px,22%) minmax(0,1fr);align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #e8ece8;font-size:14px;font-weight:600}
+.service-row input{box-sizing:border-box;width:100%;max-width:520px;background:#fff;border:1px solid #bfcac2;border-radius:6px;padding:10px 12px;font:inherit;font-weight:400;color:inherit}
+.service-row input:focus-visible{outline:2px solid #487854;outline-offset:1px}
+.service-actions{display:flex;justify-content:flex-end;margin-top:18px}
+.hr-service-form .login-error:empty{display:none}
+.service-history h2{font-size:17px;margin:0 0 12px}
+.service-history .card{box-shadow:none}
+.service-history td p{margin:0}
+.service-empty{padding:18px 0;border-block:1px solid #dfe6df;color:var(--muted);font-size:14px}
+#certificate-preview iframe{display:block;width:100%;height:min(68vh,620px);margin-top:20px;border:1px solid #cbd4cd;border-radius:6px;background:white}
+#certificate-form:has(#certificate-preview iframe) > .service-actions{display:none}
+.hr-identity-actions{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
+.hr-card-print{background:none;border:0;color:var(--muted);cursor:pointer;font:inherit;font-size:13px;padding:5px}
+@media(max-width:680px){.hr-card-identity{flex-wrap:wrap}.hr-identity-actions{width:100%;margin:0;border-top:1px solid #e8ece8;padding-top:12px}.hr-service-form .service-row{grid-template-columns:1fr;gap:6px}.service-history .table-wrap{overflow-x:auto}}
+.hr-subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 18px}.hr-subtab{padding:7px 14px;border-radius:999px;background:#f1f4ef;color:#5f6b5c;font-size:13px}.hr-subtab:hover{background:#e6ece3}.hr-subtab.active{background:var(--green);color:white;font-weight:600}.ehr-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e2e9e3;font-size:13px}.ehr-row:last-of-type{border-bottom:0}.ehr-row span{color:#53675d;flex:none}.ehr-row strong{text-align:right;font-weight:600}.ehr-notice{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #e2e9e3;font-size:13px}.ehr-notice:last-child{border-bottom:0}.ehr-notice-title{flex:1;min-width:0}.ehr-notice time{color:#7f8979;flex:none;font-size:12px}.ehr-metric small{display:block;margin-top:3px;color:#6f7d74;font-size:12px}.hr-spouse{border:1px solid #e2e9e3;border-radius:12px;padding:14px 16px;margin:0 0 16px}.hr-spouse h3{margin:0 0 10px;font-size:14px}.ehr-todo .text-btn{flex:none;white-space:nowrap}.welfare-kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}@media(max-width:700px){.welfare-kinds{grid-template-columns:1fr}.welfare-layout{grid-template-columns:1fr!important}}.welfare-kind{text-align:left;padding:14px 16px;border:1px solid #e2e9e3;cursor:pointer}.welfare-kind strong{display:block;font-size:15px}.welfare-kind small{color:#6f7d74;font-size:12px}.welfare-kind.active{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset}.welfare-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}.welfare-layout .hr-service-form{margin-bottom:0}.service-row select{box-sizing:border-box;width:100%;max-width:520px;background:#fff;border:1px solid #bfcac2;border-radius:6px;padding:10px 12px;font:inherit;font-weight:400;color:inherit}.welfare-hint{display:block;margin-top:4px;font-weight:400;font-size:12px}.welfare-fees{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.welfare-fees label{font-size:12px;font-weight:500;color:#53675d}.welfare-checks{display:flex;flex-direction:column;gap:6px;font-weight:400}.welfare-checks label input{width:auto!important;margin-right:6px}.welfare-empty{padding:20px}.welfare-review{background:#fff;border:1px solid #e2e9e3;border-radius:12px;padding:16px 18px}.welfare-review.fail{border-color:#e7c4bd}.welfare-review.check{border-color:#ecd5bf}.welfare-review-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.welfare-review h3{margin:10px 0 4px;font-size:17px}.welfare-checks-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}.welfare-checks-list li{display:flex;gap:8px;line-height:1.5}.welfare-checks-list b{flex:none;width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;margin-top:1px}.welfare-checks-list .ok b{background:#eaf3e8;color:#4f7c43}.welfare-checks-list .warn b{background:#f9ede2;color:#aa683b}.welfare-checks-list .fail b{background:#f9ecea;color:#b16459}.welfare-checks-list .info b{background:#eef1ee;color:#6f7d74}.welfare-checks-list .info{color:#6f7d74}.welfare-basis{margin-top:10px;font-size:12px}.welfare-basis summary{cursor:pointer;color:#53675d}.welfare-basis div{margin-top:8px}.welfare-basis p{margin:2px 0 0;color:#53675d}.welfare-queue-item{border-top:1px solid #e2e9e3;padding:16px 0;display:flex;flex-direction:column;gap:10px}.welfare-queue-item:first-of-type{border-top:0}.welfare-reason{display:flex;flex-direction:column;gap:4px;font-size:13px;max-width:520px}.learn-summary{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:24px}@media(max-width:800px){.learn-summary{grid-template-columns:1fr}}.learn-goal,.learn-stat{padding:18px 20px}.learn-goal-head{display:flex;justify-content:space-between;font-size:13px;color:#53675d}.learn-goal strong{display:block;font-size:28px;margin:6px 0 10px}.learn-goal strong small{font-size:15px;color:#6f7d74;font-weight:500}.learn-bar{height:10px;border-radius:6px}.learn-goal p{margin:10px 0 0}.learn-stat{display:flex;flex-direction:column;gap:4px}.learn-stat span{font-size:13px;color:#53675d}.learn-stat strong{font-size:24px}.learn-table td{vertical-align:middle}.learn-rec{display:flex;flex-direction:column;gap:6px}.learn-rec h3{margin:8px 0 0}.learn-rec p{margin:0}.learn-why{margin-top:6px;padding:10px 12px;background:#f4f7f2;border-radius:8px;font-size:12px}.learn-why strong{display:flex;gap:5px;align-items:center;color:#4f7c43}.learn-why ul{margin:6px 0 0;padding-left:16px;color:#3f4f45}.learn-why li{margin:2px 0}.learn-rec-cta{margin-top:auto;padding-top:8px}.player-screen{display:flex;gap:14px;align-items:center;background:#20352b;color:#fff;border-radius:10px;padding:26px 20px;margin-bottom:14px}.player-screen>span{font-size:26px}.player-screen small{display:block;opacity:.75;margin-top:4px}</style></head><body><div id="app"></div><div id="toast" role="status" aria-live="polite"></div><div id="modal-root"></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script>'use strict';
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icons={home:'M3 10 12 3l9 7v11h-6v-7H9v7H3Z',chat:'M4 4h16v12H9l-5 4Z M8 8h8M8 12h5',file:'M6 3h8l4 4v14H6Z M14 3v5h4M9 12h6M9 16h6',folder:'M3 6h7l2 3h9v11H3Z',book:'M12 5v16M12 5C8 2 4 3 2 4v15c4-1 7 0 10 2 3-2 6-3 10-2V4c-2-1-6-2-10 1Z',admin:'M12 3 3 7v5c0 5 9 10 9 10s9-5 9-10V7Z M8 12l3 3 5-6',bell:'M5 17h14l-2-3V9a5 5 0 0 0-10 0v5ZM10 21h4',arrow:'M5 12h14M14 7l5 5-5 5',chevron:'m9 5 7 7-7 7',up:'M12 20V4m-6 6 6-6 6 6',back:'M19 12H5m5-5-5 5 5 5',check:'m5 12 4 4L19 6',certificate:'M7 3h10v12H7ZM10 15l-2 6 4-2 4 2-2-6M10 7h4M10 10h4',plane:'m3 10 7 2 7-8 3 1-6 9 1 6-3 1-3-6-6-2Z',calendar:'M4 5h16v16H4ZM8 3v5M16 3v5M4 10h16M8 14h2M14 14h2',spark:'m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z',clock:'M12 8v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',lock:'M6 10h12v11H6ZM8 10V6a4 4 0 0 1 8 0v4M12 14v3',help:'M9 8a3 3 0 1 1 4 3c-1 1-1 1-1 3M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',close:'m6 6 12 12M6 18 18 6',download:'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',eye:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12ZM15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0',warning:'m12 3 10 18H2ZM12 9v5M12 17h.01',menu:'M4 6h16M4 12h16M4 18h16',logout:'M9 3H3v18h6M10 12h11m-4-4 4 4-4 4',search:'M16 16l5 5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',refresh:'M20 7V2m0 5h-5M4 17v5m0-5h5M20 7a9 9 0 0 0-16 0M4 17a9 9 0 0 0 16 0',upload:'M12 16V3m-5 5 5-5 5 5M4 16v5h16v-5',leaf:'M19 3C8 2 2 9 5 16s15 5 14-13ZM5 20 15 9',user:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M4 21c0-4 4-6 8-6s8 2 8 6'};
+const icon=n=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${icons[n]||icons.file}"/></svg>`;
+const btn=(label,action,cls='',ic='')=>`<button class="btn ${cls}" data-action="${action}">${ic?icon(ic):''}${label}</button>`;
+const ref=(key='cert')=>`<button class="reference" data-ref="${key}">${icon('book')}${esc(rules[key].short)} · ${esc(rules[key].page)} ${icon('chevron')}</button>`;
+const rules={cert:{name:'인사관리지침',clause:'별표 8 · 자격·면허증 소지가점표',short:'인사관리지침 별표 8',page:'p.74–75',revised:'2018.12.28 (지침 개정일)',summary:'별표 8에 직군별 필수·일반 자격증과 등급별 가점이 정해져 있어요. 수당 대상 여부와 지급액은 이 지침에 없어서 담당 부서 확인이 필요해요.',highlight:'자격·면허증 소지가점표 (별표 8)'},training:{name:'인사관리규정',clause:'제64조 · 위탁교육',short:'인사관리규정 제64조',page:'p.12',revised:'2009.12.16 (조항 개정일)',summary:'위탁교육은 국내와 해외로 나뉘고, 교육비 등 인력개발 비용은 회사가 부담해요. 학비 지원형은 교육비만 지원하고 근태는 휴직으로 처리해요.',highlight:'국내·외 위탁교육에 소요되는 교육비 등 인력개발 제 비용은 공사가 부담한다.'},service:{name:'인사관리규정',clause:'제67조 · 재직의무',short:'인사관리규정 제67조',page:'p.13',revised:'2023.8.9 (조항 개정일)',summary:'해외 1개월 이상 또는 국내 6개월 이상 위탁교육을 받으면 교육기간의 3배만큼 재직해야 해요. 최소 기간이 있어서 1인당 교육비가 US$100,000 이하면 1년, 넘으면 2년이에요. 해외 2개월 교육은 3배인 6개월보다 최소 기간이 길어서 1년이에요. 다 채우지 않고 퇴직하면 남은 기간만큼 교육비를 돌려줘야 해요.',highlight:'교육기간의 3배에 해당하는 기간의 재직의무를 진다. (최소 1년, 교육비 US$100,000 초과 시 2년)'},mandatory:{name:'취업규칙',clause:'제93조 · 직장 내 괴롭힘 예방교육',short:'취업규칙 제93조',page:'p.12',revised:'2019.4.16 (조항 신설일)',summary:'직장 내 괴롭힘 예방교육은 1년에 1회 이상, 1회에 1시간 이상 받아야 해요.',highlight:'1년에 1회 이상, 1회에 1시간 이상 실시한다.'},sexual:{name:'성희롱예방지침',clause:'제8조 · 성희롱·성폭력 예방교육',short:'성희롱예방지침 제8조',page:'p.7',revised:'지침 현행본',summary:'성희롱·성폭력 예방교육은 연 1회 이상 실시해야 해요. 관련 법률, 처리 절차, 피해자 구제 절차, 제재 조치를 포함해요.',highlight:'직장 내 성희롱·성폭력 예방을 위한 교육을 연 1회 이상 실시하여야 하며'},promotion:{name:'인사관리규정',clause:'제35조의3 · 2직급 이상에의 승진시 필수교육 이수',short:'인사관리규정 제35조의3',page:'p.9',revised:'2024.7.31 (조항 개정일)',summary:'2직급 이상으로 승진하려면 직급별 필수교육을 이수해야 해요. 직급별 필수교육은 교육훈련지침에서 정하고, 특별승진은 1년까지 유예할 수 있어요.',highlight:'2직급 이상에의 승진은 각 직급별 필수교육을 이수한 자를 대상으로 함을 원칙으로 하며'},leave:{name:'취업규칙',clause:'제29조 · 연차유급휴가',short:'취업규칙 제29조',page:'p.4',revised:'2026.1.26 (조항 개정일)',summary:'1년간 80% 이상 출근하면 15일을 받고, 3년 이상 근속하면 2년마다 1일씩 더해 최대 25일이에요. 30분 단위로 나눠 쓸 수 있어요(교대근무자는 반일 단위).',highlight:'연차유급휴가는 직원의 자유의사에 따라 30분 단위로 분할하여 사용할 수 있다.'}};
+const f=(key,label,type='text',auto=false)=>({key,label,type,auto});
+const identity=[f('dept','소속','text',true),f('position','직위','text',true),f('grade','직급','text',true),f('name','성명','text',true)];
+const trainingFields=[f('country','교육국가'),f('institution','교육기관'),f('course','교육과정'),f('contents','주요 내용','textarea'),f('start','교육 시작일','date'),f('end','교육 종료일','date'),f('tuition','수강료 (원)','number'),f('books','교재비 (원)','number'),f('travel','여비 (원)','number'),f('support','지원 요청액 (원)','number')];
+const forms={cert:{title:'기술정보수당 신고서',short:'자격증 등록',icon:'certificate',rule:'cert',desc:'새로 취득한 자격증을 등록해요.',fields:[...identity,f('cert','자격증 종목'),f('level','자격증 등급'),f('acquired','취득일자','date'),f('reason','신고사유','textarea'),f('attachment','자격증 사본','file')]},training:{title:'외부교육 신청서',short:'외부교육 신청',icon:'plane',rule:'training',desc:'교육 정보부터 비용까지 함께 준비해요.',fields:[...identity,...trainingFields]},recommendation:{title:'추천서',short:'추천서',icon:'file',rule:'training',desc:'부서장이 작성하는 서류예요.',fields:[...identity,f('birth','생년월일','text',true),f('institution','연수기관'),f('field','연수분야'),f('purpose','연수목적'),f('start','시작일','date'),f('end','종료일','date'),f('recommend','추천사유','textarea')]},pledge:{title:'서약서',short:'서약서',icon:'file',rule:'service',desc:'교육 정보와 의무 복무 기간을 확인해요.',fields:[...identity,f('birth','생년월일','text',true),f('country','교육국'),f('institution','교육기관'),f('course','교육과정'),f('start','시작일','date'),f('end','종료일','date'),f('service','의무 복무 기간')]},report:{title:'교육 결과보고서',short:'교육 결과 보고',icon:'file',rule:'training',desc:'교육의 내용과 성과를 정리해요.',fields:[...identity,f('subject','교육과제'),f('start','교육 시작일','date'),f('end','교육 종료일','date'),f('institution','교육기관'),f('contents','주요 내용','textarea'),f('effects','교육효과','textarea'),f('suggestion','건의사항','textarea')]},meeting:{title:'회의록',short:'회의록',icon:'file',rule:null,desc:'회의 메모나 녹취록을 붙여 넣으면 회의록과 요약을 만들어요.',fields:[f('dept','작성 부서','text',true),f('name','작성자','text',true),f('title','회의명'),f('date','회의 날짜','date'),f('time','시간'),f('place','장소'),f('attendees','참석자'),f('agenda','안건','textarea'),f('discussion','논의 내용','textarea'),f('decisions','결정 사항','textarea'),f('actions','후속 조치','textarea'),f('summary','요약','textarea')]},leave:{title:'연차 사용계획서',short:'연차 사용계획',icon:'calendar',rule:'leave',desc:'남은 연차와 사용 예정일을 확인해요.',fields:[...identity,f('balance','잔여 연차','number',true),f('dates','사용 예정일 목록','dates')]}};
+let me={name:'김하늘',dept:'정보통신처',position:'대리',grade:'4직급',birth:'1994-03-15',role:'member'};const shortName=()=>me.name.length>2?me.name.slice(-2):me.name;const defaultValues=()=>({dept:me.dept,position:me.position,grade:me.grade,name:me.name,birth:me.birth,balance:'8'});
+const sampleValues={cert:{cert:'정보처리',level:'기사',acquired:'2026-11-02',reason:'정보처리기사 신규 취득에 따른 자격 등록을 신청해요.',attachment:'정보처리기사_사본_예시.pdf'},training:{country:'대한민국',institution:'K-LINK 러닝센터',course:'실무에 바로 쓰는 데이터 분석',contents:'업무 데이터 분석과 보고서 자동화를 학습해요.',start:'2026-12-07',end:'2026-12-09',tuition:'300000',books:'20000',travel:'0',support:'320000'},report:{subject:'데이터 분석 실무 교육',start:'2026-10-19',end:'2026-10-21',institution:'K-LINK 러닝센터',contents:'데이터 전처리와 시각화를 학습했어요.',effects:'정기 보고서 작성 시간을 줄일 수 있어요.',suggestion:'후속 심화교육을 제안해요.'},leave:{dates:'2026-12-04, 2026-12-11, 2026-12-18'},meeting:{title:'2027년 교육 예산 조정 회의',date:'2026-11-18',time:'14:00~15:00',place:'본사 3층 회의실',attendees:'박지훈 팀장, 김하늘 대리, 이수민 주임',agenda:'1. 2027년 외부교육 예산 조정\n2. 필수교육 일정 확정',discussion:'- 외부교육 예산을 전년 대비 10% 줄이는 방안을 검토함.\n- 필수교육은 온라인으로 진행하는 데 의견을 모음.',decisions:'- 외부교육 예산을 10% 감액함.\n- 직장 내 괴롭힘 예방교육을 12월 중 온라인으로 실시함.',actions:'- 교육기관 견적 재요청 (담당: 김하늘, 기한: 2026-11-27)\n- 필수교육 일정 공지 (담당: 이수민, 기한: 확인 필요)',summary:'- 2027년 외부교육 예산을 10% 줄이기로 함.\n- 필수교육은 12월 중 온라인으로 실시함.\n- 견적 재요청과 일정 공지를 후속 조치로 정함.'},pledge:{country:'싱가포르',institution:'K-LINK 해외연수원',course:'정보통신 기술 연수',start:'2026-12-01',end:'2027-01-31',service:'1년 (교육기간 약 2.1개월 × 3 = 7개월, 최소 1년 적용)'}};
+
+const seedRecords=()=>[{id:'seed-cert',type:'cert',title:'기술정보수당 신고서',status:'작성 중',date:'2026.11.13',values:{...defaultValues(),cert:'정보처리',level:'기사'},step:0},{id:'seed-training',type:'training',title:'외부교육 신청서',status:'제출됨',date:'2026.11.11',values:{...defaultValues(),...sampleValues.training},step:0,docs:{recommendation:{...defaultValues(),institution:sampleValues.training.institution,field:'데이터 분석',purpose:'직무 역량 향상',start:sampleValues.training.start,end:sampleValues.training.end,recommend:'직무 연관성이 높아 추천해요.'},pledge:{...defaultValues(),...sampleValues.training,service:'담당 부서 확인 필요'}}},{id:'seed-report',type:'report',title:'교육 결과보고서',status:'반려됨',date:'2026.11.10',reason:'교육 효과에 실제 업무 적용 계획을 추가해 주세요.',values:{...defaultValues(),...sampleValues.report},step:0},{id:'seed-leave',type:'leave',title:'연차 사용계획서',status:'승인됨',date:'2026.11.06',values:{...defaultValues(),...sampleValues.leave},step:0}];
+let storageKey='klink-demo-v1';function readDrafts(){let saved;try{saved=JSON.parse(localStorage.getItem(storageKey))}catch{}return Array.isArray(saved?.records)?saved:{records:seedRecords(),templateVersion:{},customFields:{}}}let db=readDrafts();
+for(const r of db.records){if(r.status!=='작성 중'&&!r.snapshots){r.snapshots={};for(const t of [r.type,...Object.keys(r.docs||{})])r.snapshots[t]={fields:forms[t].fields,version:'1.0'}}}
+let page='home',mode='normal',record=null,step=0,activeField=null,fieldError='',qa={query:'',phase:'idle',rule:'cert'},qaTimer=null,filter='전체',search='',adminTab='submissions',adminType='전체',adminStatus='전체',adminDept='전체',mobile=false,modalReturn=null;
+const today=()=>new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'}).replaceAll('-','.');
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify(db));return true}catch{toast('브라우저 저장 공간을 사용할 수 없어요. 창을 닫으면 변경 내용이 사라져요.');return false}}
+function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').classList.remove('visible'),3500)}
+function badge(s){return `<span class="tag ${{'작성 중':'','제출됨':'blue','승인됨':'green','반려됨':'red','확인 필요':'orange'}[s]||''}">${esc(s)}</span>`}
+function navigate(p){ownChanges=null;page=p;mode='normal';mobile=false;filter='전체';search='';if(p!=='qa'){clearTimeout(qaTimer);if(['searching','generating'].includes(qa.phase))qa.phase='stopped'}location.hash=p;render();refreshHrCard(p);window.scrollTo(0,0)}
+function render(){if(page!=='requests')ownChanges=null;const nav=[['home','home','인사 홈'],['card','user','나의 인사카드'],
+    ['education','certificate','교육'],['documents','file','서류 작성'],['welfare','leaf','복리후생 신청'],['requests','folder','신청 현황'],['qa','chat','규정 물어보기'],['rules','book','사내 규정']];$('#app').innerHTML=`<aside class="sidebar ${mobile?'open':''}"><button class="brand flex" data-nav="home"><span class="brand-mark"><i></i><i></i><i></i><i></i></span>K-LINK</button><div class="brand-caption">인사 포털</div><div class="nav-label">임직원 서비스</div><nav aria-label="주 메뉴">${nav.map(([p,ic,t])=>`${p==='documents'?'<div class="nav-label ehr-nav-divider">업무 지원</div>':''}<button class="nav-btn ${page===p||(p==='documents'&&page==='editor')?'active':''}" data-nav="${p}" ${page===p?'aria-current="page"':''}>${icon(ic)}${t}${p==='requests'?`<span class="nav-count">${db.records.filter(r=>r.status!=='승인됨').length}</span>`:''}</button>`).join('')}</nav>${me.role==='admin'?'<div class="nav-divider"></div><div class="nav-label">인사 관리</div>':''}
+    ${hrAdmin.allowed?`<button class="nav-btn ${page==='hr'?'active':''}" data-nav="hr">${icon('user')}직원 관리</button>`:''}
+    ${me.role==='admin'?`<button class="nav-btn ${page==='review'?'active':''}" data-nav="review">${icon('file')}인사정보 변경 심사</button>`:''}
+    ${me.role==='admin'?`<button class="nav-btn ${page==='welfare-review'?'active':''}" data-nav="welfare-review">${icon('leaf')}복리후생 심사</button>`:''}
+    ${me.role==='admin'?`<button class="nav-btn ${page==='admin'?'active':''}" data-nav="admin">${icon('admin')}신청 관리</button>`:''}<div class="side-help">${icon('leaf')}<p>규정 확인부터 서류 작성까지<br>한곳에서 끝내세요.</p></div><div class="side-foot">K-LINK 업무 어시스턴트 © 2026</div></aside><div class="shell"><header class="topbar"><button class="icon-btn mobile-menu" data-action="menu" aria-label="메뉴 열기">${icon('menu')}</button><span class="breadcrumb">임직원 포털 <span style="padding:0 10px;color:#bbc5b6">/</span> ${({home:'인사 홈',employment:'재직증명서 발급',hr:'직원 관리',contact:'인사정보 변경',review:'인사정보 변경 심사','welfare-review':'복리후생 심사',welfare:'복리후생 신청',card:'나의 인사카드',education:'교육',qa:'규정 물어보기',documents:'서류 작성',editor:'서류 작성',requests:'신청 현황',admin:'관리자',rules:'사내 규정'})[page]}</span><div class="spacer"></div><button class="icon-btn notification" data-action="notifications" aria-label="알림 보기">${icon('bell')}</button><div style="height:24px;width:1px;background:#e9ede5;margin:0 5px"></div><div class="avatar">${page==='admin'?'HR':esc(shortName())}</div><div><div class="profile-name">${page==='admin'?'인사 담당자':esc(me.name)+' 님'}</div><div class="profile-team">${page==='admin'?'제출 서류만 확인해요':esc([me.dept,me.position].filter(Boolean).join(' · '))}</div></div>${auth.token?`<button class="text-btn" data-action="logout" style="margin-left:8px">로그아웃</button>`:''}</header><main class="content" id="main">${mode==='normal'?({home:home,employment:certificatePage,card:hrCard,education:educationPage,documents:documents,editor:editor,requests:requests,qa:question,admin:admin,hr:employeeDirectory,contact:contactPage,review:reviewPage,welfare:welfarePage,'welfare-review':welfareReviewPage,rules:ruleList}[page]||home)():stateView()}<footer class="footer"><span>${icon('lock').replace('<svg','<svg style="width:10px;height:10px;vertical-align:middle"')} 사내 규정 기반 업무 어시스턴트</span>${devMode()?`<div class="flex"><button data-action="reset-confirm">예시 데이터 초기화</button><select class="mode-select" aria-label="화면 상태 미리보기" id="state-select"><option value="normal" ${mode==='normal'?'selected':''}>기본 상태</option><option value="empty" ${mode==='empty'?'selected':''}>빈 상태</option><option value="loading" ${mode==='loading'?'selected':''}>로딩 상태</option><option value="error" ${mode==='error'?'selected':''}>오류 상태</option></select></div>`:''}</footer></main></div>`;bind();bindHrPage();}
+function home(){return employeeHome()}function devMode(){return new URLSearchParams(location.search).has('dev')}
+
+function dotDate(d){return String(d||'').replaceAll('-','.')}function todos(){const t=me.training;if(!t)return [];if(!t.has_history)return [{code:'unknown',title:'교육 이수 이력 확인 필요'}];return t.items.filter(i=>i.status==='missing')}function dday(due){const d=Math.ceil((new Date(due+'T23:59:59+09:00')-Date.now())/86400000);return d>=0?'D-'+d:'기한 지남'}let hrTab='basic';function hrTable(heads,rows,emptyTitle='등록된 기록이 없어요'){return rows.length?`<div class="card table-wrap"><table class="data-table"><thead><tr>${heads.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:empty(emptyTitle,'기록이 빠졌다면 인사팀에 확인해 주세요.')}function trainingTable(list){return hrTable(['과정','구분','기간','시간'],list.map(e=>[`<strong>${esc(e.title)}</strong>${e.institution?`<div class="small muted">${esc(e.institution)}</div>`:''}`,`<span class="tag">${esc(e.category||'—')}</span>`,e.start&&e.start!==e.completed_on?`${dotDate(e.start)} ~ ${dotDate(e.completed_on)}`:dotDate(e.completed_on),(e.hours??'—')+'시간']),'교육 이력이 없어요')}function ageOf(d){if(!d)return '';const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a}function since(d){if(!d)return '';const s=new Date(d),n=new Date();let m=(n.getFullYear()-s.getFullYear())*12+n.getMonth()-s.getMonth();if(n.getDate()<s.getDate())m--;return m<0?'':m>=12?`${Math.floor(m/12)}년 ${m%12}개월`:`${m}개월`}function lastPromotion(h){return (h?.appointments||[]).find(a=>/승진/.test(a.type))}function hrDl(rows){return `<div class="card" style="padding:22px 24px"><dl class="profile-info" style="margin:0;padding:0;border:0">${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v||'—')}</dd></div>`).join('')}</dl></div>`}function hrSection(title,html){return `<div class="section-head" style="margin-top:22px"><h2 style="font-size:16px">${title}</h2></div>${html}`}const HR_CARD_TABS = [
+  ['basic','인적사항'],['family','가족사항'],['military','병역'],['appoint','발령·승진'],['leaves','휴직·휴가'],['academic','학력'],
+  ['career','경력'],['certs','자격·어학'],['trainings','교육'],['awards','상벌·평정'],
+  ['travel','해외출장'],['projects','프로젝트'],
+];
+
+const HR_CARD_GROUPS = [['기본정보',['basic','family','academic','military']],['인사이력',['appoint','leaves','career','travel','projects']],['역량·평가',['certs','trainings','awards']]];function hrTabsNav(){const group=HR_CARD_GROUPS.find(([,keys])=>keys.includes(hrTab))||HR_CARD_GROUPS[0],title=key=>(HR_CARD_TABS.find(([k])=>k===key)||[,key])[1];return `<div class="tabs" role="tablist">${HR_CARD_GROUPS.map(([name,keys])=>`<button class="tab ${group[0]===name?'active':''}" role="tab" aria-selected="${group[0]===name}" data-action="hrtab:${keys[0]}">${name}</button>`).join('')}</div><div class="hr-subtabs">${group[1].map(key=>`<button class="hr-subtab ${hrTab===key?'active':''}" aria-pressed="${hrTab===key}" data-action="hrtab:${key}">${title(key)}</button>`).join('')}</div>`}function spouseCard(sp){if(!sp)return '';const yn=(v,y,n)=>v==null?'':(v?y:n);return `<section class="hr-spouse"><h3>배우자</h3>${hrDl([['성명',sp.name],['생년월일',sp.birth_date?`${dotDate(sp.birth_date)} (만 ${ageOf(sp.birth_date)}세)`:''],['혼인일',sp.married_on?dotDate(sp.married_on):''],['최종학력',sp.education],['직업',sp.occupation],['근무처',sp.workplace],['연락처',sp.phone],['동거 여부',yn(sp.lives_together,'동거','별거')],['사내 부부',yn(sp.same_company,'예','아니요')],['건강보험 피부양자',yn(sp.health_insurance_dependent,'예','아니요')],['가족수당',yn(sp.dependent,'대상','대상 아님')]])}</section>`}
+function historyPeriod(record) {
+  return esc([dotDate(record.start_on), dotDate(record.end_on)].filter(Boolean).join(' ~ ') || '—');
+}
+
+function gradeAndStep(grade, payStep) {
+  const rank = String(grade ?? '').trim();
+  const step = String(payStep ?? '').trim();
+  if (!rank || !step) return rank || step;
+  // 기존 인사기록에는 직급과 호봉이 한 값에 함께 저장되기도 한다.
+  const suffix = step.startsWith(rank) ? step.slice(rank.length) : step;
+  return [rank, suffix.replace(/^[\s·]+/, '')].filter(Boolean).join(' · ');
+}
+
+function personalDetails(b, p) {
+  const groups = [
+    ['기본 인적정보', [
+      ['성명', [b.name, p.name_hanja && `(${p.name_hanja})`].filter(Boolean).join(' ')],
+      ['생년월일', b.birth_date && `${dotDate(b.birth_date)} (만 ${ageOf(b.birth_date)}세)`],
+      ['성별', p.gender]
+    ]],
+    ['재직 정보', [
+      ['사번', b.employee_no], ['소속', b.department], ['직위', b.position],
+      ['직급·호봉', gradeAndStep(b.grade, p.pay_step)], ['직종', b.job_type],
+      ['고용형태', p.employment_type], ['입사일', b.hired_on && dotDate(b.hired_on) + serviceYears(b.hired_on)]
+    ]],
+    ['연락처', [
+      ['휴대전화', p.phone], ['비상연락처', p.emergency_contact],
+      ['이메일', p.email, true], ['주소', p.address, true]
+    ]]
+  ];
+  return `<div class="card personal-details">${groups.map(([title, fields]) =>
+    `<section class="personal-group"><h3>${title}</h3><dl class="personal-fields ${title === '연락처' ? 'personal-contact' : ''}">
+      ${fields.map(([label, value, wide]) =>
+        `<div${wide ? ' class="personal-wide"' : ''}><dt>${label}</dt><dd>${esc(value || '—')}</dd></div>`
+      ).join('')}</dl></section>`
+  ).join('')}</div>`;
+}
+
+function hrCardContent(h, tab) {
+  const b = h.basic, p = h.personal || {};
+  let body;if(tab==='basic')body=personalDetails(b, p);else if(tab==='family'){const dep=h.family.filter(f=>f.dependent).length;body=`<p class="small muted" style="margin:0 0 12px">가족 ${h.family.length}명 · 부양가족 ${dep}명 · 가족수당 대상 ${dep}명</p>`+spouseCard(h.family.find(f=>f.relation==='배우자'))+hrTable(['관계','성명','생년월일','동거','부양','비고'],h.family.map(f=>[esc(f.relation),`<strong>${esc(f.name)}</strong>`,`${dotDate(f.birth_date)} (만 ${ageOf(f.birth_date)}세)`,f.lives_together?'동거':'별거',f.dependent?'<span class="tag green">부양</span>':'—',esc(f.note||'')]),'등록된 가족이 없어요')+`<div style="margin-top:14px">${btn('가족사항 변경 신청','family-change','','file')}</div>`}else if(tab==='appoint'){const lp=lastPromotion(h);body=(lp?`<p class="small muted" style="margin:0 0 12px">현 직급(${esc(lp.grade)}) 승진 ${dotDate(lp.date)} · ${since(lp.date)} 경과 · 입사 후 ${since(b.hired_on)}</p>`:'')+hrTable(['발령일','구분','부서','직위·직급','비고'],h.appointments.map(a=>[dotDate(a.date),`<span class="tag ${/승진/.test(a.type)?'green':/입사|임용/.test(a.type)?'blue':''}">${esc(a.type)}</span>`,esc(a.dept),`${esc(a.position)} · ${esc(a.grade)}`,esc(a.note||'')]),'발령 이력이 없어요')}else if(tab==='academic')body=hrTable(['학교','전공','학위','졸업일'],h.academic.map(a=>[esc(a.school),esc(a.major||'—'),esc(a.degree),dotDate(a.graduated_on)]));
+  else if(tab==='military'){const m=h.military||{};body=hrDl([['병역 구분',m.status],['군별',m.branch],['계급',m.rank],['복무기간',m.period]])}
+  else if(tab==='career')body=hrTable(['기간','부서','담당 업무','직위'],h.career.map(c=>[`${dotDate(c.start)} ~ ${c.end?dotDate(c.end):'현재'}`,esc(c.dept),esc(c.role),esc(c.position)]));else if(tab==='certs')body=hrTable(['자격증','발급기관','취득일','기술정보수당'],h.certificates.map(c=>[`<strong>${esc(c.name)}</strong>`,esc(c.issuer),dotDate(c.acquired_on),`<span class="tag ${c.allowance==='반영'?'green':''}">${esc(c.allowance)}</span>`]),'등록된 자격증이 없어요')+`<div style="margin-top:14px">${btn('새 자격증 등록','start:cert','primary','certificate')}</div>`+hrSection('어학',hrTable(['시험','점수·등급','응시일','유효기간'],(h.languages||[]).map(l=>[esc(l.test),`<strong>${esc(l.score)}</strong>`,dotDate(l.taken_on),dotDate(l.valid_until)]),'등록된 어학 성적이 없어요'));else if(tab==='awards')body=hrSection('상벌',hrTable(['일자','구분','내용','사유'],(h.awards||[]).map(a=>[dotDate(a.date),`<span class="tag ${a.type==='포상'?'green':'red'}">${esc(a.type)}</span>`,esc(a.title),esc(a.reason)]),'상벌 기록이 없어요'))+hrSection('근무성적평정',hrTable(['연도','등급','비고'],(h.evaluations||[]).map(e=>[e.year,`<strong>${esc(e.grade)}</strong>`,esc(e.note||'')]),'평정 기록이 없어요'));
+  else if(tab==='leaves')body=hrTable(['기간','구분','비고'],(h.leaves||[]).map(l=>[`${dotDate(l.start)} ~ ${dotDate(l.end)}`,esc(l.type),esc(l.note||'')]),'휴직·휴가 기록이 없어요');else if(tab==='travel') body=hrTable(
+    ['출장 기간','국가','도시','출장 목적'],
+    (h.overseas_trips || []).map(trip => [historyPeriod(trip),esc(trip.country || '—'),
+      esc(trip.city || '—'),esc(trip.purpose || '—')]),'표시할 해외출장 이력이 없어요');
+  else if(tab==='projects') body=hrTable(
+    ['프로젝트명','참여 기간','역할','상태','주요 업무'],
+    (h.projects || []).map(project => [esc(project.name || '—'),historyPeriod(project),
+      esc(project.role || '—'),esc(project.status || '—'),esc(project.description || '—')]),
+    '표시할 프로젝트 이력이 없어요');
+  else body=trainingTable(h.trainings);
+  return body;
+}
+
+function employeePhoto(history) {
+  let photoUrl = '';
+  if (typeof history?.photo_url === 'string' && history.photo_url.trim()) {
+    try {
+      const photo = new URL(history.photo_url, location.origin);
+      if (photo.protocol === 'https:' || photo.origin === location.origin) photoUrl = photo.href;
+    } catch {}
+  }
+  return `<span class="hr-photo" aria-label="직원 사진">
+    <span class="hr-photo-empty" aria-hidden="true">${icon('user')}</span>
+    ${photoUrl ? `<img src="${esc(photoUrl)}" alt="직원 사진" referrerpolicy="no-referrer"
+      onerror="this.remove()">` : ''}</span>`;
+}
+
+function hrCard() {
+  const h = me.hr;
+  if (!h) return `<div class="page-title"><h1>나의 인사카드</h1></div>
+    ${empty('인사 정보를 불러오지 못했어요','잠시 후 다시 시도해 주세요.')}`;
+  return `<div class="page-title hr-page-heading">
+    <div><h1>나의 인사카드</h1><p>인사기록카드에 등록된 내 정보예요.</p></div>
+    <button class="hr-card-print" type="button" data-action="print-hr-card">인사카드 인쇄</button></div>
+    <div class="card hr-card-identity">${employeePhoto(h)}
+      <div><strong>${esc(h.basic.name || '')}</strong>
+      <p>${esc([h.basic.employee_no, h.basic.department, h.basic.position].filter(Boolean).join(' · '))}</p></div>
+      <div class="hr-identity-actions"><button class="btn" data-nav="contact">인사정보 변경 신청</button>
+      <button class="btn" data-nav="employment">재직증명서 발급</button></div>
+    </div>
+    ${h.has_history?'':`<div class="notice warn" style="margin-bottom:18px">${icon('warning')}조회할 상세 인사기록이 없어요.</div>`}
+    ${hrTabsNav()}
+    ${hrCardContent(h, hrTab)}
+    <p class="small muted" style="margin-top:14px">사원 기본정보는 인사 DB에서 읽어요. 연결되지 않은 상세 이력은 시연용 기록이 있거나 빈 상태로 표시돼요.</p>`;
+}
+
+function printHrCard() {
+  const h = me.hr;
+  if (!h) return;
+  $('#hr-print-sheet')?.remove();
+  const sheet = document.createElement('article');
+  sheet.id = 'hr-print-sheet';
+  sheet.hidden = true;
+  sheet.innerHTML = `<header class="hr-print-heading">
+    ${employeePhoto(h)}<div><p>K-LINK</p><h1>인사기록카드</h1>
+    <p>${esc(h.basic.name || '')} · ${esc(h.basic.employee_no || '')} · ${dotDate(hrAdmin.asOf)} 기준</p></div></header>
+    ${HR_CARD_TABS.map(([key, title]) => `<section><h2>${title}</h2>${hrCardContent(h,key)}</section>`).join('')}`;
+  sheet.querySelectorAll('button').forEach(button => button.remove());
+  document.body.append(sheet);
+  const clear = () => {
+    sheet.remove();
+    document.body.classList.remove('printing-hr-card');
+  };
+  document.body.classList.add('printing-hr-card');
+  window.addEventListener('afterprint', clear, {once:true});
+  window.print();
+}
+function serviceYears(hiredOn) {
+  const duration = since(hiredOn);
+  return duration ? ` (${duration} 근속)` : '';
+}
+
+let learning = null
+
+function educationPage() {
+  const L = learning
+  if (!L) return `<div class="page-title"><h1>교육</h1><p>교육 현황을 불러오는 중이에요.</p></div><div id="learning-status" aria-live="polite"></div>`
+  const g = L.goal, mand = L.mandatory, doneCount = mand.filter(m => m.status === 'completed').length
+  const yearHours = L.history.filter(h => (h.completed_on || '').startsWith(String(L.year))).reduce((a, h) => a + (+h.hours || 0), 0)
+  const hrs = n => (Number.isInteger(+n) ? +n : (+n).toFixed(1)) + '시간'
+  const statusTag = m => m.status === 'completed' ? '<span class="tag green">수강 완료</span>'
+    : m.status === 'in_progress' ? `<span class="tag blue">수강 중 ${m.progress}%</span>` : '<span class="tag">수강 전</span>'
+  const doneTag = m => m.completed_on ? `<span class="tag green">수료</span> <small class="muted">${dotDate(m.completed_on)}${m.auto ? ' · 자동 반영' : ''}</small>` : '<span class="tag orange">미수료</span>'
+  const cta = c => c.status === 'completed' ? '<span class="muted small">—</span>'
+    : `<button class="btn ${c.status === 'in_progress' ? '' : 'primary'}" data-learn="${esc(c.course?.id || c.id)}">${c.status === 'in_progress' ? '이어서 수강' : '수강하기'}</button>`
+  return `<div class="page-title"><h1>교육</h1><p>${esc(L.provider)}에서 들으면 이수 기록이 자동으로 반영돼요. 따로 입력하지 않아도 돼요.</p></div>
+    <section class="learn-summary">
+      <div class="card learn-goal"><div class="learn-goal-head"><span>${L.year}년 직무교육</span><small class="muted">${dotDate(L.year + '-12-31')}까지</small></div>
+        <strong>${hrs(g.done)} <small>/ ${hrs(g.target)}</small></strong>
+        <div class="progress learn-bar" role="progressbar" aria-valuenow="${g.percent}" aria-valuemin="0" aria-valuemax="100"><i style="width:${g.percent}%"></i></div>
+        <p class="small muted">${g.remaining > 0 ? `${hrs(g.remaining)} 남았어요. ${esc(L.provider)} 직무 과정을 들으면 자동으로 쌓여요.` : '올해 직무교육 목표를 채웠어요.'}</p></div>
+      <div class="card learn-stat"><span>필수교육</span><strong>${doneCount} / ${mand.length}</strong><small class="muted">수료</small></div>
+      <div class="card learn-stat"><span>올해 전체 이수</span><strong>${hrs(yearHours)}</strong><small class="muted">필수·직무·기타 합계</small></div>
+    </section>
+    <section><div class="section-head"><h2>필수교육</h2><span class="small muted">${L.year}년 모두 이수해야 해요</span></div>
+      <div class="card table-wrap"><table class="data-table learn-table"><thead><tr><th>교육</th><th>수강 마감</th><th>수강 여부</th><th>수료 여부</th><th></th></tr></thead><tbody>
+      ${mand.map(m => `<tr><td><strong>${esc(m.title)}</strong><div class="small muted">${esc(m.rule?.doc || '')} ${esc(m.rule?.article || '')}${m.hours ? ' · ' + m.hours + '시간' : ''}</div></td>
+        <td>${dotDate(m.due)}<div class="small muted">${m.completed_on ? '' : dday(m.due)}</div></td>
+        <td>${statusTag(m)}</td><td>${doneTag(m)}</td><td>${cta(m)}</td></tr>`).join('')}
+      </tbody></table></div></section>
+    <section class="recommendations"><div class="section-head"><h2>추천 교육</h2><span class="small muted">내 소속·직군·자격을 보고 골랐어요</span></div>
+      ${L.recommended.length ? `<div class="rec-grid">${L.recommended.map(c => `<article class="card rec-card learn-rec">
+        <div class="rec-top"><span class="tag green">직무 · ${hrs(c.hours)}</span>${c.status === 'in_progress' ? `<span class="tag blue">수강 중 ${c.progress}%</span>` : ''}</div>
+        <h3>${esc(c.title)}</h3><p class="small muted">${esc(c.provider)} · ${esc(c.format)}</p><p class="small">${esc(c.desc || '')}</p>
+        <div class="learn-why"><strong>${icon('spark')}추천 이유</strong><ul>${c.reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>
+        <div class="learn-rec-cta">${c.status === 'not_started' ? `<button class="btn primary" data-enroll="${esc(c.id)}">신청하기</button>` : cta(c)}</div></article>`).join('')}</div>`
+        : '<p class="muted">지금 추천할 과정이 없어요.</p>'}</section>
+    <section><div class="section-head" style="margin-top:22px"><h2>이수 이력</h2><span class="small muted">${L.history.length}건</span></div>
+      ${hrTable(['과정','구분','교육 기간','시간','반영'], L.history.map(h => [
+        `<strong>${esc(h.title)}</strong>${h.institution ? `<div class="small muted">${esc(h.institution)}</div>` : ''}`,
+        `<span class="tag ${h.track === '직무' ? 'green' : h.track === '필수' ? 'orange' : ''}">${h.track}</span>`,
+        h.start && h.start !== h.completed_on ? `${dotDate(h.start)} ~ ${dotDate(h.completed_on)}` : dotDate(h.completed_on),
+        hrs(h.hours || 0), h.auto ? `<span class="tag blue">${esc(L.provider)} 자동</span>` : '<span class="muted small">인사기록</span>']), '이수 이력이 없어요')}</section>`
+}
+
+async function loadLearning() {
+  learning = await api('/v1/me/learning')
+  return learning
+}
+
+async function bindLearning() {
+  if (!learning) {
+    try { await loadLearning() } catch (error) { const h = $('#learning-status'); if (h) h.textContent = error.message; return }
+    if (page === 'education') render()
+    return
+  }
+  document.querySelectorAll('[data-learn]').forEach(b => b.onclick = () => openPlayer(b.dataset.learn))
+  document.querySelectorAll('[data-enroll]').forEach(b => b.onclick = async () => {
+    b.disabled = true
+    try {
+      await api('/v1/me/learning/' + b.dataset.enroll + '/enroll', {method: 'POST'})
+      await loadLearning(); render(); toast('신청했어요. 수강하기를 누르면 바로 강의로 넘어가요.')
+    } catch (error) { b.disabled = false; toast(error.message) }
+  })
+}
+
+async function openMandatory(code) {
+  if (page !== 'education') navigate('education')
+  try { if (!learning) { await loadLearning(); render() } } catch (error) { toast(error.message); return }
+  const m = learning.mandatory.find(x => x.code === code)
+  if (!m?.course) { toast('연결된 과정을 찾지 못했어요.'); return }
+  if (m.status === 'completed') { toast(`${m.title}은 이미 수료했어요.`); return }
+  openPlayer(m.course.id)
+}
+
+function findCourse(id) {
+  const m = learning?.mandatory.find(x => x.course?.id === id)
+  if (m) return {id, title: m.course.title, hours: m.course.hours, format: m.course.format}
+  return learning?.recommended.find(c => c.id === id)
+}
+
+async function openPlayer(id) {
+  const course = findCourse(id)
+  if (!course) return
+  let enr
+  try { enr = await api('/v1/me/learning/' + id + '/enroll', {method: 'POST'}) } catch (error) { toast(error.message); return }
+  modal(esc(course.title), `<p class="small muted" style="margin:0 0 12px">${esc(learning.provider)} 강의실 · 시연 화면이에요. 실제로는 ${esc(learning.provider)} 강의 페이지로 바로 넘어가요.</p>
+    <div class="player-screen"><span>▶</span><div><strong>${esc(course.title)}</strong><small>${esc(course.format || '온라인')} · ${course.hours}시간</small></div></div>
+    <div class="progress-label"><span>진도</span><strong id="player-pct">${enr.progress}%</strong></div>
+    <div class="progress"><i id="player-bar" style="width:${enr.progress}%"></i></div>
+    <p class="small" id="player-msg" style="margin:12px 0 0">끝까지 들으면 수료가 자동으로 처리돼요. 이수 사실을 따로 입력할 필요가 없어요.</p>
+    <div class="modal-actions"><button class="btn" data-action="close">나중에 이어 듣기</button><button class="btn primary" id="player-play">끝까지 듣기 (시연)</button></div>`)
+  const play = $('#player-play')
+  play.onclick = async () => {
+    play.disabled = true
+    let pct = enr.progress, res
+    try {
+      while (pct < 100) {
+        pct = Math.min(100, pct + 20)
+        res = await api('/v1/me/learning/' + id + '/progress', {method: 'POST', body: JSON.stringify({percent: pct})})
+        const bar = $('#player-bar'); if (!bar) return
+        bar.style.width = res.progress + '%'; $('#player-pct').textContent = res.progress + '%'
+        await new Promise(r => setTimeout(r, 350))
+      }
+    } catch (error) { play.disabled = false; toast(error.message); return }
+    if (res?.status === 'completed') {
+      $('#player-msg').innerHTML = `<span class="tag green">수료 완료</span> ${dotDate(res.completed_at.slice(0,10))}에 수료됐어요. 이수 이력과 필수교육 현황에 자동으로 반영했어요.`
+      play.remove()
+      await refreshLearningEverywhere()
+    }
+  }
+}
+
+async function refreshLearningEverywhere() {
+  try {
+    const [l, t, card] = await Promise.all([api('/v1/me/learning'), api('/v1/me/training-status'), api('/v1/me/hr-card')])
+    learning = l; me.training = t; me.hr = card
+    if (page === 'education' || page === 'home') render()
+  } catch (error) { toast(error.message) }
+}
+
+function documents(){return `<div class="page-title"><h1>필요한 서류를 함께 작성해요</h1><p>내 정보는 미리 채우고, 필요한 내용만 하나씩 여쭤볼게요.</p></div><div class="notice" style="margin-bottom:22px">${icon('lock')}작성 중인 초안은 본인만 볼 수 있도록 설계했어요. 관리자 화면에는 제출된 서류만 나타나요.</div><div class="draft-grid">${Object.entries(forms).map(([k,d])=>`<article class="card draft-card"><span class="quick-icon">${icon(d.icon)}</span><h3>${d.title}</h3><p>${d.desc}</p>${d.rule?ref(d.rule)+'<br>':''}${btn(k==='recommendation'?'부서장 작성 안내':'작성 시작하기','start:'+k,'', 'arrow')}</article>`).join('')}</div>`}
+function start(type,id){record=id?structuredClone(db.records.find(r=>r.id===id)):null;if(!record){record={id:'draft-'+Date.now(),type,title:forms[type].title,status:'작성 중',date:today(),values:{...defaultValues(),...(type==='cert'?{cert:'정보처리',level:'기사'}:{})},docs:{},step:0};if(type==='report')prefillReport(record)}if(record.status!=='작성 중'&&record.status!=='반려됨'){openRecord(record.id);return}step=record.step||0;record.status='작성 중';activeField=null;fieldError='';page='editor';mode='normal';location.hash='editor';render();window.scrollTo(0,0);if(record.prefilledFrom){toast(`외부교육 신청 내역(${record.prefilledFrom})에서 과제·기간·기관을 불러왔어요.`);delete record.prefilledFrom}}function prefillReport(r){const src=db.records.filter(x=>x.type==='training'&&x.values?.course).sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0];if(!src)return;Object.assign(r.values,{subject:src.values.course,start:src.values.start||'',end:src.values.end||'',institution:src.values.institution||'',contents:src.values.contents||''});r.prefilledFrom=src.values.course}
+function currentType(){return record.type==='training'?['training','recommendation','pledge'][step]:record.type}
+function currentValues(){const t=currentType();if(t===record.type)return record.values;record.docs??={};if(!record.docs[t]){const v=record.values;record.docs[t]={...defaultValues(),country:v.country||'',institution:v.institution||'',course:v.course||'',start:v.start||'',end:v.end||'',...(t==='recommendation'?{field:v.course||'',purpose:v.contents||''}:{service:overseasTwo(v)?serviceInfo(v).text:''})}}for(const key of ['dept','position','grade','name','institution','course','start','end']){if(record.values[key]!==undefined)record.docs[t][key]=record.values[key]}return record.docs[t]}
+function fieldsFor(t){return [...forms[t].fields,...(db.customFields?.[t]||[]).map((label,i)=>f('custom'+i,label))]}
+function hasValue(v){return v!==''&&v!==undefined&&v!==null}
+function autoFilled(fld){return fld.auto&&hasValue(record?currentValues()[fld.key]:'x')}function isReadOnlyField(t,fld){return autoFilled(fld)||t==='recommendation'}
+function serviceInfo(v){if(!v.start||!v.end||!v.country)return null;const days=Math.round((new Date(v.end)-new Date(v.start))/86400000)+1;if(!(days>0))return null;const overseas=!['대한민국','한국','국내'].includes(v.country.trim());const applies=overseas?days>=30:days>=182;if(!applies)return{applies:false,text:'해당 없음 (재직의무 대상 교육기간 미만)'};const raw=Math.ceil(days*3/30),months=Math.max(raw,12);const fmt=m=>m%12===0?m/12+'년':m>12?Math.floor(m/12)+'년 '+m%12+'개월':m+'개월';return{applies:true,months,text:fmt(months)+' (교육기간 약 '+Math.round(days/30*10)/10+'개월 × 3 = '+raw+'개월'+(months>raw?', 최소 1년 적용':'')+')'}}function overseasTwo(v){return !!serviceInfo(v)?.applies}
+function fieldProblem(fld,value,values,type){if(!hasValue(value))return '이 항목을 입력해 주세요.';if(fld.type==='number'&&(!Number.isFinite(Number(value))||Number(value)<0))return '0 이상의 숫자를 입력해 주세요.';if(fld.key==='support'&&Number(value)>['tuition','books','travel'].reduce((a,k)=>a+Number(values[k]||0),0))return '지원 요청액은 교육비 합계를 초과할 수 없어요. 입력값을 확인해 주세요.';if(fld.type==='date'&&(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(new Date(value).getTime())||new Date(value).toISOString().slice(0,10)!==value))return '날짜를 선택해 주세요.';if((fld.key==='end'||fld.key==='start')&&values.start&&values.end&&values.end<values.start)return '교육 종료일은 시작일 이후로 입력해 주세요.';if(fld.key==='acquired'&&value>new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'}))return '취득일을 다시 확인해 주세요. 미래 날짜가 입력됐어요.';if(fld.key==='dates'){const ds=value.split(/[,\n]/).map(s=>s.trim()).filter(Boolean);if(!ds.length||ds.some(d=>!/^\d{4}-\d{2}-\d{2}$/.test(d)||!Number.isFinite(new Date(d).getTime())||new Date(d).toISOString().slice(0,10)!==d))return 'YYYY-MM-DD 형식으로 날짜를 입력하고 쉼표로 구분해 주세요.';if(new Set(ds).size!==ds.length)return '중복된 사용 예정일이 있어요.';if(ds.length>Number(values.balance))return `잔여 연차 ${values.balance}일을 초과했어요. 각 날짜는 1일로 계산해요.`}return ''}
+function nextField(){const t=currentType(),v=currentValues();return fieldsFor(t).find(fld=>!autoFilled(fld)&&fieldProblem(fld,v[fld.key],v,t))}
+function editor(){if(!record)return documents();const t=currentType(),v=currentValues(),d=forms[t],fields=fieldsFor(t),filled=fields.filter(fld=>!fieldProblem(fld,v[fld.key],v,t)).length,pct=Math.round(filled/fields.length*100);let fld=fields.find(x=>x.key===activeField&&!autoFilled(x))||nextField();const recommendation=t==='recommendation';if(recommendation)fld=null;return `<button class="back-link" data-nav="documents">${icon('back')}서류 목록</button><div class="wizard-head"><h1>${record.type==='training'?'외부교육 신청 준비':d.title}</h1><span class="tag green">${record.status==='작성 중'?'작성 중':record.status}</span><div class="spacer"></div><span class="saved-label">${db.records.some(x=>x.id===record.id)?'브라우저에 저장한 초안':'아직 저장하지 않은 초안'}</span>${btn('초안 저장','save','','folder')}</div>${record.type==='training'?`<div class="steps">${['신청서','추천서','서약서'].map((s,i)=>`${i?'<span class="step-line"></span>':''}<button class="step ${step===i?'active':''}" data-step="${i}"><b>${i+1}</b>${s}${i===1?' · 부서장':''}</button>`).join('')}</div>`:''}<div class="workspace"><aside class="card assistant-panel"><div class="assistant-heading flex"><span class="assistant-icon">${icon('spark')}</span><div><h3>K-LINK 업무 비서</h3><p>필요한 것만 하나씩 여쭤볼게요</p></div></div>${t==='meeting'?minutesBox(v):''}${record.reason?`<div class="history-reason">반려 사유: ${esc(record.reason)}</div>`:''}${recommendation?`<div class="bubble">추천서는 <strong>부서장님이 작성해요.</strong><br>직원은 추천사유를 직접 수정할 수 없어요.</div>${v.recommend?`<div class="notice">${icon('check')}부서장 추천서를 받았어요.</div>`:`<p class="small muted">교육 정보를 함께 전달하고, 작성 완료를 기다려요.</p>${btn(record.recommendationRequested?'작성 요청됨':'부서장에게 작성 요청','recommend-request','primary full')}${record.recommendationRequested?btn('추천서 받기','recommend-receive','full'):''}`}`:`<div class="bubble">${fld?`<strong>${filled===fields.filter(x=>x.auto).length?'기본 정보를 미리 채웠어요.':'잘 진행하고 있어요.'}</strong><br>${questionText(fld)}`:`<strong>모든 칸을 채웠어요.</strong><br>양식의 내용을 확인한 뒤 ${record.type==='training'&&step<2?'다음 서류로 이동해 주세요.':t==='meeting'?'PDF로 내려받아 공유해 주세요.':'제출해 주세요.'}`}</div>${fld?fieldInput(fld,v):`<div class="notice">${icon('check')}${fields.length}개 항목을 모두 확인했어요.</div>`}${fieldError?`<p class="field-error" role="alert">${esc(fieldError)}</p>`:''}`}${recommendation?'':fillBox()}${overseasTwo(record.values)?`<div class="notice warn" style="margin-top:17px">${icon('warning')}<div>재직의무 대상 교육이에요. 의무 복무 기간은 ${esc(serviceInfo(record.values).text)}이에요.<br>${ref('service')}</div></div>`:''}${record.type==='leave'?`<div class="notice warn" style="margin-top:16px">${icon('warning')}연차 기준은 취업규칙 제29조를 따라요. 정확한 잔여 일수는 인사팀에 확인해 주세요.</div>`:''}${t==='pledge'&&!overseasTwo(record.values)?`<p class="disclaimer">해외 1개월 이상·국내 6개월 이상 교육은 교육기간의 3배(최소 1년)를 재직해야 해요. 정확한 기간은 담당 부서에 확인해 주세요.</p>`:''}<div class="progress-label"><span>서류 채움 진행률</span><strong>${filled} / ${fields.length} · ${pct}%</strong></div><div class="progress"><i style="width:${pct}%"></i></div>${d.rule?`<div style="margin-top:17px">${ref(d.rule)}</div>`:''}<div class="privacy">${icon('lock')}초안은 본인만 볼 수 있어요.<br>${t==='meeting'?'회의록은 담당자에게 제출되지 않아요.':'제출한 뒤에만 담당자가 확인해요.'}</div>${!recommendation?`<button class="text-btn" data-action="sample" style="margin-top:15px">예시 값 채우기 ${icon('chevron')}</button>`:''}</aside><section class="paper-region"><div class="paper-toolbar"><span class="flex">${icon('file')}양식 미리보기 </span><div class="legend"><span><i class="dot"></i>자동 입력</span><span><i class="dot filled"></i>입력 완료</span><span><i class="dot empty"></i>빈 칸</span></div></div><div class="paper-scroll">${paper(t,v,true)}</div><div class="paper-footer">${btn('PDF 미리보기','preview','','eye')}${btn('다운로드','download','','download')}${record.type==='training'&&step<2?btn('다음 서류','next-step','primary','arrow'):t==='meeting'?'':btn('제출하기','submit','primary','arrow')}</div></section></div>`}
+function questionText(fld){return ({acquired:'자격증을 취득한 날짜가 언제예요?',attachment:'자격증 사본을 첨부해 주세요.',reason:'신고사유를 간단히 알려 주세요.',dates:'연차를 사용할 예정일을 알려 주세요.',country:'교육을 받는 국가는 어디예요?',institution:'어느 기관에서 교육을 받나요?',service:'담당 부서에서 확인한 의무 복무 기간이 있나요?'})[fld.key]||`${esc(fld.label)}${fld.type==='number'?'은 얼마인가요?':'을 알려 주세요.'}`}
+function fieldInput(fld,v){return `<form id="field-form"><label class="field-label" for="field-value">${esc(fld.label)} ${fld.type==='file'?'· 파일은 업로드되지 않아요':''}</label>${fld.type==='file'?`<label class="attachment">${icon('upload')} PDF 또는 이미지 파일을 선택해 주세요.<input type="file" id="field-value" accept=".pdf,.png,.jpg,.jpeg" aria-label="자격증 사본 첨부"></label><p class="disclaimer">파일명만 저장해요. 실제 파일은 서버로 전송하지 않아요.</p>`:fld.type==='textarea'||fld.type==='dates'?`<textarea class="field" id="field-value" ${fld.type==='dates'?'placeholder="2026-12-04, 2026-12-11"':''}>${esc(v[fld.key]||'')}</textarea>`:`<input class="field" id="field-value" type="${fld.type}" value="${esc(v[fld.key]??'')}" ${fld.type==='number'?'min="0" step="1"':''} ${fld.key==='acquired'?'max="'+new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'})+'"':''}>`}<input type="hidden" id="field-key" value="${fld.key}"><button class="btn primary full" type="submit">입력하고 계속하기 ${icon('arrow')}</button></form>`}
+function paper(t,v,editable=false,snapshot=null){const d=forms[t],fields=snapshot?.fields||fieldsFor(t),used=new Set();
+const c=key=>{used.add(key);const fld=fields.find(x=>x.key===key)||{key,label:key};const ro=!editable||isReadOnlyField(t,fld);const val=hasValue(v[key])?esc(fld.type==='number'?Number(v[key]).toLocaleString('ko-KR'):v[key]):'입력 필요';const cls=`paper-cell ${fld.auto?'auto':hasValue(v[key])?'filled':'empty'} ${activeField===key?'current-field':''}`;return ro?`<div class="${cls}">${val}</div>`:`<button data-field="${key}" aria-label="${esc(fld.label)} 수정" class="${cls}">${val}</button>`};
+const per=()=>`<div class="period">${c('start')}<span>~</span>${c('end')}</div>`,date=`<p class="paper-date">${today().replaceAll('.',' . ')}</p>`,to='<p class="paper-to">K-LINK 대표 귀하</p>';let body;
+if(t==='cert')body=`<h2>기술정보수당 신고서</h2><table class="paper-table form-table"><tbody><tr><th>소 속</th><td>${c('dept')}</td><th>직 위</th><td>${c('position')}</td></tr><tr><th>직 급</th><td>${c('grade')}</td><th>성 명</th><td>${c('name')}</td></tr><tr><th rowspan="2">자격<br>사항</th><th>자격증 종목 및 등급</th><th>취득일자</th><th>신고사유</th></tr><tr><td><div class="period cert">${c('cert')}${c('level')}</div></td><td>${c('acquired')}</td><td>${c('reason')}</td></tr><tr><td colspan="4"><div class="paper-attach">첨부 : 「국가기술자격법」에 따른 기술·기능분야 자격증 사본</div>${c('attachment')}</td></tr></tbody></table>${date}<p class="paper-sign">신 고 인 성명 ${esc(v.name||'')} (인)</p>${to}`;
+else if(t==='training'){const sum=['tuition','books','travel'].reduce((a,k)=>a+Number(v[k]||0),0).toLocaleString('ko-KR');body=`<h2>교육(연수) 신청서</h2><h3>1. 신청자 인적사항</h3><table class="paper-table form-table"><tbody><tr><th>소 속</th><th>직 급</th><th>성 명</th><th>직 위</th></tr><tr><td>${c('dept')}</td><td>${c('grade')}</td><td>${c('name')}</td><td>${c('position')}</td></tr></tbody></table><h3>2. 교육계획</h3><table class="paper-table form-table"><tbody><tr><th>교 육 국</th><th>교 육 기 관</th><th>교 육 과 제</th></tr><tr><td>${c('country')}</td><td>${c('institution')}</td><td>${c('course')}</td></tr><tr><th>교육주요내용</th><td colspan="2">${c('contents')}</td></tr><tr><th>교 육 기 간</th><td colspan="2">${per()}</td></tr></tbody></table><h3>3. 교육비</h3><table class="paper-table form-table"><tbody><tr><th>수강료</th><th>교재비</th><th>여비</th><th>합계</th><th>지원 요청액</th></tr><tr><td>${c('tuition')}</td><td>${c('books')}</td><td>${c('travel')}</td><td><div class="paper-cell filled">${sum}</div></td><td>${c('support')}</td></tr></tbody></table><p class="paper-text">위와 같이 교육(연수)을 신청하오니 허가하여 주시기 바랍니다.</p>${date}<p class="paper-sign">본 인 소속 : ${esc(v.dept||'')} 성명 : ${esc(v.name||'')} (인)<br>부서장 소속 : ${esc(v.dept||'')} 성명 : (인)</p><p class="paper-attach-note">붙임 : 1) 부서장 추천서 1부 2) 교육기관 안내문 및 세부내용 1부</p>`}
+else if(t==='recommendation')body=`<h2>추 천 서</h2><table class="paper-table form-table"><tbody><tr><th rowspan="2">교육대상자</th><th>성 명</th><td>${c('name')}</td><th>직 급</th><td>${c('grade')}</td></tr><tr><th>소 속</th><td>${c('dept')}</td><th>생년월일</th><td>${c('birth')}</td></tr><tr><th rowspan="2">교육내용</th><th>교육기관</th><td>${c('institution')}</td><th>교육분야</th><td>${c('field')}</td></tr><tr><th>교육목적</th><td>${c('purpose')}</td><th>교육기간</th><td>${per()}</td></tr><tr><th>추천사유</th><td colspan="4">${c('recommend')}</td></tr></tbody></table>${date}<p class="paper-sign">추천인 정보통신처 부서장 ㊞</p>${to}`;
+else if(t==='pledge')body=`<h2>서 약 서</h2><table class="paper-table form-table"><tbody><tr><th>소 속</th><td>${c('dept')}</td><th>직 급</th><td>${c('grade')}</td></tr><tr><th>성 명</th><td>${c('name')}</td><th>생년월일</th><td>${c('birth')}</td></tr><tr><th>교 육 국</th><td>${c('country')}</td><th>교육기간</th><td>${per()}</td></tr><tr><th>교육기관</th><td>${c('institution')}</td><th>교육과정</th><td>${c('course')}</td></tr><tr><th>의무 복무 기간</th><td colspan="3">${c('service')}</td></tr></tbody></table><p class="paper-text">본인은 교육(연수)을 허가받음에 있어 관련 규정에서 정한 모든 사항을 성실히 준수하고, 교육 이수 후 위 의무 복무 기간 동안 재직할 것을 다짐하며, 이를 위반하였을 때에는 관계 규정에 의한 어떠한 조치도 수용할 것을 서약합니다.</p>${date}<p class="paper-sign">서 약 자 ${esc(v.name||'')} ㊞</p>${to}`;
+else if(t==='report')body=`<h2>교육 결과보고서</h2>${date}<p class="paper-sign" style="text-align:left">소 속 : ${esc(v.dept||'')}<br>성 명 : ${esc(v.name||'')} (인)</p><p class="paper-text">본인은 다음과 같이 교육을 마쳤음을 보고합니다.</p><table class="paper-table form-table"><tbody><tr><th>1. 교육과제</th><td colspan="2">${c('subject')}</td></tr><tr><th>2. 교육기간</th><td colspan="2">${per()}</td></tr><tr><th rowspan="2">3. 교육현황</th><th>교육기관</th><th>교육주요내용</th></tr><tr><td>${c('institution')}</td><td>${c('contents')}</td></tr><tr><th>4. 교육효과</th><td colspan="2">${c('effects')}</td></tr><tr><th>5. 건의사항</th><td colspan="2">${c('suggestion')}</td></tr></tbody></table><p class="paper-attach-note">붙임 : 1) 교육세부내용 1부 2) 수료증 사본 1부</p>`;
+else if(t==='meeting')body=`<h2>회 의 록</h2><table class="paper-table form-table"><tbody><tr><th>회 의 명</th><td colspan="3">${c('title')}</td></tr><tr><th>일 시</th><td><div class="period cert">${c('date')}${c('time')}</div></td><th>장 소</th><td>${c('place')}</td></tr><tr><th>참 석 자</th><td colspan="3">${c('attendees')}</td></tr><tr><th>안 건</th><td colspan="3">${c('agenda')}</td></tr><tr><th>논의 내용</th><td colspan="3">${c('discussion')}</td></tr><tr><th>결정 사항</th><td colspan="3">${c('decisions')}</td></tr><tr><th>후속 조치</th><td colspan="3">${c('actions')}</td></tr><tr><th>요 약</th><td colspan="3">${c('summary')}</td></tr></tbody></table><p class="paper-sign">작성자 ${esc(v.dept||'')} ${esc(v.name||'')}</p>`;else body=`<h2>${esc(d.title)}</h2><table class="paper-table"><tbody>${fields.map(fld=>`<tr><th scope="row">${esc(fld.label)}</th><td>${c(fld.key)}</td></tr>`).join('')}</tbody></table>${date}<p class="paper-sign">신청인 ${esc(v.name||'')} (인)</p>${to}`;
+const extra=fields.filter(fld=>!used.has(fld.key)&&!fld.auto);
+const src=t==='meeting'?'K-LINK 회의록 양식':t==='cert'?'광주광역시 서구시설관리공단 보수규정 별지 제2호서식':t==='leave'?'예시 양식':'한국보건의료연구원 해외연수 운영관리지침 별지 제'+({training:1,recommendation:2,pledge:3,report:4}[t])+'호서식';
+return `<article class="paper" id="document-paper"><div class="paper-number">K-LINK · ${esc(d.title)} · 양식 v${snapshot?.version||db.templateVersion?.[t]||'1.0'}</div>${body}${extra.length?`<h3>추가 항목</h3><table class="paper-table"><tbody>${extra.map(fld=>`<tr><th scope="row">${esc(fld.label)}</th><td>${c(fld.key)}</td></tr>`).join('')}</tbody></table>`:''}<div class="paper-source">${d.rule?`근거: ${esc(rules[d.rule].name)} · ${esc(rules[d.rule].clause)} · ${esc(rules[d.rule].page)} · 개정 ${esc(rules[d.rule].revised)}<br>양식: ${src}을 바탕으로 재구성한 시연용 양식이에요. 공식 제출 문서로 사용할 수 없어요.`:'K-LINK 회의록 양식 · AI가 정리한 초안이에요. 공유 전에 내용을 확인해 주세요.'}</div></article>`}
+function saveDraft(quiet=false){record.step=step;record.date=today();let i=db.records.findIndex(r=>r.id===record.id);if(i<0)db.records.unshift(structuredClone(record));else db.records[i]=structuredClone(record);const ok=persist();if(!quiet){render();if(ok)toast('초안을 이 브라우저에 저장했어요.')}return ok}
+let ownChanges = null
+
+function changeRequestTitle(item) {
+  const fields = Object.keys(item.changes).map(key => contactLabels[key]).filter(Boolean)
+  return fields.length ? fields.join('·') + ' 변경' : '인사정보 변경'
+}
+
+function changeRequestRow(item) {
+  return `<tr><td><strong>${esc(changeRequestTitle(item))}</strong><div class="small muted">인사정보 변경 신청</div></td>
+    <td>${esc(dotDate((item.decided_at || item.submitted_at).slice(0,10)))}</td>
+    <td>${contactStatus(item.status)}</td><td>${item.status === 'pending' ? '인사 담당자 확인 대기' : '처리 완료'}</td>
+    <td><button class="btn" data-own-change="${item.id}">상세 보기</button></td></tr>`
+}
+
+function bindOwnChanges() {
+  const host = $('#own-changes-status')
+  const state = ownChanges
+  if (!host || !state) return
+  document.querySelectorAll('[data-own-change]').forEach(button => button.onclick = () => {
+    const item = state.rows.find(row => String(row.id) === button.dataset.ownChange)
+    if (!item) return
+    modal(esc(changeRequestTitle(item)), `<p>신청일 ${esc(dotDate(item.submitted_at.slice(0,10)))} · ${contactStatus(item.status)}</p>
+      <h3>신청한 내용</h3>${contactSummary(item)}
+      ${item.decided_at ? `<p>${item.status === 'cancelled' ? '취소일' : '처리일'} ${esc(dotDate(item.decided_at.slice(0,10)))}</p>` : ''}
+      ${item.reason ? `<p>${item.status === 'rejected' ? '반려 사유' : '처리 사유'} · ${esc(item.reason)}</p>` : ''}
+      ${item.status === 'pending' ? '<button class="btn" id="cancel-own-change">신청 취소</button>' : ''}
+      ${item.status === 'cancelled' ? '<button class="btn" id="new-own-change">다시 신청하기</button>' : ''}`)
+    const again = $('#new-own-change')
+    if (again) again.onclick = () => { closeModal(); navigate('contact') }
+    const cancel = $('#cancel-own-change')
+    if (cancel) cancel.onclick = async () => {
+      if (!window.confirm('이 변경 신청을 취소할까요?')) return
+      cancel.disabled = true
+      let message
+      try {
+        await api('/v1/hr/me/contact-requests/' + item.id + '/cancel', {method:'POST'})
+        message = '변경 신청을 취소했어요.'
+      } catch (error) {
+        if (error.status !== 409) {
+          if (cancel.isConnected) { cancel.disabled = false; toast(error.message) }
+          return
+        }
+        message = error.message
+      }
+      if (ownChanges !== state || !auth.signedIn) return
+      if (cancel.isConnected) closeModal()
+      ownChanges = null
+      render()
+      toast(message)
+    }
+  })
+  if (state.error) {
+    host.textContent = '인사정보 변경 신청을 불러오지 못했어요. '
+    const retry = document.createElement('button')
+    retry.className = 'btn'
+    retry.textContent = '다시 시도'
+    retry.onclick = () => { ownChanges = null; render() }
+    host.append(retry)
+  }
+  if (state.started) return
+  state.started = true
+  api('/v1/hr/me/contact-requests').then(rows => { state.rows = rows })
+    .catch(() => {state.error = true})
+    .finally(() => {
+      state.loaded = true
+      if (ownChanges !== state || page !== 'requests' || !auth.signedIn) return
+      const input = $('#record-search')
+      const focused = input && document.activeElement === input
+      const cursor = focused && input.selectionStart
+      render()
+      if (focused) { $('#record-search').focus(); $('#record-search').setSelectionRange(cursor,cursor) }
+    })
+}
+function requests(){const state = ownChanges ||= {rows:[],started:false,loaded:false,error:false};
+  const statuses = {pending:'제출됨', approved:'승인됨', rejected:'반려됨', cancelled:'취소됨'};
+  const changes = state.rows.filter(item => (filter === '전체' || statuses[item.status] === filter)
+    && (!search || ('인사정보 변경 신청 ' + changeRequestTitle(item)).includes(search)));
+  let rows=db.records.filter(r=>(filter==='전체'||r.status===filter)&&(!search||r.title.includes(search)));return `<div class="page-title"><h1>신청 현황</h1><p>내 서류와 인사정보 변경 신청의 처리 상태를 확인해요.</p></div><div class="tabs">${['전체','작성 중','제출됨','승인됨','반려됨','취소됨'].map(s=>`<button class="tab ${filter===s?'active':''}" data-filter="${s}">${s} <span class="tiny">${db.records.filter(r=>s==='전체'||r.status===s).length + state.rows.filter(item => s==='전체' || statuses[item.status]===s).length}</span></button>`).join('')}</div><div class="toolbar"><input class="search-field" id="record-search" placeholder="신청 이름으로 검색해요" aria-label="내 신청 검색" value="${esc(search)}"><div class="spacer"></div>${btn('새 서류 작성','new-document','primary','file')}</div><div id="own-changes-status" role="status">${state.loaded?'':'인사정보 변경 신청을 불러오는 중이에요.'}</div><div class="card table-wrap">${rows.length || changes.length?`<table class="data-table"><thead><tr><th>신청명</th><th>최종 변경일</th><th>상태</th><th>결재 진행</th><th>다음 행동</th></tr></thead><tbody>${changes.map(changeRequestRow).join('')}${rows.map(r=>`<tr><td><strong>${esc(r.title)}</strong><div class="small muted">${esc(r.values.course||r.values.cert||r.values.subject||esc(me.name+' · '+me.dept))}</div>${r.status==='반려됨'?`<div class="history-reason">${esc(r.reason)}</div>`:''}</td><td>${r.date}</td><td>${badge(r.status)}</td><td>${({'작성 중':'제출 전','제출됨':'결재 대기','승인됨':'결재 완료','반려됨':'반려 처리'})[r.status] || '—'}</td><td>${['작성 중','반려됨'].includes(r.status)?`<button class="btn" data-edit="${r.id}">${r.status==='반려됨'?'수정하기':'이어서 작성'} ${icon('arrow')}</button>`:`<button class="btn" data-record="${r.id}">상세 보기</button>`}<button class="icon-btn" data-pdf-record="${r.id}" aria-label="${r.title} PDF 다운로드">${icon('download')}</button></td></tr>`).join('')}</tbody></table>`:!state.loaded?'':empty('검색 결과가 없어요','다른 검색어나 상태를 선택해 주세요.','clear-filters','필터 초기화')}</div>`}
+function askBar(placeholder) {
+  return `<form class="ask-bar" data-question-form>
+    <input id="qa-question" type="text" aria-label="규정 질문" placeholder="${esc(placeholder)}" required>
+    <button class="send-btn" type="submit" aria-label="질문 보내기">${icon('arrow')}</button>
+  </form>`;
+}
+function question(){return `<div class="page-title"><h1>규정, 쉽게 물어보세요</h1><p>근거를 함께 확인하고, 필요한 다음 행동까지 이어가요.</p></div><div class="qa-layout"><section class="card qa-chat"><div class="flex small muted">${icon('spark')}K-LINK 업무 비서 <span class="tag green">규정 검색 연결됨</span></div>${qa.query?`<div class="qa-query">${esc(qa.query)}</div>`:''}${qaContent()}${askBar('궁금한 내용을 입력해 주세요.')}<p class="disclaimer">사내 규정 18개에서 검색하고, 답변은 찾은 근거만 사용해 작성해요.</p></section><aside class="card source-panel">${qa.phase==='done'&&qa.citations?.length?citeContent(qa.citations[qa.sel||0]):sourceContent(null)}</aside></div>`}
+function qaContent(){if(['searching','generating'].includes(qa.phase))return `<div class="loading-wrap"><span class="spinner"></span><p>${qa.phase==='searching'?'관련 규정을 검색하고 있어요…':'근거를 바탕으로 답변을 정리하고 있어요…'}</p>${btn('답변 중지','stop-qa')}</div>`;if(qa.phase==='stopped')return `<div class="qa-message"><h3>답변 생성을 중지했어요.</h3><p>다시 시도하거나 다른 질문을 입력해 주세요.</p>${btn('다시 생성하기','retry-qa')}</div>`;if(qa.phase==='error')return `<div class="qa-message"><h3>지금은 답변을 불러오지 못했어요.</h3><p>잠시 후 다시 시도해 주세요.</p>${btn('다시 시도','retry-qa')}</div>`;if(qa.phase==='none')return `<div class="qa-message"><span class="tag orange">근거 없음</span><h3 style="margin-top:15px">규정에서 찾을 수 없어요.</h3><p>등록된 규정에서 이 질문의 근거를 찾지 못했어요. 인사팀에 확인해 주세요.</p>${qa.rule?`<p class="small muted" style="margin-top:10px">규정 답변과 별개로, 하려는 업무는 바로 시작할 수 있어요.</p>`:''}<div class="qa-actions">${qa.rule?btn(ctaLabel(),'qa-document','primary','arrow'):''}${btn('문의 부서 확인','contact')}${btn('질문 바꾸기','change-question')}</div></div>`;if(qa.phase==='done'){return `<div class="qa-message"><span class="tag green">규정 ${qa.citations.length}건에서 찾았어요</span><div class="qa-answer" style="margin-top:13px;line-height:1.85">${formatAnswer(qa.answer)}</div><div style="margin-top:17px;display:flex;flex-direction:column;gap:6px;align-items:flex-start">${qa.citations.map((c,i)=>`<button class="reference" data-cite="${i}">${icon('book')}[${c.number}] ${esc(c.doc)}${c.article?' '+esc(c.article):''} · ${esc(c.pages)} ${icon('chevron')}</button>`).join('')}</div>${qa.rule?`<div class="qa-actions">${btn(ctaLabel(),'qa-document','primary','arrow')}</div>`:''}</div>`}return `<div class="qa-message" style="margin-top:45px"><span class="quick-icon">${icon('book')}</span><h3 style="margin-top:20px">무엇이 궁금하세요?</h3><p>길고 복잡한 규정에서 필요한 내용을 찾아드려요.<br>아래 예시 질문으로 시작해 보세요.</p><div class="suggestions">${['자격증 따면 승진 가점이 있나요?','해외 위탁교육 받으면 재직의무가 있나요?','외부 위탁교육 교육비는 회사가 내주나요?'].map(q=>`<button data-ask="${q}">${q}</button>`).join('')}</div></div>`}
+let qaAbort=null,filling=false,fillReply='',minuting=false,minutesReply='',minutesDraft='';function minutesBox(v){const has=hasValue(v.discussion);return `<form id="minutes-form" class="fill-box" style="margin:0 0 16px"><label class="field-label" for="minutes-text">${has?'회의 내용 다시 넣기':'회의 내용 붙여넣기'}</label><p class="small muted" style="margin:0 0 8px">메모, 녹취록, 화상회의 자막을 그대로 붙여 넣으면 회의록과 요약을 만들어요.</p><textarea class="field" id="minutes-text" rows="${has?3:9}" placeholder="예: 11/18 2시 3층 회의실, 박팀장 김대리 이주임. 교육 예산 10% 줄이기로 함. 김대리가 27일까지 견적 다시 받기.">${esc(minutesDraft)}</textarea><button class="btn ${has?'':'primary'} full" type="submit" ${minuting?'disabled':''}>${minuting?'회의록 만드는 중… (길면 1분 이상 걸려요)':has?'다시 만들기':'회의록 만들기'}</button>${minutesReply?`<p class="small muted" style="margin-top:8px">${esc(minutesReply)}</p>`:''}</form>`}function fillBox(){return `<form id="fill-form" class="fill-box"><label class="field-label" for="fill-text">말로 한 번에 채우기</label><textarea class="field" id="fill-text" rows="3" placeholder="예: 10월 24일에 정보처리기사 땄어요. 승진 가점 받으려고 신고해요."></textarea><button class="btn full" type="submit" ${filling?'disabled':''}>${filling?'채우는 중…':'AI로 채우기'}</button>${fillReply?`<p class="small muted" style="margin-top:8px">${esc(fillReply)}</p>`:''}</form>`}function ctaLabel(){return ({cert:'자격증 등록하기',training:'외부교육 신청하기',service:'외부교육 신청하기',leave:'연차계획 작성하기',mandatory:'교육 신청하기'})[qa.rule]||'서류 작성하기'}function guessRule(q){return /의무|복무|해외/.test(q)?'service':/자격|기사|기능사|정처|컴활|면허|수당|취득|땄|땀|합격/.test(q)?'cert':/교육비|외부\s*(교육|연수)|위탁|연수|신청|교육.*지원|지원.*교육/.test(q)?'training':/괴롭힘|필수교육/.test(q)?'mandatory':/연차/.test(q)?'leave':null}function ask(q){if(!q.trim())return;qaAbort?.abort();const ctrl=new AbortController();qaAbort=ctrl;qa={query:q.trim(),phase:'searching',rule:guessRule(q),answer:'',citations:[],sel:0};page='qa';mode='normal';location.hash='qa';render();clearTimeout(qaTimer);qaTimer=setTimeout(()=>{if(qa.phase==='searching'){qa.phase='generating';render()}},1200);qaApi(qa.query,ctrl.signal).then(d=>{if(qaAbort!==ctrl||qa.phase==='stopped')return;clearTimeout(qaTimer);qa.answer=d.answer;qa.citations=d.citations;qa.limitations=d.limitations;qa.phase=qa.answer&&qa.citations.length?'done':'none';render()}).catch(e=>{if(e.name==='AbortError'||qaAbort!==ctrl||qa.phase==='stopped')return;clearTimeout(qaTimer);qa.phase='error';qa.error=e.message;render()})}let qaConv=null;const auth = {client: null, token: null, demo: false, signedIn: false}
+
+function allowedPage(next) {
+  if (next === 'review' || next === 'welfare-review') return me.role === 'admin'
+  if (next === 'welfare') return true
+  if (next === 'hr') return hrAdmin.allowed
+  if (next === 'employment' || next === 'contact') return true
+  if (next === 'admin') return me.role === 'admin'
+  return ['home', 'card', 'education', 'documents', 'qa', 'requests', 'rules'].includes(next)
+}
+
+async function boot() {
+  try {
+    const response = await fetch('/api/config')
+    if (!response.ok) throw new Error('인사 포털 설정을 불러오지 못했어요.')
+    const config = await response.json()
+    if (!config.auth || !config.supabase_anon_key) {
+      return showLogin('회사 계정 로그인 설정을 확인해 주세요.', true)
+    }
+    if (!window.supabase) throw new Error('로그인 모듈을 불러오지 못했어요.')
+    auth.client = window.supabase.createClient(config.supabase_url, config.supabase_anon_key)
+    auth.client.auth.onAuthStateChange((_event, session) => { auth.token = session?.access_token || null })
+    auth.token = (await auth.client.auth.getSession()).data.session?.access_token || null
+    if (!auth.token) return showLogin()
+    await openWorkspace(location.hash.slice(1))
+  } catch (error) {
+    if (error.status === 401) clearLogin()
+    showLogin(error.message, !auth.client)
+  }
+}
+
+async function loadMe() {
+  const [user, employee, training, card, portal] = await Promise.all([
+    api('/v1/me'), api('/v1/me/employee'), api('/v1/me/training-status'),
+    api('/v1/me/hr-card'), api('/v1/hr/me'),
+  ])
+  const alerts = await api('/v1/me/alerts').catch(() => ({items: []}))
+  storageKey = 'klink-demo-v1:' + user.user_id
+  db = readDrafts()
+  me = {
+    ...me, name: user.display_name || employee.display_name,
+    role: user.role, dept: employee.department_name || '',
+    position: employee.position_title || '', grade: employee.grade || '',
+    birth: employee.birth_date || '', employeeNo: employee.employee_no || '',
+    jobType: employee.job_type || '', training, hr: card, alerts,
+  }
+  auth.demo = portal.demo
+  hrAdmin.allowed = portal.can_manage
+  hrAdmin.asOf = portal.as_of
+  return true
+}
+
+async function openWorkspace(requested = 'home') {
+  await loadMe()
+  auth.signedIn = true
+  page = allowedPage(requested) ? requested : 'home'
+  mode = 'normal'
+  history.replaceState(null, '', '#' + page)
+  render()
+}
+
+function showLogin(message = '', fatal = false) {
+  const fields = `
+    <label class="small" for="login-email">이메일</label>
+    <input id="login-email" type="email" autocomplete="username" required ${fatal ? 'disabled' : ''}>
+    <label class="small" for="login-password">비밀번호</label>
+    <input id="login-password" type="password" autocomplete="current-password" required ${fatal ? 'disabled' : ''}>
+    <button class="btn primary" type="submit" style="width:100%" ${fatal ? 'disabled' : ''}>로그인</button>`
+  $('#modal-root').innerHTML = ''
+  $('#app').innerHTML = `<main class="login-wrap"><form class="login-card" id="login-form">
+    <div class="brand flex" style="margin-bottom:6px"><span class="brand-mark"><i></i><i></i><i></i><i></i></span>K-LINK</div>
+    <h1 style="font-size:22px;margin:14px 0 4px">인사 포털 로그인</h1>
+    <p class="small muted" style="margin:0 0 18px">회사에서 받은 계정으로 로그인해 주세요.</p>
+    ${fields}<p class="login-error" role="alert">${esc(message)}</p></form></main>`
+  if (fatal) return
+  const form = $('#login-form')
+  $('#login-email')?.focus()
+  form.onsubmit = async event => {
+    event.preventDefault()
+    const buttons = [...form.querySelectorAll('button')]
+    buttons.forEach(button => { button.disabled = true })
+    const errorLine = form.querySelector('.login-error')
+    errorLine.textContent = ''
+    try {
+      const credentials = {email: $('#login-email').value.trim(), password: $('#login-password').value}
+      const {data, error} = await auth.client.auth.signInWithPassword(credentials)
+      if (error) throw new Error('이메일과 비밀번호를 확인해 주세요.')
+      auth.token = data.session.access_token
+      await openWorkspace()
+    } catch (error) {
+      errorLine.textContent = error.message
+    } finally {
+      buttons.forEach(button => { button.disabled = false })
+    }
+  }
+}
+
+function clearLogin() {
+  ownChanges = null
+  auth.token = null
+  auth.signedIn = false
+  qaConv = null
+  qaAbort?.abort()
+  clearTimeout(qaTimer)
+  qa = {query: '', phase: 'idle', rule: 'cert'}
+  record = null
+  hrTab = 'basic'
+  hrAdmin.allowed = false
+  hrAdmin.detail = null
+  hrAdmin.people = null
+}
+
+async function logout() {
+  try {
+    const {error} = await auth.client.auth.signOut()
+    if (error) throw error
+  } catch (error) {
+    toast(error.message)
+    return
+  }
+  clearLogin()
+  history.replaceState(null, '', '/')
+  showLogin('로그아웃했어요.')
+}
+
+function authHeaders(){return auth.token?{Authorization:'Bearer '+auth.token}:{}}async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{'Content-Type':'application/json',...authHeaders(),...(opt.headers||{})}});const d=r.status===204?null:await r.json().catch(()=>null);if(r.status===401&&auth.token){clearLogin();showLogin('로그인이 만료됐어요. 다시 로그인해 주세요.')}if(!r.ok){const err=new Error(d?.message||'HTTP '+r.status);err.code=d?.code;err.status=r.status;throw err}return d}function wait(ms,signal){return new Promise((ok,no)=>{const t=setTimeout(ok,ms);signal?.addEventListener('abort',()=>{clearTimeout(t);no(new DOMException('중단','AbortError'))},{once:true})})}function uiCitation(c){const l=c.location||{},pages=l.page_start?('p.'+l.page_start+(l.page_end&&l.page_end!==l.page_start?'–'+l.page_end:'')):'';return{id:c.id,number:c.label,doc:c.title,heading:l.article||'',article:l.article||'',pages,text:(c.quotes||[]).join('\n')}}async function qaApi(question,signal,retried){if(!qaConv){const c=await api('/v1/conversations',{method:'POST',signal,body:JSON.stringify({title:question.slice(0,200),client_request_id:crypto.randomUUID()})});qaConv=c.id}let acc;try{acc=await api('/v1/answers',{method:'POST',signal,body:JSON.stringify({conversation_id:qaConv,question,mode:'qa',selected_version_ids:[],client_request_id:crypto.randomUUID()})})}catch(e){if(!retried&&(e.status===404||e.code==='conversation_busy')){qaConv=null;return qaApi(question,signal,true)}throw e}while(true){await wait(2000,signal);const a=await api(acc.status_url,{signal});if((a.phase==='generation'||a.phase==='citation_check')&&qa.phase==='searching'){qa.phase='generating';render()}if(a.status==='failed')throw new Error(a.error?.message||'답변을 만들지 못했어요.');if(a.status==='completed'){const r=a.result;return{answer:r.decision==='answered'&&r.answer?r.answer:'',citations:r.decision==='answered'?r.citations.map(uiCitation):[],limitations:r.limitations||[]}}}}
+function formatAnswer(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\[(\d+)\]/g,(m,n)=>`<button class="cite-mark" data-cite="${Math.max(0,(qa.citations||[]).findIndex(c=>c.number===Number(n)))}" aria-label="근거 ${n} 보기">[${n}]</button>`).replace(/\n/g,'<br>')}function citeContent(c){return `<span class="tag green">근거 [${c.number}]</span><h3>${esc(c.doc)}</h3><p class="small muted">${esc(c.heading)}</p><div class="quote" style="max-height:420px;overflow:auto"><span class="tiny muted">규정 원문</span><br>${esc(c.text).replace(/\n/g,'<br>')}</div><dl><dt>문서명</dt><dd>${esc(c.doc)}</dd><dt>위치</dt><dd>${esc(c.heading)}</dd><dt>페이지</dt><dd>${esc(c.pages)}</dd>${c.score!=null?`<dt>관련도</dt><dd>${c.score}</dd>`:''}<dt>문의 부서</dt><dd>인사팀</dd></dl>`}
+function sourceContent(key){if(!key)return `<span class="tag">근거 패널</span><h3>답변의 출처를 확인해요</h3><p class="small muted">질문하면 관련 조항과 확인 가능한 문서 정보를 함께 표시해요.</p><div class="empty-state" style="padding:55px 15px">${icon('book')}<p>아직 선택된 근거가 없어요.</p></div>`;const r=rules[key];return `<span class="tag green">근거 규정</span><h3>${r.name}</h3><p class="small muted">${r.clause}</p><div class="quote"><span class="tiny muted">규정 원문 발췌</span><br><mark>${r.highlight}</mark><br>${r.summary}</div><dl><dt>문서명</dt><dd>${r.name}</dd><dt>조항</dt><dd>${r.clause}</dd><dt>페이지</dt><dd>${r.page}</dd><dt>개정일</dt><dd>${r.revised}</dd><dt>문의 부서</dt><dd>인사팀</dd></dl><div class="notice warn" style="margin-top:22px">${icon('warning')}아래 요약은 이해를 돕기 위한 설명이에요. 정확한 내용은 규정 원문을 확인해 주세요.</div>`}
+function ruleList(){return `<div class="page-title"><h1>사내 규정</h1><p>답변과 서류의 근거를 확인해요. 시연용으로 일부 조항만 등록되어 있어요.</p></div><div class="source-list">${Object.entries(rules).map(([k,r])=>`<article class="card"><span class="tag">${r.page}</span><h3>${r.name} · ${r.clause}</h3><p>${r.summary}</p>${btn('근거 정보 보기','source:'+k,'','book')}</article>`).join('')}</div>`}
+function admin(){return `<div class="page-title"><h1>관리자 워크스페이스</h1><p>직원이 제출한 서류를 검토하고, 양식과 규정을 관리해요.</p></div><div class="notice admin-note">${icon('lock')}직원의 작성 중 초안은 표시하지 않아요.</div><div class="tabs">${[['submissions','제출 서류'],['templates','양식 관리'],['regulations','규정 문서 관리']].map(([k,t])=>`<button class="tab ${adminTab===k?'active':''}" data-admin-tab="${k}">${t}</button>`).join('')}</div>${adminTab==='submissions'?adminSubmissions():adminTab==='templates'?adminTemplates():adminRegulations()}`}
+function adminSubmissions(){const rows=db.records.filter(r=>r.status!=='작성 중'&&(adminType==='전체'||r.type===adminType)&&(adminStatus==='전체'||r.status===adminStatus)&&(adminDept==='전체'||r.values.dept===adminDept));return `<div class="toolbar"><select id="admin-type" aria-label="서류 종류 필터"><option value="전체">모든 서류</option>${Object.entries(forms).map(([k,d])=>`<option value="${k}" ${adminType===k?'selected':''}>${d.title}</option>`).join('')}</select><select id="admin-status" aria-label="상태 필터">${['전체','제출됨','승인됨','반려됨'].map(s=>`<option ${adminStatus===s?'selected':''}>${s}</option>`).join('')}</select><select id="admin-dept" aria-label="부서 필터">${['전체','정보통신처','경영지원처'].map(s=>`<option ${adminDept===s?'selected':''}>${s}</option>`).join('')}</select><div class="spacer"></div><span class="small muted">${rows.length}건</span></div><div class="card table-wrap">${rows.length?`<table class="data-table"><thead><tr><th>서류명</th><th>신청자 / 부서</th><th>제출일</th><th>상태</th><th>검토</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${r.title}</strong><div class="small muted">${esc(r.values.course||r.values.subject||r.values.cert||'')}</div></td><td>${esc(r.values.name)}<div class="small muted">${esc(r.values.dept)}</div></td><td>${r.date}</td><td>${badge(r.status)}</td><td><button class="btn" data-review="${r.id}">상세 확인 ${icon('chevron')}</button></td></tr>`).join('')}</tbody></table>`:empty('조건에 맞는 제출 서류가 없어요','다른 상태나 부서를 선택해 주세요.','admin-clear','필터 초기화')}</div>`}
+function adminTemplates(){return `<div class="card table-wrap"><table class="data-table"><thead><tr><th>양식</th><th>버전</th><th>칸 구성</th><th>관리</th></tr></thead><tbody>${Object.entries(forms).map(([k,d])=>`<tr><td><strong>${d.title}</strong><div class="tiny muted">원본 양식 기반</div></td><td>v${db.templateVersion?.[k]||'1.0'}</td><td>${fieldsFor(k).length}개 항목</td><td><button class="btn" data-template="${k}">구성 편집</button></td></tr>`).join('')}</tbody></table></div>`}
+function adminRegulations(){return `<div class="notice warn" style="margin-bottom:19px">${icon('warning')}규정 원문은 검색 서버(knowledge-mcp)에서 파싱·색인돼요.</div><div class="card table-wrap"><table class="data-table"><thead><tr><th>문서명</th><th>개정일</th><th>색인 상태</th><th>관리</th></tr></thead><tbody>${[['인사관리지침','SRC-0008 · 청크 286개','2018.12.28'],['인사관리규정','SRC-0007 · 청크 172개','표지에 없음 · 확인 필요'],['취업규칙','SRC-0009 · 청크 90개','표지에 없음 · 확인 필요']].map(([n,meta,rev],i)=>`<tr><td><strong>${n}</strong><div class="tiny muted">${meta}</div></td><td>${rev}</td><td><span class="tag ${!db.indexStatus?.[i]||db.indexStatus[i]==='색인 완료'?'green':'orange'}">${db.indexStatus?.[i]||'색인 완료'}</span></td><td><button class="btn" data-index="${i}">다시 색인</button></td></tr>`).join('')}</tbody></table></div>`}
+function empty(title,desc,action,label){return `<div class="empty-state">${icon('folder')}<h3>${title}</h3><p>${desc}</p>${action?btn(label,action):''}</div>`}
+function stateView(){let titles={home:'오늘은 챙길 일이 없어요',qa:'아직 대화가 없어요',documents:'등록된 양식이 없어요',editor:'선택된 양식이 없어요',requests:'아직 신청한 서류가 없어요',admin:adminTab==='templates'?'등록된 양식이 없어요':adminTab==='regulations'?'등록된 규정 문서가 없어요':'접수된 서류가 없어요',rules:'등록된 규정이 없어요'};if(mode==='empty')return `<div class="page-title"><h1>빈 상태 미리보기</h1></div><div class="card">${empty(titles[page],'새 항목이 생기면 이곳에 표시해 드려요.','normal','기본 화면으로 돌아가기')}</div>`;if(mode==='loading')return `<div class="page-title"><h1>필요한 정보를 불러오고 있어요</h1></div><div class="card" style="padding:30px"><div class="loading-wrap"><span class="spinner"></span><p>${page==='qa'?'관련 규정을 검색하고 있어요.':page==='editor'?'양식과 내 정보를 준비하고 있어요.':'잠시만 기다려 주세요.'}</p></div><div class="skeleton"></div><div class="skeleton" style="width:75%"></div>${btn('불러오기 중지','normal')}</div>`;return `<div class="page-title"><h1>잠시 문제가 생겼어요</h1></div><div class="card">${empty('정보를 불러오지 못했어요','저장된 초안은 그대로예요. 다시 시도해 주세요.','normal','다시 시도')}</div>`}
+function modal(title,body,wide=false){modalReturn=document.activeElement;$('#modal-root').innerHTML=`<div class="modal-overlay"><section class="modal ${wide?'wide':''}" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-head"><h2>${title}</h2><button class="icon-btn" data-action="close" aria-label="닫기">${icon('close')}</button></div>${body}</section></div>`;document.body.style.overflow='hidden';bindModal();$('.modal [data-action="close"]')?.focus()}
+function closeModal(){ $('#modal-root').innerHTML='';document.body.style.overflow='';modalReturn?.isConnected&&modalReturn.focus() }
+function showSource(k){modal('근거 규정 확인',sourceContent(k))}
+function openRecord(id,review=false){const r=db.records.find(x=>x.id===id);if(!r)return;if(!review&&r.status==='작성 중'){start(r.type,id);return}if(review&&r.status==='작성 중'){toast('작성 중인 초안은 관리자가 볼 수 없어요.');return}modal(review?'제출 서류 검토':'신청 상세',`<div class="between"><span class="small muted">${r.date} · ${esc(r.values.name)} · ${esc(r.values.dept)}</span>${badge(r.status)}</div>${r.reason?`<div class="history-reason">반려 사유: ${esc(r.reason)}</div>`:''}<div style="margin-top:20px">${paper(r.type,r.values,false,r.snapshots?.[r.type])}${r.type==='training'&&r.docs?Object.entries(r.docs).map(([t,v])=>paper(t,v,false,r.snapshots?.[t])).join(''):''}</div>${review&&r.status==='제출됨'?`<div class="notice warn" style="margin-top:16px">${icon('warning')}승인·반려 결과는 직원의 신청 내역에 바로 표시돼요.</div><label class="field-label" for="reject-reason">반려 사유 · 반려할 때 필수</label><textarea class="field" id="reject-reason" placeholder="직원이 수정할 내용을 구체적으로 알려 주세요."></textarea><div class="field-error" id="review-error" role="alert"></div><div class="modal-actions">${btn('반려하기','reject:'+id)}${btn('승인하기','approve:'+id,'primary')}</div>`:`<div class="modal-actions">${r.status==='반려됨'?btn('수정하기','edit:'+id,'primary'):''}${btn('PDF 다시 받기','pdf:'+id,'','download')}</div>`}`,true)}
+function submit(){const types=record.type==='training'?['training','recommendation','pledge']:[record.type];for(const t of types){const v=t===record.type?record.values:record.docs?.[t]||{};const missing=fieldsFor(t).find(fld=>fieldProblem(fld,v[fld.key],v,t));if(missing){step=types.indexOf(t);activeField=missing.key;fieldError=`${forms[t].title}의 ${missing.label}을 확인해 주세요.`;render();toast('빠진 항목이나 입력 오류를 먼저 확인해 주세요.');return}}modal('서류를 제출할까요?',`<p class="small muted">${esc(record.title)}${record.type==='training'?' · 추천서 · 서약서':''}</p><div class="notice" style="margin-top:17px">${icon('lock')}제출한 서류만 담당자에게 표시돼요.</div><label class="review-check"><input type="checkbox" id="submit-check">입력 내용과 근거 확인이 필요한 항목을 검토했어요.</label><div class="modal-actions">${btn('계속 작성','close')}${btn('제출하기','confirm-submit','primary')}</div><div class="field-error" id="submit-error" role="alert"></div>`)}
+function recommendAfterCert(certName){modal('자격증과 이어지는 교육이 있어요',`<p>방금 신고한 ${esc(certName||'자격증')}과 연결된 직무교육을 교육 화면 추천교육에서 볼 수 있어요. 들으면 직무교육 50시간에 반영돼요.</p><div class="modal-actions">${btn('나중에','close')}${btn('추천교육 보기','go-education','primary','arrow')}</div>`)}function editTemplate(k){modal('양식 칸 구성',`<h3>${forms[k].title}</h3><p class="small muted" style="margin:7px 0 15px">v${db.templateVersion?.[k]||'1.0'} · 기본 항목은 유지하고 추가 항목을 관리해요.</p><div class="flex" style="flex-wrap:wrap">${forms[k].fields.map(fld=>`<span class="tag">${fld.label}${fld.auto?' · 자동':''}</span>`).join('')}</div><label class="field-label" for="template-fields">추가 항목 · 한 줄에 하나씩 입력해요</label><textarea class="field" id="template-fields">${esc((db.customFields?.[k]||[]).join('\n'))}</textarea><p class="disclaimer">추가 항목은 새 양식과 작성 중 서류에 적용돼요. 제출된 서류의 데이터는 바뀌지 않아요.</p><div class="modal-actions">${btn('버전 저장','template-save:'+k,'primary')}</div>`)}
+function bind(){document.querySelectorAll('[data-nav]').forEach(el=>el.onclick=()=>{if(page==='editor'&&record)saveDraft(true);navigate(el.dataset.nav)});document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>action(el.dataset.action));document.querySelectorAll('[data-start]').forEach(el=>el.onclick=()=>el.dataset.start==='recommendation'?action('start:recommendation'):start(el.dataset.start));document.querySelectorAll('[data-ref]').forEach(el=>el.onclick=()=>showSource(el.dataset.ref));document.querySelectorAll('[data-record]').forEach(el=>el.onclick=()=>openRecord(el.dataset.record));document.querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>start(db.records.find(r=>r.id===el.dataset.edit).type,el.dataset.edit));document.querySelectorAll('[data-pdf-record]').forEach(el=>el.onclick=()=>exportRecord(db.records.find(r=>r.id===el.dataset.pdfRecord)));document.querySelectorAll('[data-filter]').forEach(el=>el.onclick=()=>{filter=el.dataset.filter;render()});document.querySelectorAll('[data-filter-go]').forEach(el=>el.onclick=()=>{page='requests';filter=el.dataset.filterGo;render()});document.querySelectorAll('[data-ask]').forEach(el=>el.onclick=()=>ask(el.dataset.ask));document.querySelectorAll('[data-cite]').forEach(el=>el.onclick=()=>{qa.sel=Number(el.dataset.cite);render()});const mf=document.querySelector('#minutes-form');if(mf)mf.onsubmit=async e=>{e.preventDefault();const text=mf.querySelector('#minutes-text').value.trim();if(!text||minuting)return;if(hasValue(currentValues().discussion)&&!confirm('지금 회의록 내용을 새로 만든 내용으로 바꿀까요?'))return;minutesDraft=text;minuting=true;minutesReply='';render();try{const d=await api('/api/minutes',{method:'POST',body:JSON.stringify({transcript:text})});Object.assign(currentValues(),d.values||{});minutesReply=d.reply||'회의록을 만들었어요. 내용을 확인해 주세요.';minutesDraft='';activeField=null;fieldError='';saveDraft(true)}catch(err){minutesReply=err.status===422?'회의 내용이 너무 길어요. 6만 자 이하로 나눠서 넣어 주세요.':(err.message||'회의록을 만들지 못했어요.')}minuting=false;render()};const ff=document.querySelector('#fill-form');if(ff)ff.onsubmit=async e=>{e.preventDefault();const msg=ff.querySelector('#fill-text').value.trim();if(!msg||filling)return;const t=currentType();filling=true;fillReply='';render();try{const r=await fetch('/api/fill',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({form:forms[t].title,fields:fieldsFor(t).filter(x=>!x.auto&&x.type!=='file'&&!isReadOnlyField(t,x)).map(x=>({key:x.key,label:x.label,type:x.type})),values:currentValues(),message:msg})});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();Object.assign(currentValues(),d.values||{});fillReply=d.reply||'';if(Object.keys(d.values||{}).length){activeField=null;fieldError='';saveDraft(true)}}catch{fillReply='지금은 자동으로 채우지 못했어요. 위 입력창으로 직접 입력해 주세요.'}filling=false;render()};document.querySelectorAll('[data-question-form]').forEach(el=>el.onsubmit=e=>{e.preventDefault();ask(el.querySelector('input').value)});document.querySelectorAll('[data-field]').forEach(el=>el.onclick=()=>{activeField=el.dataset.field;fieldError='';render();$('#field-value')?.focus()});document.querySelectorAll('[data-step]').forEach(el=>el.onclick=()=>{step=+el.dataset.step;activeField=null;fieldError='';render()});document.querySelectorAll('[data-admin-tab]').forEach(el=>el.onclick=()=>{adminTab=el.dataset.adminTab;render()});document.querySelectorAll('[data-review]').forEach(el=>el.onclick=()=>openRecord(el.dataset.review,true));document.querySelectorAll('[data-template]').forEach(el=>el.onclick=()=>editTemplate(el.dataset.template));document.querySelectorAll('[data-index]').forEach(el=>el.onclick=()=>{const i=el.dataset.index;db.indexStatus??={};db.indexStatus[i]='색인 중';render();setTimeout(()=>{db.indexStatus[i]='색인 완료';persist();if(page==='admin')render();toast('색인 상태를 갱신했어요.')},1600)});if($('#state-select'))$('#state-select').onchange=e=>{mode=e.target.value;render()};if($('#record-search'))$('#record-search').oninput=e=>{const p=e.target.selectionStart;search=e.target.value;render();$('#record-search').focus();$('#record-search').setSelectionRange(p,p)};if($('#admin-type'))$('#admin-type').onchange=e=>{adminType=e.target.value;render()};if($('#admin-status'))$('#admin-status').onchange=e=>{adminStatus=e.target.value;render()};if($('#admin-dept'))$('#admin-dept').onchange=e=>{adminDept=e.target.value;render()};if($('#field-form')){const input=$('#field-value');input.addEventListener('input',()=>{const key=$('#field-key').value;currentValues()[key]=input.type==='file'?input.files[0]?.name||'':input.value;$('.paper-scroll').innerHTML=paper(currentType(),currentValues(),true);document.querySelectorAll('[data-field]').forEach(el=>el.onclick=()=>{activeField=el.dataset.field;fieldError='';render();$('#field-value')?.focus()});const fs=fieldsFor(currentType()),vv=currentValues(),n=fs.filter(x=>!fieldProblem(x,vv[x.key],vv,currentType())).length,p=Math.round(n/fs.length*100);$('.progress-label strong').textContent=n+' / '+fs.length+' · '+p+'%';$('.progress>i').style.width=p+'%';});}if($('#field-form'))$('#field-form').onsubmit=e=>{e.preventDefault();const key=$('#field-key').value,t=currentType(),fld=fieldsFor(t).find(x=>x.key===key),v=currentValues(),el=$('#field-value'),value=fld.type==='file'?el.files[0]?.name||'':el.value.trim(),newValues={...v,[key]:value};v[key]=value;fieldError=fieldProblem(fld,value,newValues,t);if(fieldError){render();return}v[key]=value;activeField=null;saveDraft(true);render();toast('양식에 입력했어요.');};}
+function bindModal(){document.querySelectorAll('#modal-root [data-action]').forEach(el=>el.onclick=()=>action(el.dataset.action));document.querySelectorAll('#modal-root [data-ref]').forEach(el=>el.onclick=()=>showSource(el.dataset.ref));$('.modal-overlay').onclick=e=>{if(e.target.classList.contains('modal-overlay'))closeModal()}}
+function action(a){const [cmd,arg]=a.split(':');if(cmd==='mandatory'){openMandatory(arg||'workplace_harassment');return}if(cmd==='close')return closeModal();if(cmd==='menu'){mobile=!mobile;render();return}if(cmd==='normal'){mode='normal';render();return}if(cmd==='save')return saveDraft();if(cmd==='new-document')return navigate('documents');if(cmd==='source')return showSource(arg);if(cmd==='start'){if(arg==='recommendation'){modal('추천서는 부서장님이 작성해요',`<p>외부교육 신청서에 교육 정보를 입력하면 부서장에게 추천서 작성을 요청할 수 있어요.</p><div class="modal-actions">${btn('외부교육 신청하기','start-training','primary')}</div>`);return}return start(arg)}if(cmd==='start-training'){closeModal();start('training');return}if(cmd==='sample'){const t=currentType();Object.assign(currentValues(),t==='pledge'&&record.type==='training'?{service:overseasTwo(record.values)?serviceInfo(record.values).text:'담당 부서 확인 필요'}:sampleValues[t]||{});fieldError='';activeField=null;saveDraft(true);render();toast('예시 값을 채웠어요.');return}if(cmd==='next-step'){let missing=nextField();if(currentType()==='recommendation'&&!currentValues().recommend){toast('부서장 추천서를 받은 후 진행해 주세요.');return}if(missing){activeField=missing.key;fieldError='다음 단계로 이동하기 전에 이 항목을 확인해 주세요.';render();return}step++;activeField=null;render();return}if(cmd==='recommend-request'){record.recommendationRequested=true;saveDraft(true);render();toast('부서장 작성 요청 상태로 변경했어요. 실제 메시지는 보내지 않았어요.');return}if(cmd==='recommend-receive'){Object.assign(currentValues(),{field:record.values.course,purpose:record.values.contents,recommend:'해당 교육은 담당 업무와 연관성이 높고 직무 역량 향상에 도움이 되어 추천해요.'});saveDraft(true);render();return}if(cmd==='preview'){modal('PDF 미리보기',paper(currentType(),currentValues())+`<div class="modal-actions">${btn('PDF 다운로드','download','','download')}</div>`,true);return}if(cmd==='logout'){logout();return}if(cmd==='print-hr-card'){printHrCard();return}if(cmd==='hrtab'){hrTab=arg;render();return}if(cmd==='family-change'){modal('가족사항 변경 신청',`<p>결혼, 출생, 사망 등으로 가족이 바뀌면 부양가족 신고서를 제출해요. 승인되면 가족수당에 반영돼요.</p><div class="notice warn" style="margin-top:14px">${icon('warning')}부양가족 신고서 양식은 아직 준비 중이에요.</div><div class="modal-actions">${btn('닫기','close','primary')}</div>`);return}if(cmd==='nav-appointments'){hrTab='appoint';navigate('card');return}if(cmd==='card-tab'){hrTab=arg||'basic';navigate('card');return}if(cmd==='nav-card'){hrTab='basic';navigate('card');return}if(cmd==='download'||cmd==='download-anyway'){const t=currentType(),v=currentValues(),miss=fieldsFor(t).filter(fld=>fieldProblem(fld,v[fld.key],v,t));if(cmd==='download'&&miss.length){modal('빈 칸이 있어요',`<p>아래 ${miss.length}개 항목이 비어 있거나 확인이 필요해요. 이대로 받으면 양식에 빈칸으로 나와요.</p><ul class="small" style="margin:12px 0 0 18px;line-height:1.9">${miss.map(fld=>`<li>${esc(fld.label)}</li>`).join('')}</ul><div class="modal-actions">${btn('계속 작성','close')}${btn('그래도 다운로드','download-anyway','primary','download')}</div>`);return}closeModal();return exportPDF([{type:t,values:v}],forms[t].title)}if(cmd==='pdf')return exportRecord(db.records.find(r=>r.id===arg));if(cmd==='edit'){closeModal();return start(db.records.find(r=>r.id===arg).type,arg)}if(cmd==='submit')return submit();if(cmd==='confirm-submit'){if(!$('#submit-check').checked){$('#submit-error').textContent='검토 확인에 체크해 주세요.';return}record.status='제출됨';record.snapshots={};for(const t of (record.type==='training'?['training','recommendation','pledge']:[record.type]))record.snapshots[t]={fields:fieldsFor(t),version:db.templateVersion?.[t]||'1.0'};delete record.reason;const was=record.type,certName=(record.values.cert||'')+(record.values.level||'');saveDraft(true);closeModal();navigate('requests');toast('제출했어요. 담당자가 확인하면 알려 드릴게요.');if(was==='cert')recommendAfterCert(certName);return}if(cmd==='approve'||cmd==='reject'){const r=db.records.find(x=>x.id===arg);if(!r||r.status!=='제출됨')return;const reason=$('#reject-reason')?.value.trim();if(cmd==='reject'&&!reason){$('#review-error').textContent='반려 사유를 입력해 주세요.';$('#reject-reason').focus();return}r.status=cmd==='approve'?'승인됨':'반려됨';r.date=today();if(cmd==='reject')r.reason=reason;else delete r.reason;persist();closeModal();render();toast(cmd==='approve'?'서류를 승인했어요.':'반려 사유를 저장했어요. 직원 신청 내역에 표시돼요.');return}if(cmd==='template-save'){db.customFields??={};db.templateVersion??={};db.customFields[arg]=[...new Set($('#template-fields').value.split('\n').map(x=>x.trim()).filter(Boolean))];db.templateVersion[arg]=(Number(db.templateVersion[arg]||1)+.1).toFixed(1);persist();closeModal();render();toast('양식 버전과 칸 구성을 저장했어요.');return}if(cmd==='admin-clear'){adminType=adminStatus=adminDept='전체';render();return}if(cmd==='clear-filters'){filter='전체';search='';render();return}if(cmd==='notifications'){const t=todos()[0];if(!t){const a=(me.alerts?.items||[])[0];if(a)return action(alertCmd(a));toast('새 알림이 없어요.');return}return action(t.code==='unknown'?'contact':'mandatory:'+t.code)}if(cmd==='go-education'){closeModal();navigate('education');return}if(cmd==='stop-qa'){clearTimeout(qaTimer);qaAbort?.abort();qa.phase='stopped';render();return}if(cmd==='retry-qa')return ask(qa.query||'자격증 따면 승진 가점이 있나요?');if(cmd==='change-question'){$('#qa-question')?.focus();return}if(cmd==='qa-document'){if(qa.rule==='mandatory')return action('mandatory');return start(qa.rule==='cert'?'cert':qa.rule==='leave'?'leave':'training')}if(cmd==='contact'){modal('문의 부서 안내',`<h3>인사팀에 확인해 주세요</h3><p class="small muted" style="margin-top:12px">규정 원문, 자격수당 적용 여부, 교육 지원 기준과 연차 사용 기준을 문의해 주세요.</p><div class="notice warn" style="margin-top:18px">${icon('help')}연락처가 제공되지 않았어요. 사내 연락처 목록에서 인사팀 연락처를 확인해 주세요.</div>`);return}if(cmd==='reset-confirm'){modal('예시 데이터를 초기화할까요?',`<p>이 브라우저에서 작성한 초안과 승인·반려 내역이 사라지고 최초 예시 데이터로 돌아가요.</p><div class="modal-actions">${btn('취소','close')}${btn('초기화하기','reset','primary')}</div>`);return}if(cmd==='reset'){db={records:seedRecords(),templateVersion:{},customFields:{}};persist();record=null;closeModal();navigate('home');toast('최초 예시 데이터로 초기화했어요.');return}}
+// Export a self-contained image-backed PDF. Canvas text preserves Korean glyphs without an external PDF/font dependency.
+async function exportPDF(docs,name){const html=docs.map(doc=>paper(doc.type,doc.values,false,doc.snapshot)).join('<div style="page-break-after:always"></div>');const css=[...document.querySelectorAll('style')].map(x=>x.outerHTML).join('');const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';document.body.appendChild(f);const w=f.contentWindow,doc=w.document;doc.open();doc.write(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>${esc(name||'K-LINK 서류')}</title>${css}<style>@page{size:A4;margin:14mm}body{background:#fff}.paper{box-shadow:none;min-height:0;padding:0}.paper-cell,.paper-cell.auto,.paper-cell.filled,.paper-cell.empty{background:none!important;color:#222!important;box-shadow:none!important}.cell-label{display:none}</style><\/head><body>${html}<\/body><\/html>`);doc.close();setTimeout(()=>{w.focus();w.print();setTimeout(()=>f.remove(),1500)},300);toast('인쇄 창에서 대상을 "PDF로 저장"으로 선택해 주세요.')}
+function exportRecord(r){if(!r)return;exportPDF([{type:r.type,values:r.values,snapshot:r.snapshots?.[r.type]},...Object.entries(r.docs||{}).map(([type,values])=>({type,values,snapshot:r.snapshots?.[type]}))],r.title)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#modal-root').children.length)closeModal();else if(mobile){mobile=false;render()}}if(e.key==='Tab'&&$('.modal')){const nodes=[...$('.modal').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled),first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
+window.addEventListener('hashchange',()=>{if(!auth.signedIn)return;const next=location.hash.slice(1);if(allowedPage(next)&&next!==page){if(page==='editor'&&record)saveDraft(true);page=next;mode='normal';render();refreshHrCard(next)}});
+const hrAdmin = {allowed: false, people: null, detail: null, asOf: ''}
+
+function employeeDirectory() {
+  return `<div class="page-title"><h1>직원 관리</h1><p class="muted">직원 기록을 조회하고 연락처 또는 인사발령을 관리해요.</p></div>
+    <div id="employee-directory"><p role="status" class="muted">직원 목록을 불러오는 중이에요.</p></div>`
+}
+
+function directoryPanel(host) {
+  host.innerHTML = `<section class="card" style="padding:18px">
+    <label for="employee-search">직원 검색</label>
+    <input id="employee-search" class="input" placeholder="이름, 사번, 소속, 직급" style="display:block;margin:8px 0 14px;width:min(100%,340px);padding:9px">
+    <div id="employee-results"></div></section>`
+  const search = $('#employee-search')
+  function showRows() {
+    const term = search.value.trim().toLowerCase()
+    const rows = hrAdmin.people.filter(person => [person.name, person.employee_no, person.department, person.grade]
+      .some(item => String(item || '').toLowerCase().includes(term)))
+    $('#employee-results').innerHTML = hrTable(['이름', '사번', '소속', '직위', '직급', '입사일'], rows.map(person => [
+      `<button class="text-btn" data-employee="${esc(person.employee_no)}">${esc(person.name)}</button>`,
+      esc(person.employee_no), esc(person.department), esc(person.position), esc(person.grade), esc(person.hired_on),
+    ]), '검색 결과가 없어요.')
+    host.querySelectorAll('[data-employee]').forEach(button => button.onclick = async () => {
+      button.disabled = true
+      try {
+        const profile = await api('/v1/hr/employees/' + encodeURIComponent(button.dataset.employee))
+        if (!host.isConnected) return
+        hrAdmin.detail = profile
+        detailPanel(host)
+      } catch (error) { toast(error.message) }
+      finally { button.disabled = false }
+    })
+  }
+  search.addEventListener('input', showRows)
+  showRows()
+}
+
+function detailPanel(host) {
+  const profile = hrAdmin.detail
+  const base = profile.basic
+  const personal = profile.personal || {}
+  const field = (label, name, value, type = 'text', extra = '') =>
+    `<label style="display:grid;gap:4px">${label}<input class="input" style="padding:8px;width:100%" name="${name}" type="${type}" value="${esc(value || '')}" ${extra}></label>`
+  const form = (id, title, contents, action) => `<form id="${id}" class="card" style="padding:18px;margin-bottom:16px">
+    <h2 style="margin-top:0">${title}</h2><div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(175px,100%),1fr))">${contents}</div>
+    <p role="alert" class="login-error"></p><button class="btn primary" type="submit">${action}</button></form>`
+  host.innerHTML = `<section class="card" style="padding:18px;margin-bottom:16px">
+    <div class="section-head"><h2>${esc(base.name)} <span class="muted">${esc(base.employee_no)}</span></h2>
+    <button class="text-btn" id="employees-back">직원 목록</button></div>
+    ${hrDl([['소속',base.department],['직위',base.position],['직급',base.grade],['입사일',base.hired_on]])}</section>
+    ${form('employee-contact', '연락처 관리', field('휴대전화','phone',personal.phone,'tel','maxlength="40"') +
+      field('이메일','email',personal.email,'email','maxlength="160"') + field('주소','address',personal.address,'text','maxlength="240"'), '연락처 저장')}
+    <section class="card" style="padding:18px;margin-bottom:16px"><h2>인사발령 이력</h2>
+    ${hrTable(['적용일','구분','이전 소속','새 소속','직위·직급','상태','메모'], profile.appointments.map(item => [
+      dotDate(item.date),esc(item.type),esc(item.before_department || '—'),esc(item.dept),
+      esc([item.position,item.grade].filter(Boolean).join(' · ')),esc(item.status),esc(item.note || '—'),
+    ]), '등록된 발령이 없어요.')}</section>
+    ${form('employee-appointment', '인사발령 등록',
+      field('적용일','effective_on',hrAdmin.asOf,'date',`required min="${esc(hrAdmin.asOf)}"`) +
+      '<label style="display:grid;gap:4px">발령 구분<select name="kind"><option>부서 이동</option><option>승진</option><option>보직 변경</option></select></label>' +
+      field('새 소속','department',base.department,'text','required maxlength="80"') +
+      field('새 직위','position',base.position,'text','required maxlength="80"') +
+      field('새 직급','grade',base.grade,'text','required maxlength="40"') +
+      field('인사팀 메모','note','','text','maxlength="400"'), '발령 등록')}`
+  $('#employees-back').onclick = () => {
+    hrAdmin.detail = null
+    bindEmployeeDirectory()
+  }
+  for (const [id, method, path, message] of [
+    ['employee-contact','PATCH','contact','연락처를 저장했어요.'],
+    ['employee-appointment','POST','appointments','발령을 등록했어요.'],
+  ]) {
+    const section = $('#' + id)
+    section.onsubmit = async event => {
+      event.preventDefault()
+      const button = section.querySelector('button')
+      const errorLine = section.querySelector('[role="alert"]')
+      button.disabled = true
+      errorLine.textContent = ''
+      try {
+        const updated = await api('/v1/hr/employees/' + encodeURIComponent(base.employee_no) + '/' + path, {
+          method, body: JSON.stringify(Object.fromEntries(new FormData(section))),
+        })
+        if (base.employee_no === me.employeeNo) await loadMe()
+        if (host.isConnected && section.isConnected) {
+          hrAdmin.detail = updated
+          detailPanel(host)
+        }
+        toast(message)
+      } catch (error) { errorLine.textContent = error.message }
+      finally { button.disabled = false }
+    }
+  }
+}
+
+async function bindEmployeeDirectory() {
+  const host = $('#employee-directory')
+  if (!host || !hrAdmin.allowed) return
+  if (hrAdmin.detail) return detailPanel(host)
+  try {
+    hrAdmin.people = await api('/v1/hr/employees')
+    if (host.isConnected) directoryPanel(host)
+  } catch (error) {
+    if (host.isConnected) host.innerHTML = `<p role="alert">${esc(error.message)}</p>`
+  }
+}
+
+function employeeHome() {
+  const basic = me.hr?.basic || {}
+  const summary = me.hr?.summary
+  const firstName = basic.name || me.name
+  return `<div class="page-title"><h1>인사 홈</h1><p class="muted">${dotDate(hrAdmin.asOf)} 기준</p></div>
+    <section class="card ehr-hero" aria-label="내 재직 정보">
+      <div class="ehr-identity">${employeePhoto(me.hr)}
+        <div><h2>${esc(firstName)}</h2><p>${esc([basic.employee_no,basic.department,basic.position].filter(Boolean).join(' · '))}</p></div>
+        ${btn('인사카드 전체 보기','nav-card','','arrow')}</div>
+      ${hrDl([['사번',basic.employee_no],['소속',basic.department],['직위',basic.position],
+        ['직급',basic.grade],['직군',basic.job_type],['입사일',basic.hired_on ? dotDate(basic.hired_on) : '']])}
+    </section>
+    <div class="ehr-metrics">
+      <button class="card ehr-metric" type="button" data-nav="requests">
+        <span>내 신청 현황</span><strong id="home-request-count" aria-live="polite">조회 중…</strong>
+        <small id="home-request-latest"></small></button>
+      <button class="card ehr-metric" type="button" data-start="leave">
+        <span>잔여 연차</span><strong id="home-leave" aria-live="polite">조회 중…</strong>
+        <small id="home-leave-detail"></small></button>
+      <button class="card ehr-metric" type="button" data-nav="education">
+        <span>올해 교육 이수</span><strong>${esc(summary ? summary.year_count + '건 · ' + summary.year_hours + '시간' : '확인 필요')}</strong>
+        <small>필수교육 ${esc(mandatorySummary())}</small></button>
+    </div>
+    <div class="ehr-home-grid">
+      <div>${careerCard()}${allowanceCard()}</div>
+      <div>
+        <section class="card ehr-panel">
+          <div class="section-head"><h2>해야 할 일</h2><button class="text-btn" data-nav="education">교육 현황</button></div>
+          ${homeTasks().length ? homeTasks().slice(0,5).map(item =>
+            `<div class="ehr-todo"><div><strong>${esc(item.title)}</strong>${item.detail ? `<small>${esc(item.detail)}</small>` : ''}${item.due && !item.detail ? `<small>기한 ${dotDate(item.due)}</small>` : ''}</div>
+            <button class="text-btn" data-action="${esc(item.cmd)}">${esc(item.label || '확인')}</button></div>`).join('')
+            : '<p class="muted">지금 처리할 항목이 없어요.</p>'}
+        </section>
+        <section class="card ehr-panel">
+          <div class="section-head"><h2>공지사항</h2></div>
+          <div id="home-notices"><p class="muted">공지를 불러오는 중이에요.</p></div>
+        </section>
+      </div>
+    </div>`
+}
+
+function alertCmd(a) {
+  return a.action?.kind === 'form' ? 'start:' + a.action.target : 'card-tab:' + (a.action?.target || 'basic')
+}
+
+function homeTasks() {
+  const edu = todos().map(t => ({title: t.title, due: t.due,
+    cmd: t.code === 'unknown' ? 'contact' : 'mandatory:' + t.code, label: '확인'}))
+  const alerts = (me.alerts?.items || []).map(a => ({title: a.title, detail: a.detail, due: a.due,
+    cmd: alertCmd(a), label: a.action?.label}))
+  return [...edu, ...alerts]
+}
+
+function mandatorySummary() {
+  const t = me.training
+  if (!t?.has_history) return '이력 확인 필요'
+  const done = t.items.filter(i => i.status === 'completed').length
+  return `${done}/${t.items.length} 이수`
+}
+
+function ehrRows(rows) {
+  return rows.map(([k, v]) => `<div class="ehr-row"><span>${k}</span><strong>${esc(v || '—')}</strong></div>`).join('')
+}
+
+function careerCard() {
+  const h = me.hr || {}, b = h.basic || {}, lp = lastPromotion(h), a = (h.appointments || [])[0]
+  const promo = (me.training?.items || []).find(i => i.code === 'promotion')
+  const rows = [
+    ['근속기간', b.hired_on ? `${since(b.hired_on)} (${dotDate(b.hired_on)} 입사)` : ''],
+    ['현 직급', lp ? `${b.grade || lp.grade} · ${dotDate(lp.date)} 승진 · ${since(lp.date)} 경과` : b.grade],
+    ['최근 발령', a ? `${dotDate(a.date)} ${a.type} · ${a.dept}` : ''],
+  ]
+  if (promo) rows.push(['승진 필수교육', promo.status === 'completed' ? '이수' : '미이수'])
+  return `<section class="card ehr-panel"><div class="section-head"><h2>재직 현황</h2>
+    <button class="text-btn" data-action="nav-appointments">발령 이력 보기</button></div>${ehrRows(rows)}</section>`
+}
+
+function allowanceCard() {
+  const h = me.hr || {}
+  const deps = (h.family || []).filter(f => f.dependent)
+  const paid = (h.certificates || []).filter(c => c.allowance === '반영')
+  return `<section class="card ehr-panel"><div class="section-head"><h2>수당 현황</h2>
+    <button class="text-btn" data-action="nav-card">인사카드</button></div>
+    ${ehrRows([
+      ['가족수당', deps.length ? `대상 ${deps.length}명 (${deps.map(f => f.relation).join(', ')})` : '대상 없음'],
+      ['기술정보수당', paid.length ? paid.map(c => c.name).join(', ') + ' 반영' : '반영된 자격 없음'],
+    ])}
+    <p class="small muted" style="margin:10px 0 0">지급액은 급여명세서에서 확인해요.</p></section>`
+}
+
+function fmtDays(n) { return Number.isInteger(+n) ? String(+n) : (+n).toFixed(1) }
+
+function bindHomeExtras() {
+  const leave = $('#home-leave'), detail = $('#home-leave-detail'), notices = $('#home-notices')
+  api('/v1/me/leave').then(l => {
+    if (!leave?.isConnected) return
+    if (!l.source) { leave.textContent = '확인 필요'; return }
+    leave.textContent = `${fmtDays(l.remaining_days)}일 남음`
+    detail.textContent = `${fmtDays(l.granted_days)}일 중 ${fmtDays(l.used_days)}일 사용 · ${dotDate(l.period_end)}까지`
+  }).catch(() => { if (leave?.isConnected) leave.textContent = '조회하지 못했어요' })
+  api('/v1/notices').then(items => {
+    if (!notices?.isConnected) return
+    notices.innerHTML = items.length ? items.map(n => `<div class="ehr-notice"><span class="tag">${esc(n.category)}</span>
+      <span class="ehr-notice-title">${esc(n.title)}</span><time>${dotDate(n.date)}</time></div>`).join('')
+      : '<p class="muted">새 공지가 없어요.</p>'
+  }).catch(() => { if (notices?.isConnected) notices.innerHTML = '<p class="muted">공지를 불러오지 못했어요.</p>' })
+}
+
+const contactLabels = {phone: '휴대전화', email: '이메일', address: '주소'}
+function contactSummary(item) {
+  return Object.entries(item.changes).map(([key, value]) => `<p>${esc(contactLabels[key])} ${esc(value || '미등록')}</p>`).join('')
+}
+function contactStatus(status) {
+  const label = {pending: '처리 대기', approved: '승인', rejected: '반려', cancelled: '취소됨'}[status] || status
+  return `<span class="tag ${status === 'approved' ? 'green' : status === 'rejected' ? 'red' : ''}">${esc(label)}</span>`
+}
+
+function serviceHeading(title, description) {
+  return `<button class="hr-service-back" data-nav="card">‹ 나의 인사카드</button>
+    <div class="page-title"><h1>${title}</h1><p>${description}</p></div>`
+}
+
+function contactPage() {
+  return `<div class="hr-service">${serviceHeading('인사정보 변경 신청','바꿀 항목만 수정하세요. 승인되면 인사카드에 반영됩니다.')}
+    <div id="contact-panel" aria-live="polite">신청 내역을 불러오는 중입니다.</div></div>`
+}
+
+async function bindContactPage() {
+  const host = $('#contact-panel')
+  try {
+    const requests = await api('/v1/hr/me/contact-requests')
+    if (!host.isConnected) return
+    const pending = requests.some(item => item.status === 'pending')
+    const personal = me.hr?.personal || {}
+    const fields = [['phone','tel',40],['email','email',160],['address','text',240]]
+    host.innerHTML = `<form id="contact-request" class="card hr-service-form">
+      ${pending ? '<p class="muted">처리 중인 신청이 있어요. 아래에서 상태를 확인할 수 있어요.</p>' : `
+        <div>${fields.map(([name,type,length]) =>
+          `<label class="service-row"><span>${contactLabels[name]}</span><input class="input" type="${type}" name="${name}" maxlength="${length}" value="${esc(personal[name] || '')}"></label>`).join('')}</div>
+        <p role="alert" class="login-error"></p><div class="service-actions"><button type="submit" class="btn primary">변경 신청</button></div>`}
+      </form>
+      <section class="service-history"><h2>변경 신청 내역</h2>
+      ${requests.length ? hrTable(['신청일','변경 내용','상태','처리일','처리 사유'], requests.map(item => [
+        dotDate(item.submitted_at.slice(0,10)),contactSummary(item),contactStatus(item.status),
+        item.decided_at ? dotDate(item.decided_at.slice(0,10)) : '—',esc(item.reason || '—'),
+      ])) : '<p class="service-empty">변경 신청 내역이 없습니다.</p>'}</section>`
+    if (pending) return
+    const form = $('#contact-request')
+    form.onsubmit = async event => {
+      event.preventDefault()
+      const button = form.querySelector('button')
+      button.disabled = true
+      try {
+        await api('/v1/hr/me/contact-requests', {method:'POST', body:JSON.stringify(Object.fromEntries([...new FormData(form)].filter(([key,value]) => value.trim() !== (personal[key] || ''))))})
+        if (form.isConnected) await bindContactPage()
+        toast('인사정보 변경을 신청했어요.')
+      } catch (error) { form.querySelector('[role="alert"]').textContent = error.message }
+      finally { button.disabled = false }
+    }
+  } catch (error) {
+    if (host.isConnected) host.textContent = error.message
+  }
+}
+
+function reviewPage() {
+  return `<div class="page-title"><h1>인사정보 변경 심사</h1><p class="muted">승인한 변경 내용은 직원 인사카드에 반영돼요.</p></div>
+    <div id="contact-review-panel" aria-live="polite"><p class="muted">변경 신청을 불러오는 중이에요.</p></div>`
+}
+
+async function bindReviewPage() {
+  const host = $('#contact-review-panel')
+  try {
+    const queue = await api('/v1/hr/contact-requests')
+    if (!host.isConnected) return
+    const pending = queue.filter(item => item.status === 'pending')
+    host.innerHTML = `<section class="card ehr-panel"><div class="section-head"><h2>처리 대기 <span class="count">${pending.length}</span></h2></div>
+      ${pending.map(item => `<form class="ehr-review" data-contact-review="${item.id}">
+        <div><h3>${esc(item.employee_name)} <small>${esc(item.employee)}</small></h3>${contactSummary(item)}</div>
+        <label>처리 사유<input class="input" name="reason" maxlength="400" placeholder="반려할 때 필수"></label>
+        <div class="ehr-links"><button type="submit" class="btn primary" value="approved">승인</button>
+        <button type="submit" class="btn" value="rejected">반려</button></div>
+        <p role="alert" class="login-error"></p></form>`).join('') || '<p class="muted">처리할 신청이 없어요.</p>'}</section>
+      <section class="card ehr-panel"><div class="section-head"><h2>처리 이력</h2></div>
+      ${hrTable(['직원','변경 내용','상태','처리일','처리 사유'], queue.filter(item => item.status !== 'pending').map(item => [
+        esc(item.employee_name),contactSummary(item),contactStatus(item.status),
+        dotDate(item.decided_at.slice(0,10)),esc(item.reason || '—'),
+      ]), '처리 이력이 없어요.')}</section>`
+    host.querySelectorAll('form').forEach(form => form.onsubmit = async event => {
+      event.preventDefault()
+      const decision = event.submitter.value
+      const reason = form.elements.reason.value.trim()
+      const buttons = [...form.querySelectorAll('button')]
+      buttons.forEach(button => { button.disabled = true })
+      try {
+        await api('/v1/hr/contact-requests/' + form.dataset.contactReview + '/decision', {
+          method:'POST', body:JSON.stringify({decision, reason}),
+        })
+        if (form.isConnected) await bindReviewPage()
+        toast(decision === 'approved' ? '변경 신청을 승인했어요.' : '변경 신청을 반려했어요.')
+      } catch (error) { form.querySelector('[role="alert"]').textContent = error.message }
+      finally { buttons.forEach(button => { button.disabled = false }) }
+    })
+  } catch (error) {
+    if (host.isConnected) host.textContent = error.message
+  }
+}
+
+
+// ── 복리후생 신청 (출산축하금·학자금·경조휴가) ─────────────────────────
+const WELFARE_KINDS = [
+  ['birth', '출산축하금', '둘째 200만원 · 셋째 이상 300만원'],
+  ['tuition', '학자금', '고교 지급 · 대학 무이자 대부'],
+  ['condolence', '경조휴가', '결혼·출산·사망 등 유급휴가'],
+]
+const CONDOLENCE_REASONS = [
+  ['own_wedding','본인 결혼',5],['child_wedding','자녀 결혼',1],['spouse_birth','배우자 출산',20],
+  ['spouse_death','배우자 사망',5],['parent_death','본인 및 배우자의 부모 사망',5],
+  ['grandparent_death','본인 및 배우자의 조부모·외조부모 사망',3],['child_death','자녀와 그 자녀의 배우자 사망',3],
+  ['sibling_death','본인 및 배우자의 형제자매 사망',3],['adoption','자녀 입양',20],
+]
+const TUITION_FEES = ['입학금','수업료','육성회비','학생회비','실험실습비']
+let welfareKind = 'birth', welfareResult = null
+
+function welfareChildren() { return (me.hr?.family || []).filter(f => f.relation === '자녀') }
+
+function welfareFields(kind) {
+  const kids = `<datalist id="welfare-kids">${welfareChildren().map(c => `<option value="${esc(c.name)}">`).join('')}</datalist>`
+  const row = (label, input, hint='') => `<label class="service-row"><span>${label}</span><div>${input}${hint ? `<small class="muted welfare-hint">${hint}</small>` : ''}</div></label>`
+  if (kind === 'birth') return kids +
+    row('자녀 이름', '<input name="child_name" list="welfare-kids" maxlength="40" required>', '가족사항에 이미 등록했다면 목록에서 고르세요.') +
+    row('출생일', '<input type="date" name="birth_date" required>') +
+    row('출생 자녀 수', '<select name="count"><option value="1">1명</option><option value="2">2명 (쌍둥이)</option><option value="3">3명</option></select>')
+  if (kind === 'tuition') return kids +
+    row('자녀 이름', '<input name="child_name" list="welfare-kids" maxlength="40" required>') +
+    row('학교 구분', '<select name="level"><option value="high">고등학교</option><option value="univ">대학교</option><option value="overseas">해외대학교</option></select>') +
+    row('학교명', '<input name="school" maxlength="80" required>') +
+    row('학기', '<input name="term" maxlength="20" placeholder="예: 2027-1학기" required>') +
+    `<div class="service-row"><span>등록금 항목</span><div class="welfare-fees">${TUITION_FEES.map(f =>
+      `<label>${f}<input type="number" min="0" step="1000" name="fee:${f}" placeholder="0"></label>`).join('')}
+      <label>그 밖의 비용<input type="number" min="0" step="1000" name="other_fees" placeholder="기숙사비 등"></label></div></div>` +
+    '<p class="small muted" style="margin:8px 0 0">해외대학교는 금액을 달러로 입력하세요.</p>'
+  return row('사유', `<select name="reason">${CONDOLENCE_REASONS.map(([v,t,d]) => `<option value="${v}" data-days="${d}">${t} (${d}일)</option>`).join('')}</select>`) +
+    row('경조사 발생일', '<input type="date" name="event_date" required>', '배우자 출산은 출산(예정)일') +
+    row('휴가 시작일', '<input type="date" name="start_date" required>') +
+    row('휴가 일수', '<input type="number" name="days" min="1" max="30" value="5" required>', '토·일은 빼고 세요.') +
+    row('추가 조건', `<div class="welfare-checks"><label><input type="checkbox" name="twins"> 한 번에 둘 이상 출산</label>
+      <label><input type="checkbox" name="remote"> 원격지 (왕복 8시간 이상)</label></div>`)
+}
+
+function welfareData(form) {
+  const fd = new FormData(form), data = {}
+  if (welfareKind === 'tuition') {
+    data.fees = {}
+    for (const [k, v] of fd) {
+      if (k.startsWith('fee:')) { if (v) data.fees[k.slice(4)] = +v }
+      else if (k === 'other_fees') data.other_fees = +v || 0
+      else data[k] = v.trim()
+    }
+    return data
+  }
+  for (const [k, v] of fd) data[k] = typeof v === 'string' ? v.trim() : v
+  if (welfareKind === 'birth') data.count = +data.count
+  if (welfareKind === 'condolence') { data.days = +data.days; data.twins = fd.has('twins'); data.remote = fd.has('remote') }
+  return data
+}
+
+const VERDICT = {ok: ['green','요건 충족'], check: ['orange','담당자 확인 필요'], fail: ['red','요건 미충족']}
+const CHECK_MARK = {ok: '✓', warn: '!', fail: '✕', info: 'i'}
+
+function welfareReviewView(r, compact = false) {
+  const [tone, label] = VERDICT[r.verdict]
+  return `<div class="welfare-review ${r.verdict}">
+    <div class="welfare-review-head"><span class="tag ${tone}">AI 자동 심사 · ${label}</span><small class="muted">${dotDate(r.reviewed_on)} 기준</small></div>
+    <h3>${esc(r.headline || r.title)}</h3>
+    <p class="muted" style="margin:0 0 10px">${esc(r.pay_type || '')}${r.pay_type ? ' · ' : ''}${esc(r.summary)}</p>
+    <ul class="welfare-checks-list">${r.checks.map(c => `<li class="${c.level}"><b aria-hidden="true">${CHECK_MARK[c.level]}</b>${esc(c.text)}</li>`).join('')}</ul>
+    ${compact ? '' : `<p class="small" style="margin:12px 0 4px"><strong>제출 서류</strong> · ${esc(r.documents.join(', '))}</p>`}
+    <details class="welfare-basis" ${compact ? '' : 'open'}><summary>근거 규정 ${r.basis.length}건</summary>
+      ${r.basis.map(b => `<div><strong>${esc(b.doc)} ${esc(b.article)}</strong> <span class="muted">${esc(b.page)}</span>${b.quote ? `<p>“${esc(b.quote)}”</p>` : ''}</div>`).join('')}</details>
+  </div>`
+}
+
+function welfarePage() {
+  return `<div class="page-title"><h1>복리후생 신청</h1><p>규정과 내 인사기록을 대조해 지급액·휴가일수와 확인할 점을 바로 알려드려요.</p></div>
+    <div class="welfare-kinds" role="tablist">${WELFARE_KINDS.map(([k,t,d]) =>
+      `<button class="card welfare-kind ${welfareKind===k?'active':''}" role="tab" aria-selected="${welfareKind===k}" data-welfare-kind="${k}"><strong>${t}</strong><small>${d}</small></button>`).join('')}</div>
+    <div class="welfare-layout">
+      <form class="card hr-service-form" id="welfare-form" novalidate>${welfareFields(welfareKind)}
+        <p role="alert" class="login-error"></p>
+        <div class="service-actions"><button class="btn" type="submit" value="review">자동 심사</button>
+        <button class="btn primary" type="submit" value="submit">신청하기</button></div></form>
+      <aside id="welfare-result">${welfareResult ? welfareReviewView(welfareResult) :
+        `<div class="card welfare-empty"><p><strong>입력하고 자동 심사를 눌러 보세요.</strong></p><p class="muted small">지급액, 휴가 기간, 대상 여부, 필요한 서류를 근거 조항과 함께 보여드려요. 인사 담당자도 같은 결과를 보고 승인해요.</p></div>`}</aside>
+    </div>
+    <section class="service-history"><h2>내 복리후생 신청</h2><div id="welfare-history" aria-live="polite"><p class="muted">불러오는 중이에요.</p></div></section>`
+}
+
+async function bindWelfarePage() {
+  document.querySelectorAll('[data-welfare-kind]').forEach(b => b.onclick = () => {
+    welfareKind = b.dataset.welfareKind; welfareResult = null; render()
+  })
+  const form = $('#welfare-form')
+  if (!form) return
+  const reason = form.elements.reason
+  if (reason) reason.onchange = () => { form.elements.days.value = reason.selectedOptions[0].dataset.days }
+  form.onsubmit = async event => {
+    event.preventDefault()
+    const alert = form.querySelector('[role="alert"]')
+    const missing = [...form.querySelectorAll('[required]')].find(el => !el.value.trim())
+    if (missing) { alert.textContent = '빈 칸을 채워 주세요.'; missing.focus(); return }
+    alert.textContent = ''
+    const body = JSON.stringify({kind: welfareKind, data: welfareData(form)})
+    const buttons = [...form.querySelectorAll('button')]
+    buttons.forEach(b => { b.disabled = true })
+    try {
+      if (event.submitter?.value === 'submit') {
+        const preview = await api('/v1/welfare/review', {method:'POST', body})
+        if (preview.verdict === 'fail' && !window.confirm('규정 요건을 충족하지 못한 항목이 있어요. 그래도 신청할까요? (반려될 수 있어요)')) {
+          welfareResult = preview; $('#welfare-result').innerHTML = welfareReviewView(preview); return
+        }
+        const saved = await api('/v1/welfare/requests', {method:'POST', body})
+        welfareResult = null
+        if (form.isConnected) { render(); toast(`${saved.title} 신청을 접수했어요. 인사 담당자가 확인해요.`) }
+      } else {
+        welfareResult = await api('/v1/welfare/review', {method:'POST', body})
+        if (form.isConnected) $('#welfare-result').innerHTML = welfareReviewView(welfareResult)
+      }
+    } catch (error) { alert.textContent = error.message }
+    finally { buttons.forEach(b => { b.disabled = false }) }
+  }
+  const host = $('#welfare-history')
+  try {
+    const rows = await api('/v1/welfare/requests')
+    if (!host.isConnected) return
+    host.innerHTML = hrTable(['신청일','구분','내용','AI 심사','상태',''], rows.map(r => [
+      dotDate(r.submitted_at.slice(0,10)), esc(r.title), esc(r.review.headline || ''),
+      `<span class="tag ${VERDICT[r.review.verdict][0]}">${VERDICT[r.review.verdict][1]}</span>`,
+      contactStatus(r.status) + (r.reason ? `<div class="small muted">${esc(r.reason)}</div>` : ''),
+      r.status === 'pending' ? `<button class="btn" data-welfare-cancel="${r.id}">취소</button>` : '',
+    ]), '아직 신청한 내역이 없어요')
+    host.querySelectorAll('[data-welfare-cancel]').forEach(b => b.onclick = async () => {
+      if (!window.confirm('이 신청을 취소할까요?')) return
+      try { await api('/v1/welfare/requests/' + b.dataset.welfareCancel + '/cancel', {method:'POST'}); toast('신청을 취소했어요.') }
+      catch (error) { toast(error.message) }
+      if (host.isConnected) bindWelfarePage()
+    })
+  } catch (error) { if (host.isConnected) host.textContent = error.message }
+}
+
+function welfareReviewPage() {
+  return `<div class="page-title"><h1>복리후생 심사</h1><p class="muted">AI가 규정과 인사기록을 대조한 결과예요. 확인 필요 항목만 보고 승인하거나 반려하세요.</p></div>
+    <div id="welfare-queue" aria-live="polite"><p class="muted">신청을 불러오는 중이에요.</p></div>`
+}
+
+async function bindWelfareReview() {
+  const host = $('#welfare-queue')
+  try {
+    const rows = await api('/v1/admin/welfare')
+    if (!host.isConnected) return
+    const pending = rows.filter(r => r.status === 'pending')
+    const counts = Object.fromEntries(['ok','check','fail'].map(v => [v, pending.filter(r => r.review.verdict === v).length]))
+    host.innerHTML = `<section class="card ehr-panel"><div class="section-head"><h2>처리 대기 <span class="count">${pending.length}</span></h2>
+        <p class="small muted" style="margin:0">요건 충족 ${counts.ok} · 확인 필요 ${counts.check} · 요건 미충족 ${counts.fail}</p></div>
+      ${pending.map(r => `<form class="welfare-queue-item" data-welfare-decide="${r.id}">
+        <div class="welfare-queue-who"><strong>${esc(r.employee_name)}</strong> <small class="muted">${esc(r.employee || '')} · ${esc(r.title)} · ${dotDate(r.submitted_at.slice(0,10))} 신청</small></div>
+        ${welfareReviewView(r.review, true)}
+        <label class="welfare-reason">처리 사유<input class="input" name="reason" maxlength="400" placeholder="반려할 때 필수"></label>
+        <div class="ehr-links"><button type="submit" class="btn primary" value="approved">승인</button>
+        <button type="submit" class="btn" value="rejected">반려</button></div><p role="alert" class="login-error"></p></form>`).join('')
+        || '<p class="muted">처리할 신청이 없어요.</p>'}</section>
+      <section class="card ehr-panel"><div class="section-head"><h2>처리 이력</h2></div>
+      ${hrTable(['직원','구분','내용','AI 심사','결과','처리일'], rows.filter(r => r.status !== 'pending').map(r => [
+        esc(r.employee_name), esc(r.title), esc(r.review.headline || ''),
+        `<span class="tag ${VERDICT[r.review.verdict][0]}">${VERDICT[r.review.verdict][1]}</span>`,
+        contactStatus(r.status) + (r.reason ? `<div class="small muted">${esc(r.reason)}</div>` : ''),
+        r.decided_at ? dotDate(r.decided_at.slice(0,10)) : '—']), '처리 이력이 없어요.')}</section>`
+    host.querySelectorAll('[data-welfare-decide]').forEach(form => form.onsubmit = async event => {
+      event.preventDefault()
+      const decision = event.submitter.value, reason = form.elements.reason.value.trim()
+      if (decision === 'rejected' && !reason) { form.querySelector('[role="alert"]').textContent = '반려 사유를 입력해 주세요.'; return }
+      const buttons = [...form.querySelectorAll('button')]
+      buttons.forEach(b => { b.disabled = true })
+      try {
+        await api('/v1/admin/welfare/' + form.dataset.welfareDecide + '/decision', {method:'POST', body: JSON.stringify({decision, reason})})
+        toast(decision === 'approved' ? '승인했어요.' : '반려했어요.')
+        if (form.isConnected) await bindWelfareReview()
+      } catch (error) { form.querySelector('[role="alert"]').textContent = error.message }
+      finally { buttons.forEach(b => { b.disabled = false }) }
+    })
+  } catch (error) { if (host.isConnected) host.textContent = error.message }
+}
+
+const certificateApi = '/v1/me/employment-certificates'
+function certificatePage() {
+  return `<div class="hr-service">${serviceHeading('재직증명서 발급','제출처와 용도를 입력한 뒤, 미리보기에서 내용을 확인하고 PDF로 발급하세요.')}
+    <form class="card hr-service-form" id="certificate-form">
+      <label class="service-row"><span>제출처</span><input name="recipient" placeholder="예: 제출할 기관명" maxlength="80" required></label>
+      <label class="service-row"><span>용도</span><input name="purpose" placeholder="예: 금융기관 제출" maxlength="120" required></label>
+      <div class="service-actions"><button class="btn primary" type="submit">미리보기</button></div>
+      <div id="certificate-preview"></div><p class="login-error" role="alert"></p></form>
+    <section class="service-history"><h2>내 발급 내역</h2><div id="certificate-history" aria-live="polite"></div></section></div>`
+}
+
+async function downloadCertificate(number) {
+  const res = await fetch(certificateApi + '/' + encodeURIComponent(number) + '/pdf', {headers:authHeaders()})
+  if (!res.ok) throw new Error('PDF를 내려받을 수 없어요. 다시 로그인한 후 내 발급 내역을 확인해 주세요.')
+  const url = URL.createObjectURL(await res.blob())
+  const link = document.createElement('a')
+  link.href = url
+  link.download = '재직증명서_' + number + '.pdf'
+  document.body.append(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 60000)
+}
+
+function bindCertificatePage() {
+  const form = $('#certificate-form'), history = $('#certificate-history')
+  const preview = form.querySelector('#certificate-preview'), error = form.querySelector('[role=alert]')
+  let generation = 0
+  async function loadHistory() {
+    try {
+      const rows = await api(certificateApi)
+      history.innerHTML = rows.length ? hrTable(['발급일','문서번호','제출처','용도','파일'],rows.map(r => [
+        esc(r.issued_at.slice(0,10)),esc(r.number),esc(r.recipient),esc(r.purpose),
+        `<button class="btn" data-download="${esc(r.number)}">PDF 다운로드</button>`
+      ])) : '<p class="service-empty">발급한 재직증명서가 없습니다.</p>'
+    } catch (e) { history.textContent = e.message }
+  }
+  history.onclick = async event => {
+    const button = event.target.closest('[data-download]')
+    if (button) try { await downloadCertificate(button.dataset.download) } catch(e) {error.textContent=e.message}
+  }
+  loadHistory()
+  form.oninput = () => {generation++; preview.replaceChildren(); error.textContent=''}
+  form.onsubmit = async event => {
+    event.preventDefault()
+    const attempt = ++generation
+    preview.replaceChildren()
+    error.textContent = ''
+    const body = JSON.stringify({...Object.fromEntries(new FormData(form)),request_id:crypto.randomUUID()})
+    try {
+      const data = await api(certificateApi+'/preview',{method:'POST',body})
+      if (generation !== attempt || !form.isConnected) return
+      preview.innerHTML = '<iframe title="재직증명서 미리보기" sandbox></iframe><div class="service-actions"><button class="btn primary" type="button">발급 및 PDF 다운로드</button></div>'
+      preview.querySelector('iframe').srcdoc = data.html
+      const issue = preview.querySelector('button')
+      issue.onclick = async () => {
+        const controls = [...form.querySelectorAll('button,input')]
+        controls.forEach(el => el.disabled=true)
+        try {
+          const result = await api(certificateApi,{method:'POST',body})
+          if (!form.isConnected) return
+          preview.replaceChildren()
+          form.reset()
+          await loadHistory()
+          await downloadCertificate(result.number)
+        } catch(e) {error.textContent=e.message}
+        finally {controls.forEach(el => el.disabled=false)}
+      }
+    } catch(e) {error.textContent=e.message}
+  }
+}
+
+async function bindHomeRequests() {
+  const count = $('#home-request-count')
+  const latest = $('#home-request-latest')
+  try {
+    const changes = await api('/v1/hr/me/contact-requests')
+    if (!count.isConnected) return
+    const labels = {pending:'처리 대기', approved:'승인', rejected:'반려', cancelled:'취소됨'}
+    const items = changes.map(item => ({
+      title:changeRequestTitle(item), status:labels[item.status],
+      date:item.decided_at || item.submitted_at, pending:item.status === 'pending'
+    }))
+    for (const doc of db.records) {
+      if (doc.status === '작성 중') continue
+      items.push({title:doc.title, status:doc.status, date:(doc.date || '').replaceAll('.', '-'),
+        pending:doc.status === '제출됨'})
+    }
+    items.sort((a,b) => b.date.localeCompare(a.date))
+    count.textContent = items.length ? '처리 대기 ' + items.filter(item => item.pending).length + '건' : '신청 내역 없음'
+    if (items.length) latest.textContent = '최근 · ' + items[0].title + ' · ' + items[0].status
+  } catch {
+    if (count.isConnected) count.textContent = '조회하지 못했어요'
+  }
+}
+
+function bindHrPage() {
+  const load = {home: () => { bindHomeRequests(); bindHomeExtras() }, requests: bindOwnChanges, employment: bindCertificatePage, hr: bindEmployeeDirectory, contact: bindContactPage, education: bindLearning, review: bindReviewPage, welfare: bindWelfarePage, 'welfare-review': bindWelfareReview}[page]
+  if (mode === 'normal' && load) load()
+}
+
+async function refreshHrCard(target) {
+  if (target !== 'home' && target !== 'card' && target !== 'contact') return
+  const token = auth.token
+  try {
+    const current = await api('/v1/me/hr-card')
+    if (!auth.signedIn || token !== auth.token || page !== target || mode !== 'normal') return
+    if (JSON.stringify(me.hr) === JSON.stringify(current)) return
+    me.hr = current
+    me.dept = current.basic.department || ''
+    me.position = current.basic.position || ''
+    me.grade = current.basic.grade || ''
+    render()
+  } catch (error) {
+    if (auth.signedIn) toast(error.message)
+  }
+}
+
+window.addEventListener('beforeunload',()=>{if(page==='editor'&&record)saveDraft(true)});
+if(['home','card','education','documents','qa','requests','admin','rules'].includes(location.hash.slice(1)))page=location.hash.slice(1);boot();
+</script></body></html>

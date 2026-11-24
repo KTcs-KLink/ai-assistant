@@ -1,0 +1,3 @@
+openai
+python-dotenv
+# 검색은 knowledge-mcp의 requirements.txt를 따른다.

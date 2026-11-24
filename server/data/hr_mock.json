@@ -1,0 +1,345 @@
+{
+  "_설명": "시연용 인사기록카드 데이터. 팀 DB에 해당 테이블이 생기기 전까지 사번(employee_no)으로 찾는다. 이름·주소·연락처·가족 등 모두 가상 값이며 실제 개인정보를 넣지 않는다. education의 code는 필수교육 판정(training-status)에 쓰인다.",
+  "130001": {
+    "grade": "P1",
+    "hired_on": "2026-01-02",
+    "promotion_target": null,
+    "personal": {
+      "name_hanja": "金하늘",
+      "gender": "여",
+      "employment_type": "정규직",
+      "pay_step": "P1",
+      "address": "광주광역시 가상구 예시로 123, 101동 1001호",
+      "phone": "010-0000-1234",
+      "email": "haneul.kim@klink.example",
+      "emergency_contact": "배우자 이준호 · 010-0000-5678"
+    },
+    "family": [
+      {
+        "relation": "배우자",
+        "name": "이준호",
+        "birth_date": "1992-08-21",
+        "lives_together": true,
+        "dependent": false,
+        "note": "맞벌이",
+        "married_on": "2020-10-17",
+        "occupation": "회사원",
+        "workplace": "가상전자㈜ 연구소",
+        "phone": "010-0000-5678",
+        "same_company": false,
+        "health_insurance_dependent": false,
+        "education": "대졸"
+      },
+      {
+        "relation": "자녀",
+        "name": "이서윤",
+        "birth_date": "2021-05-03",
+        "lives_together": true,
+        "dependent": true,
+        "note": "가족수당 대상"
+      },
+      {
+        "relation": "자녀",
+        "name": "이도윤",
+        "birth_date": "2024-02-17",
+        "lives_together": true,
+        "dependent": true,
+        "note": "가족수당 대상"
+      },
+      {
+        "relation": "모",
+        "name": "박영희",
+        "birth_date": "1965-11-09",
+        "lives_together": false,
+        "dependent": false,
+        "note": ""
+      }
+    ],
+    "appointments": [
+      {
+        "date": "2026-07-01",
+        "type": "정규 임용",
+        "dept": "인재경영",
+        "position": "사원",
+        "grade": "P1",
+        "note": "수습 종료"
+      },
+      {
+        "date": "2026-01-02",
+        "type": "신규 입사",
+        "dept": "인재경영",
+        "position": "사원(수습)",
+        "grade": "P1",
+        "note": "2026년 신입사원 공채"
+      }
+    ],
+    "academic": [
+      {
+        "school": "가상대학교",
+        "major": "컴퓨터공학",
+        "degree": "학사",
+        "graduated_on": "2020-02-20"
+      },
+      {
+        "school": "가상고등학교",
+        "major": "",
+        "degree": "고졸",
+        "graduated_on": "2016-02-05"
+      }
+    ],
+    "military": {
+      "status": "해당 없음",
+      "branch": "",
+      "rank": "",
+      "period": ""
+    },
+    "career": [
+      {
+        "start": "2026-01-02",
+        "end": null,
+        "dept": "인재경영",
+        "role": "인사·복리후생 지원",
+        "position": "사원"
+      }
+    ],
+    "certificates": [
+      {
+        "name": "정보처리기사",
+        "issuer": "한국산업인력공단",
+        "acquired_on": "2019-08-16",
+        "allowance": "반영"
+      },
+      {
+        "name": "네트워크관리사 2급",
+        "issuer": "한국정보통신자격협회",
+        "acquired_on": "2021-05-28",
+        "allowance": "대상 아님"
+      },
+      {
+        "name": "정보보안기사",
+        "issuer": "한국인터넷진흥원",
+        "acquired_on": "2026-11-13",
+        "allowance": "미신고"
+      }
+    ],
+    "languages": [
+      {
+        "test": "TOEIC",
+        "score": "865",
+        "taken_on": "2025-10-12",
+        "valid_until": "2027-10-11"
+      }
+    ],
+    "awards": [],
+    "evaluations": [],
+    "leaves": [],
+    "education": [
+      {
+        "code": null,
+        "title": "HR 데이터 분석 실무",
+        "track": "job",
+        "category": "위탁",
+        "institution": "K-LINK 러닝센터",
+        "start": "2026-06-15",
+        "completed_on": "2026-06-17",
+        "hours": 21
+      },
+      {
+        "code": "sexual_harassment",
+        "title": "성희롱·성폭력 예방교육",
+        "category": "사이버",
+        "start": "2026-04-10",
+        "completed_on": "2026-04-10",
+        "hours": 1
+      },
+      {
+        "code": null,
+        "title": "정보보안 기본",
+        "category": "사내",
+        "start": "2026-03-05",
+        "completed_on": "2026-03-05",
+        "hours": 4
+      },
+      {
+        "code": null,
+        "title": "신입사원 입문교육",
+        "category": "사내",
+        "start": "2026-01-05",
+        "completed_on": "2026-01-23",
+        "hours": 105
+      }
+    ],
+    "leave": {
+      "period_start": "2026-01-02",
+      "period_end": "2026-12-31",
+      "granted_days": 11,
+      "used_days": 4,
+      "as_of": "2026-11-20"
+    }
+  },
+  "DEV-0001": {
+    "grade": "3직급",
+    "hired_on": "2014-01-06",
+    "promotion_target": "2직급",
+    "personal": {
+      "name_hanja": "金하늘",
+      "gender": "남",
+      "employment_type": "정규직",
+      "pay_step": "3직급 12호봉",
+      "address": "서울특별시 가상구 예시로 45",
+      "phone": "010-0000-4321",
+      "email": "dev.user@klink.example",
+      "emergency_contact": "배우자 정민지 · 010-0000-8765"
+    },
+    "family": [
+      {
+        "relation": "배우자",
+        "name": "정민지",
+        "birth_date": "1989-04-12",
+        "lives_together": true,
+        "dependent": true,
+        "note": "가족수당 대상",
+        "married_on": "2015-05-23",
+        "occupation": "무직(전업)",
+        "workplace": "",
+        "phone": "010-0000-8765",
+        "same_company": false,
+        "health_insurance_dependent": true,
+        "education": "대졸"
+      },
+      {
+        "relation": "자녀",
+        "name": "김하준",
+        "birth_date": "2017-09-30",
+        "lives_together": true,
+        "dependent": true,
+        "note": "가족수당 대상"
+      }
+    ],
+    "appointments": [
+      {
+        "date": "2022-01-01",
+        "type": "승진·전보",
+        "dept": "정보통신처 정보화기획부",
+        "position": "차장",
+        "grade": "3직급",
+        "note": "3직급 승진"
+      },
+      {
+        "date": "2018-07-01",
+        "type": "승진",
+        "dept": "서울본부 배전운영부",
+        "position": "대리",
+        "grade": "4직급",
+        "note": "4직급 승진"
+      },
+      {
+        "date": "2014-01-06",
+        "type": "신규 입사",
+        "dept": "서울본부 배전운영부",
+        "position": "사원(수습)",
+        "grade": "5직급",
+        "note": "2013년 하반기 공채"
+      }
+    ],
+    "academic": [
+      {
+        "school": "가상대학교",
+        "major": "전기공학",
+        "degree": "학사",
+        "graduated_on": "2013-02-20"
+      }
+    ],
+    "military": {
+      "status": "군필",
+      "branch": "육군",
+      "rank": "병장",
+      "period": "2008.03 ~ 2010.01"
+    },
+    "career": [
+      {
+        "start": "2022-01-01",
+        "end": null,
+        "dept": "정보통신처 정보화기획부",
+        "role": "정보화 기획",
+        "position": "차장"
+      },
+      {
+        "start": "2014-01-06",
+        "end": "2021-12-31",
+        "dept": "서울본부 배전운영부",
+        "role": "배전 설비 관리",
+        "position": "대리"
+      }
+    ],
+    "certificates": [
+      {
+        "name": "전기기사",
+        "issuer": "한국산업인력공단",
+        "acquired_on": "2012-11-30",
+        "allowance": "반영"
+      },
+      {
+        "name": "정보처리기사",
+        "issuer": "한국산업인력공단",
+        "acquired_on": "2016-08-19",
+        "allowance": "반영"
+      }
+    ],
+    "languages": [
+      {
+        "test": "OPIc",
+        "score": "IM2",
+        "taken_on": "2024-06-01",
+        "valid_until": "2026-05-31"
+      }
+    ],
+    "awards": [],
+    "evaluations": [
+      {
+        "year": 2025,
+        "grade": "S",
+        "note": "근무성적평정"
+      },
+      {
+        "year": 2024,
+        "grade": "A",
+        "note": "근무성적평정"
+      }
+    ],
+    "leaves": [],
+    "education": [
+      {
+        "code": "sexual_harassment",
+        "title": "성희롱·성폭력 예방교육",
+        "category": "사이버",
+        "start": "2026-04-10",
+        "completed_on": "2026-04-10",
+        "hours": 1
+      },
+      {
+        "code": null,
+        "title": "중간관리자 리더십",
+        "category": "사내",
+        "start": "2026-02-09",
+        "completed_on": "2026-02-11",
+        "hours": 18
+      },
+      {
+        "code": "workplace_harassment",
+        "title": "직장 내 괴롭힘 예방교육",
+        "category": "사이버",
+        "start": "2025-11-20",
+        "completed_on": "2025-11-20",
+        "hours": 1
+      }
+    ],
+    "leave": {
+      "period_start": "2026-01-01",
+      "period_end": "2026-12-31",
+      "granted_days": 21,
+      "used_days": 12,
+      "as_of": "2026-11-20"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "_설명": "KT지니어스 과정 목록 시연용 데이터. 과정명·시간은 가상이다. mandatory_code는 필수교육 규칙(server.py MANDATORY_TRAININGS)과 연결되고, match는 추천 이유를 만드는 데 쓴다.",
+  "provider": "KT지니어스",
+  "goal_hours": 50,
+  "courses": [
+    {"id": "KTG-M01", "title": "2026 직장 내 괴롭힘 예방교육", "type": "mandatory", "mandatory_code": "workplace_harassment", "hours": 1, "format": "온라인 · 동영상"},
+    {"id": "KTG-M02", "title": "2026 성희롱·성폭력 예방교육", "type": "mandatory", "mandatory_code": "sexual_harassment", "hours": 1, "format": "온라인 · 동영상"},
+    {"id": "KTG-M03", "title": "2026 장애인 인식개선 교육", "type": "mandatory", "mandatory_code": "disability_awareness", "hours": 1, "format": "온라인 · 동영상"},
+    {"id": "KTG-M04", "title": "2026 개인정보보호 교육", "type": "mandatory", "mandatory_code": "privacy", "hours": 2, "format": "온라인 · 동영상"},
+
+    {"id": "KTG-J01", "title": "인사관리 실무 기초", "type": "job", "hours": 16, "format": "온라인 · 8차시",
+     "desc": "채용·배치·평가·보상까지 인사 업무 전체 흐름을 사례로 익혀요.",
+     "match": {"departments": ["인재경영"], "job_types": ["경영지원"], "new_hire": true}},
+    {"id": "KTG-J02", "title": "노동법과 취업규칙 실무", "type": "job", "hours": 12, "format": "온라인 · 6차시",
+     "desc": "근로시간·휴가·징계 등 취업규칙 조항을 노동법과 연결해 해석해요.",
+     "match": {"departments": ["인재경영"], "job_types": ["경영지원"]}},
+    {"id": "KTG-J03", "title": "급여와 4대보험 실무", "type": "job", "hours": 8, "format": "온라인 · 4차시",
+     "desc": "급여 계산, 원천징수, 4대보험 취득·상실 신고를 실습해요.",
+     "match": {"departments": ["인재경영"], "job_types": ["경영지원"]}},
+    {"id": "KTG-J04", "title": "복리후생 제도 설계와 운영", "type": "job", "hours": 6, "format": "온라인 · 3차시",
+     "desc": "학자금·경조·출산 지원 같은 복리후생 제도의 운영 기준과 심사 포인트를 다뤄요.",
+     "match": {"departments": ["인재경영"]}},
+    {"id": "KTG-J05", "title": "정보보안 관리체계 실무", "type": "job", "hours": 8, "format": "온라인 · 4차시",
+     "desc": "보안 정책 수립과 점검 절차를 실제 체크리스트로 익혀요.",
+     "match": {"certificates": ["정보보안기사"]}},
+    {"id": "KTG-J06", "title": "공공기관 회계와 예산 기초", "type": "job", "hours": 6, "format": "온라인 · 3차시",
+     "desc": "예산 편성·집행과 회계 처리의 기본을 익혀요.",
+     "match": {"job_types": ["경영지원"]}},
+    {"id": "KTG-J07", "title": "배전설비 운영 기초", "type": "job", "hours": 12, "format": "온라인 · 6차시",
+     "desc": "배전설비 구성과 점검·고장 대응 절차를 익혀요.",
+     "match": {"job_types": ["배전", "기술"]}},
+    {"id": "KTG-C01", "title": "신입사원 보고서·기안문 작성법", "type": "job", "hours": 4, "format": "온라인 · 2차시",
+     "desc": "공공기관 기안문과 보고서의 구조, 자주 틀리는 표현을 고쳐 봐요.",
+     "match": {"new_hire": true}}
+  ]
+}

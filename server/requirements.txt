@@ -1,0 +1,7 @@
+fastapi==0.115.6
+uvicorn==0.34.0
+openai
+python-dotenv
+psycopg[binary]==3.3.6
+# 검색은 knowledge-mcp의 requirements.txt를 따른다.
+playwright>=1.50,<2
